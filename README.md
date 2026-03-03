@@ -9,7 +9,7 @@
 ## Infos
 
 - **Progression difficultés :**
-  - plus ms
+  - plus move speed
   - plus bullet speed
   - bot avec EMP shield (bloque les balles + à implémenter avec l'update de la mélée)
 
@@ -18,7 +18,7 @@
   - invisibilité (mais impossible d'infliger des damages)
   - multi bullets
   - bonus bullet speed
-  - bonus hp
+  - bonus HP
 
 ## Milestones
 
@@ -44,7 +44,7 @@
 - **V0.4 :**
   - inventaire / perso (à voir on fait quoi)
   - skins
-  - menu genre rétro futuriste ui
+  - menu genre rétro futuriste UI
   - musique
 - **V0.5 _(milestone bonus)_ :**
   - case opening
@@ -61,11 +61,11 @@
 > Il peut être chargé en mm tps que d'autres actions  
 > Il peut être counter par un parry, qui est un "mur" autour du joueur qui dure 1.5s et qui root la personne qui initie le parry  
 > Semblable dans l'idée au parry de deadlock  
-> Possible de le move dans le V0.5  
+> Possible de le move dans le V0.4 ou V0.5  
 
 ### Inventaire / Perso
 
-> Soit on fait un inventaire qui permet de choisir son bonus, skin, ...  
+> Soit on fait un inventaire qui permet de choisir son bonus, skin  
 > Ca permet un une meilleure personalisation  
 >
 > Soit on fait des perso qui ont des bonus et un skin prédéfini  
