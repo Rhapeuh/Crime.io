@@ -1,0 +1,27 @@
+{
+  "name": "jsae-ylann-ethan-adam",
+  "version": "1.0.0",
+  "description": "- Ethan Seulin - Ylann Wattrelos - Adam Stievenard",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab-ssh.univ-lille.fr:jsae/2025-2026/projets/groupe-g/equipe-5/jsae-ylann-ethan-adam.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=production",
+    "watch": "webpack --mode=development --watch",
+    "start": "webpack serve --mode=development"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.3"
+  }
+}
