@@ -12,16 +12,16 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode=production",
-    "watch": "webpack --mode=development --watch",
-    "start": "webpack serve --mode=development"
+    "start": "vite --port=8000",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "node --test",
+    "test:watch": "node --test --watch"
   },
   "devDependencies": {
-    "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
-    "webpack": "^5.105.4",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.3"
+    "@types/node": "^25.3.5",
+    "prettier": "^3.8.1",
+    "vite": "^7.3.1"
   }
 }

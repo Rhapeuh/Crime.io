@@ -1,1 +1,5 @@
-console.log("test");
+console.log('test');
+
+export function sayOK() {
+	return 'OK';
+}
