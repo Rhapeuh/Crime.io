@@ -4,16 +4,63 @@
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Accueil</title>
-    <script src="build/main.bundle.js" defer></script>
+    <link rel="stylesheet" href="/css/main.css" />
+	<script type="module" src="/src/main.ts"></script>
 </head>
 <body>
-    <section class="accueil">
-        <h1>Titre</h1>
-        <li>
-            <ul><a href="solo">Solo</a></ul>
-            <ul><a href="multijoueur">Multijoueur</a></ul>
-            <ul><a href="credit">Crédit</a></ul>
-        </li>
-    </section>
+    <div class="viewContent activeOnly">
+        <section class="accueil">
+            <h1>Titre</h1>
+            <li>
+                <ul><a href="/solo">Solo</a></ul>
+                <ul><a href="/multijoueur">Multijoueur</a></ul>
+                <ul><a href="/credit">Crédit</a></ul>
+            </li>
+        </section>
+        <section class="credit">
+            <h2>Crédits</h2>
+            <p>Ce projet a été réalisé par l'équipe suivante dans le cadre de la JSAÉ Shoot them up (2025-2026).</p>
+
+            <table class="credits-table">
+                <thead>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Groupe</th>
+                        <th>Surnom</th>
+                        <th>Jeu préféré</th>
+                        <th>% Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ethan</strong></td>
+                        <td>Seulin</td>
+                        <td>[G/H/I]</td>
+                        <td>[Surnom]</td>
+                        <td>[Jeu]</td>
+                        <td>33.3%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ylann</strong></td>
+                        <td>Wattrelos</td>
+                        <td>[G/H/I]</td>
+                        <td>[Surnom]</td>
+                        <td>[Jeu]</td>
+                        <td>33.3%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adam</strong></td>
+                        <td>Stievenard</td>
+                        <td>[G/H/I]</td>
+                        <td>[Surnom]</td>
+                        <td>[Jeu]</td>
+                        <td>33.4%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="/acceuil">Retour</a>
+        </section>
+    </div>
 </body>
 </html>
