@@ -12,10 +12,12 @@ const creditView = new CreditView(
 );
 
 const routes = [
-	{ path: '/acceuil', view: acceuilView, title: 'Accueil' },
+	{ path: '/', view: acceuilView, title: 'Accueil' },
 	{ path: '/credit', view: creditView, title: 'Crédits' },
 ];
 
 Router.routes = routes
 
-Router.navigate('/acceuil');
+Router.navigate(window.location.pathname, true);
+
+window.onpopstate = () => Router.navigate(document.location.pathname, true);
