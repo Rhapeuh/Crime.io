@@ -1,0 +1,232 @@
+.rectangle-parent {
+	width: 100%;
+	height: 982px;
+	position: relative;
+	overflow: hidden;
+	text-align: left;
+	font-size: 64px;
+	color: #000;
+	font-family: Inter;
+}
+.frame-child {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #d9d9d9;
+	width: 1512px;
+	height: 982px;
+}
+.rectangle-group {
+	position: absolute;
+	top: 308px;
+	left: 605px;
+	width: 302px;
+	height: 365.4px;
+	font-size: 100px;
+}
+.group-child {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border-radius: 34px;
+	background-color: #aca3a3;
+	width: 298px;
+	height: 167.4px;
+}
+.group-item {
+	position: absolute;
+	top: 198px;
+	left: 0px;
+	border-radius: 34px;
+	background-color: #aca3a3;
+	width: 298px;
+	height: 167.4px;
+}
+.solo {
+	position: absolute;
+	top: 22px;
+	left: 50px;
+	display: inline-block;
+	width: 252px;
+	height: 123px;
+}
+.multi {
+	position: absolute;
+	top: 218px;
+	left: 33px;
+	display: inline-block;
+	width: 252px;
+	height: 123px;
+}
+.frame-item {
+	position: absolute;
+	top: 0px;
+	left: 185px;
+	border-radius: 35px;
+	background: rgba(0, 0, 0, 0.2), #8b5c5c;
+	width: 96px;
+	height: 982px;
+}
+.frame-inner {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #aca3a3;
+	width: 233px;
+	height: 982px;
+}
+.vector-parent {
+	position: absolute;
+	top: 0px;
+	left: 1235px;
+	width: 277px;
+	height: 982px;
+	font-size: 200px;
+}
+.rectangle-icon {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 92px;
+	height: 982px;
+	flex-shrink: 0;
+}
+.frame-child2 {
+	position: absolute;
+	top: 0px;
+	left: 48px;
+	width: 229px;
+	height: 982px;
+	flex-shrink: 0;
+}
+.titre-icon {
+	position: absolute;
+	top: 224px;
+	left: 83px;
+	width: 145.5px;
+	height: 534.4px;
+	flex-shrink: 0;
+}
+.titre {
+	position: absolute;
+	top: 837px;
+	left: 277px;
+	display: inline-block;
+	width: 630px;
+	height: 268px;
+	transform: rotate(90deg);
+	transform-origin: 0 0;
+	flex-shrink: 0;
+}
+.rectangle-div {
+	position: absolute;
+	top: 161px;
+	left: 135px;
+	border-radius: 100px;
+	background-color: #000;
+	width: 42px;
+	height: 40px;
+	flex-shrink: 0;
+}
+.frame-child3 {
+	position: absolute;
+	top: 783px;
+	left: 135px;
+	border-radius: 100px;
+	background-color: #000;
+	width: 42px;
+	height: 40px;
+	flex-shrink: 0;
+}
+.titre-icon2 {
+	position: absolute;
+	top: -406px;
+	left: 83px;
+	width: 145.5px;
+	height: 534.4px;
+	flex-shrink: 0;
+}
+.rectangle-container {
+	position: absolute;
+	top: 308px;
+	left: 605px;
+	width: 319px;
+	height: 365.4px;
+	font-size: 90px;
+}
+.solo2 {
+	position: absolute;
+	top: 36px;
+	left: 22px;
+	display: inline-block;
+	width: 285px;
+	height: 123px;
+}
+.multi2 {
+	position: absolute;
+	top: 228px;
+	left: 9px;
+	display: inline-block;
+	width: 310px;
+	height: 123px;
+}
+.frame-child11 {
+	position: absolute;
+	top: 669px;
+	left: 29px;
+	border-radius: 20px;
+	background-color: #d8c8c8;
+	width: 174px;
+	height: 278px;
+	cursor: pointer;
+}
+.frame-child12 {
+	position: absolute;
+	top: 352px;
+	left: 29px;
+	border-radius: 20px;
+	background-color: #d8c8c8;
+	width: 174px;
+	height: 278px;
+	cursor: pointer;
+}
+.frame-child13 {
+	position: absolute;
+	top: 35px;
+	left: 29px;
+	border-radius: 20px;
+	background-color: #d8c8c8;
+	width: 174px;
+	height: 278px;
+	cursor: pointer;
+}
+.inven-taire {
+	position: absolute;
+	top: 278px;
+	left: 39px;
+	display: flex;
+	align-items: center;
+	width: 208px;
+	transform: rotate(-90deg);
+	transform-origin: 0 0;
+}
+.musiq {
+	position: absolute;
+	top: 606px;
+	left: 78px;
+	display: flex;
+	align-items: center;
+	width: 233px;
+	transform: rotate(-90deg);
+	transform-origin: 0 0;
+}
+.credits {
+	position: absolute;
+	top: 948px;
+	left: 78px;
+	display: flex;
+	align-items: center;
+	width: 285px;
+	transform: rotate(-90deg);
+	transform-origin: 0 0;
+}

@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Accueil</title>
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/jeu.css" />
 	<script type="module" src="/src/main.ts"></script>
 </head>
 <body>
@@ -12,8 +13,8 @@
         <section class="accueil">
             <h1>Titre</h1>
             <ul class="menu">
-                <li><a href="/solo">Solo</a></li>
-                <li><a href="/multijoueur">Multijoueur</a></li>
+                <li><a href="/jeu">Solo</a></li>
+                <li><a href="/jeu">Multijoueur</a></li>
                 <li><a href="/credit">Crédit</a></li>
             </ul>
         </section>
@@ -60,6 +61,10 @@
                 </tbody>
             </table>
             <a href="/">Retour</a>
+        </section>
+        <section class="jeu">
+            <a href="/">Retour</a>
+            <canvas id="gameCanvas"></canvas>
         </section>
     </div>
 </body>
