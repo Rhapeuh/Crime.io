@@ -1,4 +1,5 @@
 import View from './View';
+import Router from './Router';
 
 export default class JeuView extends View {
 	ctx;
@@ -14,6 +15,7 @@ export default class JeuView extends View {
 		this.ctx = this.canva.getContext('2d')!;
 
 		this.renderConstructionMode();
+		Router.setMenuElement(element);
 	}
 
 	renderConstructionMode() {

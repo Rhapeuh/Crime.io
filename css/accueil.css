@@ -1,0 +1,77 @@
+.accueil {
+	display: grid;
+	width: 100vw;
+	height: 100vh;
+	background-color: #d9d9d9;
+	overflow: hidden;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.menuJeu {
+	grid-column: 2;
+	grid-row: 1;
+	justify-self: center;
+	align-self: center;
+}
+
+.menuJeu > a {
+	display: flex;
+	width: 250px;
+	height: 150px;
+	background-color: #aca3a3;
+	border-radius: 30px;
+	justify-content: center;
+	align-items: center;
+	font-size: 25px;
+	margin: 10px;
+}
+
+.menuGauche {
+	display: none;
+}
+
+.titre {
+	grid-column: 3;
+    justify-self: end;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.scroll-wrapper {
+    display: flex;
+    flex-direction: column;
+    transform: rotate(90deg);
+
+}
+
+h1 {
+	font-size: 100px;
+	letter-spacing: 10px;
+
+    margin-right: 110px;
+
+	writing-mode: vertical-rl;
+
+	animation: scrollTitle 2s linear infinite;
+}
+
+.delay-1 {
+	animation-delay: 5s;
+}
+.delay-2 {
+	animation-delay: 10s;
+}
+
+@keyframes scrollTitle {
+	from {
+		transform: translateY(0);
+	}
+	to {
+		transform: translateY(-100%);
+	}
+}
