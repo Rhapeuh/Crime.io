@@ -75,3 +75,7 @@
 
 - Choisir le nom du jeu
 - Faires les issues
+
+## plus
+
+[figma](https://www.figma.com/design/NtCrYoV48QG4gA1IYktlMD/maquette?node-id=0-1&p=f&t=I1PpPJhCa9w2e3yW-0)
