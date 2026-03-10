@@ -1,85 +1,78 @@
 import View from './View';
 import Router from './Router';
+import perso from '/images/persoTemp.jpg'
 
 export default class JeuView extends View {
-	ctx;
-	canva;
+	private context: CanvasRenderingContext2D;
+	private canvas: HTMLCanvasElement;
+	private x: number = 50;
+	private y: number = 50;
+	private vx: number = 0;
+	private vy: number = 0;
+	private speed: number = 2;
+	private image: HTMLImageElement;
 
 	constructor(element: HTMLElement) {
 		super(element);
 
-		this.canva = this.element.querySelector('canvas')!;
+		this.canvas = this.element.querySelector('canvas')!;
+		this.context = this.canvas.getContext('2d')!;
+		this.image = new Image();
 
-		this.canva.width = window.innerWidth;
-		this.canva.height = window.innerHeight;
-		this.ctx = this.canva.getContext('2d')!;
+		this.resampleCanvas();
+		this.initEvents();
+		this.afficherImage();
 
-		this.renderConstructionMode();
+		setInterval(() => this.moveMonster(), 100 / 60);
+
 		Router.setMenuElement(element);
 	}
 
-	renderConstructionMode() {
-		const { width, height } = this.canva;
-		const ctx = this.ctx;
+	private initEvents() {
+		window.addEventListener('keydown', e => this.selectDirection(e));
+		window.addEventListener('keyup', e => this.arretDirection(e));
+	}
 
-		// --- 2. Barrières de sécurité "vignettées" ---
-		// On dessine de grandes bandes jaune/noir sur un calque séparé,
-		// puis on applique un masque pour qu'elles n'apparaissent qu'en bordure.
+	private afficherImage() {
+		this.image.src = perso;
+		this.image.onload = () => {
+			requestAnimationFrame(this.render);
+		};
+	}
 
-		// Créer un dégradé radial pour le masque (vignettage inversé)
-		const maskGradient = ctx.createRadialGradient(
-			width / 2,
-			height / 2,
-			width * 0.3, // Zone centrale claire
-			width / 2,
-			height / 2,
-			width * 0.8 // Fondu vers l'extérieur
-		);
-		maskGradient.addColorStop(0, 'rgba(0,0,0,0)'); // Transparent au centre
-		maskGradient.addColorStop(1, 'rgba(0,0,0,0.4)'); // Sombre sur les bords
+	render = () => {
+		this.context.fillStyle = 'red';
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.context.drawImage(this.image, this.x, this.y);
+		requestAnimationFrame(this.render);
+	};
 
-		// Appliquer le masque de vignettage sur tout l'écran
-		ctx.fillStyle = maskGradient;
-		ctx.fillRect(0, 0, width, height);
+	private moveMonster() {
+		this.x += this.vx * this.speed;
+		this.y += this.vy * this.speed;
 
-		// Maintenant dessiner les bandes
-		ctx.save(); // Sauvegarder l'état (avant le filtre de flou)
+		if (this.x < 0) this.x = 0;
+		if (this.y < 0) this.y = 0;
+		if (this.x + this.image.width > this.canvas.width)
+			this.x = this.canvas.width - this.image.width;
+		if (this.y + this.image.height > this.canvas.height)
+			this.y = this.canvas.height - this.image.height;
+	}
 
-		// Un léger flou pour les intégrer à l'arrière-plan
-		ctx.filter = 'blur(4px)';
+	private resampleCanvas() {
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+	}
 
-		const stripeWidth = 60; // Largeur d'une paire de bandes
-		const stripeColor1 = 'rgba(241, 196, 15, 0.5)';
+	private selectDirection(e: KeyboardEvent) {
+		if (e.key === 'd') this.vx = 1;
+		if (e.key === 'q') this.vx = -1;
+		if (e.key === 'z') this.vy = -1;
+		if (e.key === 's') this.vy = 1;
+	}
 
-		for (let x = -height; x < width + height; x += stripeWidth) {
-			ctx.fillStyle = stripeColor1;
-			ctx.beginPath();
-			ctx.moveTo(x, 0);
-			ctx.lineTo(x + stripeWidth / 2, 0);
-			ctx.lineTo(x + stripeWidth / 2 + height, height);
-			ctx.lineTo(x + height, height);
-			ctx.closePath();
-			ctx.fill();
-		}
-		ctx.restore(); // Restaurer l'état (enlever le flou)
-
-		// --- 3. Titre Principal ---
-		ctx.save();
-
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-
-		ctx.fillStyle = 'white';
-		// Utilisation d'une police système pour le style, ou remplace par ta police de jeu
-		ctx.font = 'bold 80px "Arial Black", Gadget, sans-serif';
-		ctx.fillText('EN CONSTRUCTION', width / 2, height / 2 - 20);
-
-		// Ajout d'un léger contour pour "détacher" le texte
-		ctx.shadowBlur = 0; // Enlever la lueur pour le contour
-		ctx.strokeStyle = '#2c3e50';
-		ctx.lineWidth = 2;
-		ctx.strokeText('EN CONSTRUCTION', width / 2, height / 2 - 20);
-
-		ctx.restore();
+	private arretDirection(e: KeyboardEvent) {
+		if (['d', 'q'].includes(e.key)) this.vx = 0;
+		if (['z', 's'].includes(e.key)) this.vy = 0;
 	}
 }
