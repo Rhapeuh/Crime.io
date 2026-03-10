@@ -10,8 +10,19 @@ export default class Jeu {
 
 	constructor(socket: Socket) {
 		this.socket = socket;
-		setInterval(() => this.update(), 1000 / 60);
-	}
+		socket.emit('initImage', this.getCoordonee())
+
+		socket.emit('premiereConnexion', "tu t'est bien connecté");
+
+		socket.on('initTailleEcran', (tailleEcran: { width: number, height: number }) => {
+			this.setTailleEcran(tailleEcran.width, tailleEcran.height);
+		});
+
+		socket.on('updateInput', (input: { vx: number, vy: number }) => {
+			this.updateInput(input.vx, input.vy);
+		});
+			setInterval(() => this.update(), 1000 / 60);
+		}
 
 	setTailleEcran(width: number, height: number) {
 		this.canvasWidth = width;
@@ -37,7 +48,7 @@ export default class Jeu {
 	}
 
 	private updateSpeed() {
-		if (this.seDeplace() && this.j.speed < this.max_speed) this.j.speed += 0.5;
+		if (this.seDeplace() && this.j.speed < this.max_speed) this.j.speed += 0.2;
 		else if (!this.seDeplace()) this.j.speed = 1
 	}
 

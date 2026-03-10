@@ -18,18 +18,7 @@ const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
 	jeu = new Jeu(socket as Socket)
-	socket.emit('initImage', jeu.getCoordonee())
 	console.log(`Nouvelle connexion du client ${socket.id}`);
-
-	socket.emit('premiereConnexion', "tu t'est bien connecté");
-
-	socket.on('initTailleEcran', (tailleEcran: { width: number, height: number }) => {
-        jeu.setTailleEcran(tailleEcran.width, tailleEcran.height);
-    });
-
-	socket.on('updateInput', (input: { vx: number, vy: number }) => {
-        jeu.updateInput(input.vx, input.vy);
-    });
 
 	socket.on('disconnect', () => {
 		console.log(`Deconnexion du client ${socket.id}`);

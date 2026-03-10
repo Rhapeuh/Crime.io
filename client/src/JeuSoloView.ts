@@ -52,7 +52,6 @@ export default class JeuSoloView extends View {
 	}
 
 	render = (c: Coordonee) => {
-		this.context.fillStyle = 'red';
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.context.drawImage(this.image, c.x, c.y);
 	};
