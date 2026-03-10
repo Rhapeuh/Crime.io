@@ -5,6 +5,15 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Debug server",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "server:watch", "ylann"],
+			"skipFiles": ["<node_internals>/**"],
+		},
+		{
 			"type": "firefox",
 			"request": "launch",
 			"name": "Launch localhost",

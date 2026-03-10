@@ -1,30 +1,32 @@
 {
-  "name": "jsae-ylann-ethan-adam",
+  "name": "jsae",
   "version": "1.0.0",
-  "description": "- Ethan Seulin - Ylann Wattrelos - Adam Stievenard",
-  "keywords": [],
+  "main": "server/index.ts",
+  "type": "module",
+  "description": "Jsae",
+  "author": "- Ethan Seulin - Ylann Wattrelos - Adam Stievenard",
   "repository": {
     "type": "git",
     "url": "git@gitlab-ssh.univ-lille.fr:jsae/2025-2026/projets/groupe-g/equipe-5/jsae-ylann-ethan-adam.git"
   },
-  "license": "ISC",
-  "author": "",
-  "type": "module",
-  "main": "index.js",
+  "license": "UNLICENSED",
   "scripts": {
-    "start": "vite --port=8000",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
     "test": "node --test",
-    "test:watch": "node --test --watch"
+    "test:watch": "node --test --watch",
+    "client:start": "vite --port=8000 client",
+    "client:build": "tsc && vite build",
+    "client:preview": "vite preview",
+    "server": "node .",
+    "server:watch": "node --watch ."
   },
   "devDependencies": {
-    "@types/node": "^25.3.5",
+    "@types/node": "^25.3.3",
     "prettier": "^3.8.1",
-    "typescript": "^5.9.3",
+    "typescript": "~5.9.3",
     "vite": "^7.3.1"
   },
   "dependencies": {
-    "bootstrap": "^5.3.8"
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   }
 }
