@@ -1,7 +1,7 @@
 import AcceuilView from './AcceuilView';
 import CreditView from './CreditView';
 import Router from './Router.ts';
-import JeuView from './JeuView';
+import JeuSoloView from './JeuSoloView.ts';
 import { io } from 'socket.io-client';
 
 console.log('tout est ok');
@@ -19,12 +19,12 @@ const creditView = new CreditView(
 	document.querySelector('.viewContent > .credit')!
 );
 
-const jeuView = new JeuView(document.querySelector('.viewContent > .jeu')!);
+const jeuSoloView = new JeuSoloView(document.querySelector('.viewContent > .jeuSolo')!, socket);
 
 const routes = [
 	{ path: '/', view: acceuilView },
 	{ path: '/credit', view: creditView },
-	{ path: '/jeu', view: jeuView },
+	{ path: '/jeuSolo', view: jeuSoloView },
 ];
 
 Router.routes = routes;
