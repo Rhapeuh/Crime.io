@@ -1,7 +1,7 @@
 import http from 'http';
 import { env } from 'process';
 import { Server as IOServer } from 'socket.io';
-import Jeu from './Jeu.ts';
+import JeuSolo from './JeuSolo.ts';
 import type { Socket } from 'socket.io';
 
 const httpServer = http.createServer((_req, res) => {
@@ -13,11 +13,11 @@ const httpServer = http.createServer((_req, res) => {
 httpServer.listen(9876, () => {
 	console.log(`Server running at http://localhost:9876/`); // <-- pour verif que le serveur tourne bien
 });
-let jeu: Jeu;
+let jeu: JeuSolo;
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
-	jeu = new Jeu(socket as Socket)
+	jeu = new JeuSolo(socket as Socket)
 	console.log(`Nouvelle connexion du client ${socket.id}`);
 
 	socket.on('disconnect', () => {

@@ -1,9 +1,9 @@
 import type { Socket } from 'socket.io';
 import type { Joueur } from './types';
 
-export default class Jeu {
+export default class JeuSolo {
 	private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
-	private canvasWidth: number = 0; // Ajuste selon tes besoins
+	private canvasWidth: number = 0;
 	private canvasHeight: number = 0;
 	private max_speed: number = 10;
 	private socket;
