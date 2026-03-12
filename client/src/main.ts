@@ -8,7 +8,7 @@ console.log('tout est ok');
 
 const socket = io(window.location.hostname + `:9876`);
 
-socket.on('premiereConnexion', message => {
+socket.on('premiereConnexion', (message: string) => {
 	console.log(message);
 });
 
