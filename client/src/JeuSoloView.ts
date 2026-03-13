@@ -33,10 +33,6 @@ export default class JeuSoloView extends View {
 			this.render(this.realCordonee(c), this.image);
 		});
 
-		socket.on('initEnnemy', (c: Coordonee) => {
-			this.renderEnnemy(this.realCordonee(c));
-		});
-		
 		Router.setMenuElement(element);
 	}
 
@@ -101,11 +97,5 @@ export default class JeuSoloView extends View {
 		const realY = ratioY * this.canvas.height;
 
 		return { x: realX, y: realY };
-	}
-
-	private renderEnnemy(c: Coordonee){
-		const i = new Image();
-		i.src = '../public/img/ennemyTemp.jpg'
-		this.render(c, this.image)
 	}
 }
