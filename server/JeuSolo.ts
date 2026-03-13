@@ -1,7 +1,7 @@
 import type { Socket } from 'socket.io';
 import Joueur from './Joueur.ts';
 import Jeu from './Jeu.ts';
-import { BasicEnnemy } from './BasicEnnemy';
+import { BasicEnnemy } from './BasicEnnemy.ts';
 
 export default class JeuSolo extends Jeu {
 	// private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
@@ -11,7 +11,7 @@ export default class JeuSolo extends Jeu {
 	
 	private socket;
 
-	constructor(socket: Socket) {
+	constructor(socket: Socket) {0
 		super();
 		this.socket = socket;
 		socket.emit('initImage', this.getCoordonee());

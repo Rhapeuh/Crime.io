@@ -1,5 +1,5 @@
-import { Ennemy } from './Ennemy';
-import type { Coordonee } from './types';
+import { Ennemy } from './Ennemy.ts';
+import type { Coordonee } from './types.ts';
 
 export class BasicEnnemy extends Ennemy {
 	constructor(

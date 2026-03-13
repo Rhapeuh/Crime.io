@@ -17,15 +17,18 @@ let jeu: JeuSolo;
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
-	jeu = new JeuSolo(socket as Socket)
+	startNewGame(socket);
 	console.log(`Nouvelle connexion du client ${socket.id}`);
 
 	socket.on('disconnect', () => {
 		console.log(`Deconnexion du client ${socket.id}`);
 	});
 
-	socket.on('reset', () => {jeu=new JeuSolo(socket as Socket)});
+	socket.on('reset', startNewGame);
 
 });
 
 
+function startNewGame(socket : Socket){
+	jeu = new JeuSolo(socket as Socket);
+}

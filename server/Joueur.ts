@@ -1,5 +1,5 @@
 import { randomInt } from 'node:crypto';
-import type { Coordonee } from './types';
+import type { Coordonee } from './types.ts';
 
 export default class Joueur {
 	pseudo?: string;
