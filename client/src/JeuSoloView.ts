@@ -1,7 +1,7 @@
 import View from './View';
 import Router from './Router';
 import { Socket } from 'socket.io-client';
-import type { Coordonee } from '../../server/types.ts';
+import type { Coordonee } from '../../common/types.ts';
 
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;

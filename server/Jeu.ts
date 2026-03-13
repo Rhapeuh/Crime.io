@@ -1,4 +1,4 @@
-import Joueur  from './Joueur.ts';
+import Joueur  from '../common/Joueur.ts';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;

@@ -1,13 +1,14 @@
+import { randomInt } from 'node:crypto';
 import type { Socket } from 'socket.io';
-import Joueur from './Joueur.ts';
+import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
-import { BasicEnnemy } from './BasicEnnemy.ts';
+import { BasicEnnemy } from '../common/BasicEnnemy.ts';
 
 export default class JeuSolo extends Jeu {
 	// private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
 
-	private j = new Joueur(null, { x: 50, y: 50 }, 0, 0, 1, 3); // tempNom
-	private e = new BasicEnnemy(null, { x: 200, y: 200 }, 0, 0, 1); // tempNom
+	private j = new Joueur(this.genereNom(), { x: 50, y: 50 }, 0, 0, 1, 3); // tempNom
+	private e = new BasicEnnemy('ennemy', { x: 200, y: 200 }, 0, 0, 1); // tempNom
 	
 	private socket;
 
@@ -49,5 +50,21 @@ export default class JeuSolo extends Jeu {
 
 	getCoordonee() {
 		return { x: this.j.getX(), y: this.j.getY() };
+	}
+
+	genereNom(): string {
+		// pas testé
+		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+		const tailleStr = randomInt(999999);
+		const num = randomInt(6);
+
+		let temp = '';
+		for (let i = 0; i < tailleStr; i++) {
+			const randomIndex = Math.floor(Math.random() * characters.length);
+			temp += characters.charAt(randomIndex);
+		}
+
+		return temp.concat(num.toString());
 	}
 }

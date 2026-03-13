@@ -1,4 +1,3 @@
-import { randomInt } from 'node:crypto';
 import type { Coordonee } from './types.ts';
 
 export default class Joueur {
@@ -11,14 +10,13 @@ export default class Joueur {
 	invincibilite: boolean;
 
 	constructor(
-		pseudo: string | null,
+		pseudo: string,
 		coJoueur: Coordonee,
 		vx: number,
 		vy: number,
 		speed: number,
 		vies: number
 	) {
-		if (pseudo == null) pseudo = this.genereNom();
 		this.pseudo = pseudo;
 		this.coJoueur = coJoueur;
 		this.vx = vx;
@@ -90,21 +88,5 @@ export default class Joueur {
 	}
 	public isInvincible(): boolean {
 		return this.invincibilite === true;
-	}
-
-	genereNom(): string {
-		// pas testé
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-		const tailleStr = randomInt(999999);
-		const num = randomInt(6);
-
-		let temp = '';
-		for (let i = 0; i < tailleStr; i++) {
-			const randomIndex = Math.floor(Math.random() * characters.length);
-			temp += characters.charAt(randomIndex);
-		}
-
-		return temp.concat(num.toString());
 	}
 }
