@@ -56,7 +56,7 @@ export default class JeuSoloView extends View {
 		};
 	}
 
-	render = (c: Coordonee) => {
+	render(c: Coordonee) {
 		this.context.clearRect(0, 0, 1920, 1080);
 
 		this.context.drawImage(this.image, c.x, c.y, 50, 50);

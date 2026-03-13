@@ -22,7 +22,6 @@ export default class Jeu{
 	private updateSpeed(j: Joueur) {
 		if (this.seDeplace(j) && j.speed < this.max_speed) {
             j.speed += 0.2;
-            console.log(j.speed)
         }
         if(!this.seDeplace(j))j.speed = 1;
 	}
