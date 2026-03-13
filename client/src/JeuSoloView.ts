@@ -30,9 +30,13 @@ export default class JeuSoloView extends View {
 		this.initEvents();
 
 		socket.on('render', (c: Coordonee) => {
-			this.render(this.realCordonee(c));
+			this.render(this.realCordonee(c), this.image);
 		});
 
+		socket.on('initEnnemy', (c: Coordonee) => {
+			this.renderEnnemy(this.realCordonee(c));
+		});
+		
 		Router.setMenuElement(element);
 	}
 
@@ -60,15 +64,15 @@ export default class JeuSoloView extends View {
 		this.image.src = '/images/persoTemp.jpg';
 		this.image.onload = () => {
 			requestAnimationFrame(() => {
-				this.render(c);
+				this.render(c, this.image);
 			});
 		};
 	}
 
-	render(c: Coordonee) {
+	render(c: Coordonee, i: HTMLImageElement) {
 		this.context.clearRect(0, 0, 1920, 1080);
 
-		this.context.drawImage(this.image, c.x, c.y, 50, 50);
+		this.context.drawImage(i, c.x, c.y, 50, 50);
 	}
 	private resampleCanvas() {
 		this.socket.emit('initTailleEcran', {
@@ -97,5 +101,10 @@ export default class JeuSoloView extends View {
 		const realY = ratioY * this.canvas.height;
 
 		return { x: realX, y: realY };
+	}
+
+	private renderEnnemy(c: Coordonee){
+		const i = new Image();
+		i.src = '../public/img/ennemyTemp.jpg'
 	}
 }

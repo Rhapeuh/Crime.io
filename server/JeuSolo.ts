@@ -1,11 +1,14 @@
 import type { Socket } from 'socket.io';
 import Joueur from './Joueur.ts';
 import Jeu from './Jeu.ts';
+import { BasicEnnemy } from './BasicEnnemy';
 
 export default class JeuSolo extends Jeu {
 	// private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
 
 	private j = new Joueur(null, { x: 50, y: 50 }, 0, 0, 1, 3); // tempNom
+	private e = new BasicEnnemy(null, { x: 200, y: 200 }, 0, 0, 1); // tempNom
+	
 	private socket;
 
 	constructor(socket: Socket) {
@@ -37,6 +40,7 @@ export default class JeuSolo extends Jeu {
 		super.update(this.getJoueur());
 
 		this.socket.emit('render', this.getCoordonee());
+		this.socket.emit('initEnnemy', {x: this.e.getX(), y: this.e.getY()});
 	}
 
 	getJoueur() {

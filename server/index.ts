@@ -23,4 +23,9 @@ io.on('connection', socket => {
 	socket.on('disconnect', () => {
 		console.log(`Deconnexion du client ${socket.id}`);
 	});
+
+	socket.on('reset', () => {jeu=new JeuSolo(socket as Socket)});
+
 });
+
+

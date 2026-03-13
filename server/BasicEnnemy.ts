@@ -9,6 +9,6 @@ export class BasicEnnemy extends Ennemy {
 		vy: number,
 		speed: number
 	) {
-		super(pseudo, coJoueur, vx, vy, speed);
+		super(pseudo, coJoueur, vx, vy, speed, 100);    // base hp a 100 je pense
 	}
 }
