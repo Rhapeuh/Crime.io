@@ -8,6 +8,7 @@ export default class Joueur {
 	vy: number;
 	speed: number;
 	vies: number;
+	invincibilite: boolean;
 
 	constructor(
 		pseudo: string | null,
@@ -24,6 +25,7 @@ export default class Joueur {
 		this.vy = vy;
 		this.speed = speed;
 		this.vies = vies;
+		this.invincibilite = false;
 	}
 
 	getPseudo(): string {
@@ -73,12 +75,21 @@ export default class Joueur {
 	setVies(vies: number) {
 		this.vies = vies;
 	}
-
 	enleverVies(damages: number) {
 		this.vies = this.vies - damages;
 	}
 	ajouterVies(vies: number) {
 		this.vies = this.vies + vies;
+	}
+
+	public mettreInvincible() {
+		this.invincibilite = true;
+	}
+	public enleverInvincible() {
+		this.invincibilite = false;
+	}
+	public isInvincible(): boolean {
+		return this.invincibilite === true;
 	}
 
 	genereNom(): string {

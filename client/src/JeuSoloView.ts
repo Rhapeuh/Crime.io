@@ -40,11 +40,20 @@ export default class JeuSoloView extends View {
 		window.addEventListener('keydown', e => {
 			this.selectDirection(e);
 			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+
+			// POUR LES ABILITIES (PARRY et autres)
+			this.handleAbilities(e);
 		});
 		window.addEventListener('keyup', e => {
 			this.arretDirection(e);
 			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
 		});
+	}
+
+	private handleAbilities(e: KeyboardEvent) {
+		if (e.key === ' ') {
+			this.socket.emit('playerParry');
+		}
 	}
 
 	private afficherImage(c: Coordonee) {
