@@ -1,4 +1,3 @@
-import Joueur from "./Joueur.ts";
+import Joueur from './Joueur.ts';
 
-export class Ennemy extends Joueur{
-}
+export default class Ennemy extends Joueur {}
