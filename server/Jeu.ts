@@ -1,4 +1,4 @@
-import type { Joueur } from './types';
+import Joueur  from './Joueur.ts';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
@@ -8,8 +8,8 @@ export default class Jeu {
 
 	update(j: Joueur) {
 		this.updateSpeed(j);
-		j.setX(j.getSpeed() + j.getVX() * j.getSpeed());
-		j.setY(j.getSpeed() + j.getVY() * j.getSpeed());
+		j.setX(j.getX() + j.getVX() * j.getSpeed());
+		j.setY(j.getY() + j.getVY() * j.getSpeed());
 
 		// j.x += j.vx * j.speed;
 		// j.y += j.vy * j.speed;
@@ -30,9 +30,9 @@ export default class Jeu {
 	}
 
 	private updateSpeed(j: Joueur) {
-		if (this.seDeplace(j) && j.speed < this.max_speed) {
-            j.speed += 0.2;
-        }if(!this.seDeplace(j))j.speed = 1;
+		if (this.seDeplace(j) && j.getSpeed() < this.max_speed)
+			j.setSpeed(j.getSpeed() + 0.2);
+		if (!this.seDeplace(j)) j.setSpeed(1);
 	}
 
 	private seDeplace(j: Joueur) {

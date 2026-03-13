@@ -1,12 +1,12 @@
 import type { Socket } from 'socket.io';
-import { Coordonee, Joueur } from './types';
+import Joueur from './Joueur.ts';
 import Jeu from './Jeu.ts';
 
 
 export default class JeuSolo extends Jeu {
 	// private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
 
-	private j = new Joueur (null, new Coordonee(50, 50) , 0, 0, 1 );		// tempNom
+	private j = new Joueur (null, {x: 50, y: 50} , 0, 0, 1 );		// tempNom
 	private socket;
 
 	constructor(socket: Socket) {

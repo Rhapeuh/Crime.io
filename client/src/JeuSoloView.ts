@@ -1,7 +1,7 @@
 import View from './View';
 import Router from './Router';
 import { Socket } from 'socket.io-client';
-import type { Coordonee } from '../../server/types';
+import type { Coordonee } from '../../server/types.ts';
 
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;
@@ -69,16 +69,16 @@ export default class JeuSoloView extends View {
 	}
 
 	private selectDirection(e: KeyboardEvent) {
-		if (e.key === 'd') this.vx = 1;
-		if (e.key === 'q') this.vx = -1;
-		if (e.key === 'z') this.vy = -1;
-		if (e.key === 's') this.vy = 1;
-	}
+    if (e.key === 'd') this.vx = 1;
+    if (e.key === 'q') this.vx = -1;
+    if (e.key === 'z') this.vy = -1;
+    if (e.key === 's') this.vy = 1; 
+}
 
-	private arretDirection(e: KeyboardEvent) {
-		if (['d', 'q'].includes(e.key)) this.vx = 0;
-		if (['z', 's'].includes(e.key)) this.vy = 0;
-	}
+private arretDirection(e: KeyboardEvent) {
+    if (e.key === 'd' || e.key === 'q') this.vx = 0;
+    if (e.key === 'z' || e.key === 's') this.vy = 0;
+}
 
 	private realCordonee(c: Coordonee): Coordonee {
 		const ratioX = c.x / 1920;
@@ -87,6 +87,6 @@ export default class JeuSoloView extends View {
 		const realX = ratioX * this.canvas.width;
 		const realY = ratioY * this.canvas.height;
 
-		return { x: realX, y: realY };
+		return {x: realX, y: realY};
 	}
 }
