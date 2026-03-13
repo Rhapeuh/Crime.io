@@ -1,4 +1,5 @@
 export interface Joueur {
+    pseudo?: string;
     x: number;
     y: number;
     vx: number;

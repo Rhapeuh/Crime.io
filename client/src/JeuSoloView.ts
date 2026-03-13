@@ -19,14 +19,19 @@ export default class JeuSoloView extends View {
 		this.context = this.canvas.getContext('2d')!;
 		this.image = new Image();
 
+		this.canvas.width = 1920;
+		this.canvas.height = 1080;
+
 		socket.on('initImage', (c: Coordonee) => {
-			this.afficherImage(c);
+			this.afficherImage(this.realCordonee(c));
 		});
 
 		this.resampleCanvas();
 		this.initEvents();
 
-		socket.on('render', this.render);
+		socket.on('render', (c: Coordonee) => {
+			this.render(this.realCordonee(c));
+		});
 
 		Router.setMenuElement(element);
 	}
@@ -52,14 +57,11 @@ export default class JeuSoloView extends View {
 	}
 
 	render = (c: Coordonee) => {
-		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.context.drawImage(this.image, c.x, c.y);
+		this.context.clearRect(0, 0, 1920, 1080);
+
+		this.context.drawImage(this.image, c.x, c.y, 50, 50);
 	};
-
 	private resampleCanvas() {
-		this.canvas.width = window.innerWidth;
-		this.canvas.height = window.innerHeight;
-
 		this.socket.emit('initTailleEcran', {
 			width: this.canvas.width,
 			height: this.canvas.height,
@@ -76,5 +78,15 @@ export default class JeuSoloView extends View {
 	private arretDirection(e: KeyboardEvent) {
 		if (['d', 'q'].includes(e.key)) this.vx = 0;
 		if (['z', 's'].includes(e.key)) this.vy = 0;
+	}
+
+	private realCordonee(c: Coordonee): Coordonee {
+		const ratioX = c.x / 1920;
+		const ratioY = c.y / 1080;
+
+		const realX = ratioX * this.canvas.width;
+		const realY = ratioY * this.canvas.height;
+
+		return { x: realX, y: realY };
 	}
 }
