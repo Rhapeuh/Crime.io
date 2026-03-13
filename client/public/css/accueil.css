@@ -51,7 +51,7 @@ h1 {
 
 	writing-mode: vertical-rl;
 
-	animation: scrollTitle 2s linear infinite;
+	animation: scrollTitle 5s linear infinite;
 }
 
 .delay-1 {
@@ -66,13 +66,15 @@ h1 {
 		transform: translateY(0);
 	}
 	to {
-		transform: translateY(-100%);
+		transform: translateY(100%);
 	}
 }
 
 .colonne-titre {
 	width: 120px;
 	background-color: #ACA3A3;
+	height: 850%;
+	transform: translateY(-50%);
 }
 
 .barre-verticale {
