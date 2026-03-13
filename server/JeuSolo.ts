@@ -1,10 +1,12 @@
 import type { Socket } from 'socket.io';
-import type { Joueur } from './types';
+import { Coordonee, Joueur } from './types';
 import Jeu from './Jeu.ts';
 
 
 export default class JeuSolo extends Jeu {
-	private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
+	// private j: Joueur = { x: 50, y: 50, vx: 0, vy: 0, speed: 1 };
+
+	private j = new Joueur (null, new Coordonee(50, 50) , 0, 0, 1 );		// tempNom
 	private socket;
 
 	constructor(socket: Socket) {
@@ -21,8 +23,8 @@ export default class JeuSolo extends Jeu {
 	}
 
 	updateInput(vx: number, vy: number) {
-		this.j.vx = vx;
-		this.j.vy = vy;
+		this.j.setVX(vx);
+		this.j.setVY(vy);
 	}
 
 	update() {
@@ -36,6 +38,6 @@ export default class JeuSolo extends Jeu {
 	}
 
 	getCoordonee() {
-		return { x: this.j.x, y: this.j.y };
+		return { x: this.j.getX(), y: this.j.getY() };
 	}
 }
