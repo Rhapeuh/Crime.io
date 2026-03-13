@@ -1,34 +1,85 @@
-export interface Joueur {
-    pseudo?: string;
-    coJoueur: Coordonee
-    vx: number;
-    vy: number;
-    speed: number;
+export class Joueur {
+	pseudo?: string;
+	coJoueur: Coordonee;
+	vx: number;
+	vy: number;
+	speed: number;
 
-    getPseudo() : string;
-    setPseudo(nouveauPseudo: string) : void;
+	constructor(
+		pseudo: string,
+		coJoueur: Coordonee,
+		vx: number,
+		vy: number,
+		speed: number
+	) {
+		this.pseudo = pseudo;
+		this.coJoueur = coJoueur;
+		this.vx = vx;
+		this.vy = vy;
+		this.speed = speed;
+	}
 
-    getX(): number;
-    getY(): number;
-    setX(posX : number): void;
-    setY(posY : number): void;
+	getPseudo(): string|undefined{      // TODO verifier le cas ou il est undefined
+        return this.pseudo;
+    }
+	setPseudo(nouveauPseudo: string): void{
+        this.pseudo = nouveauPseudo;
+    }
 
-    getVX(): number;
-    getVY(): number;
-    setVX(vecteurX : number): void;
-    setVY(vecteurY : number): void;
+	getX(): number{
+        return this.coJoueur.getX();
+    }
+	getY(): number{
+        return this.coJoueur.getY();
+    }
+	setX(posX: number): void{
+        this.coJoueur.setX(posX);
+    }
+	setY(posY: number): void{
+        this.coJoueur.setY(posY);
+    }
 
-    getSpeed() : number;
-    setSpeed(speed: number) : void;
+	getVX(): number{
+        return this.vx;
+    }
+	getVY(): number{
+        return this.vy;
+    }
+	setVX(vecteurX: number): void{
+        this.vx = vecteurX;
+    }
+	setVY(vecteurY: number): void{
+        this.vx = vecteurY;
+    }
+
+	getSpeed(): number{
+        return this.speed;
+    }
+	setSpeed(speed: number): void{
+        this.speed = speed;
+    }
 }
 
-export interface Coordonee {
-    x: number;
-    y: number;
+export class Coordonee {
+	x: number;
+	y: number;
 
-    getX(): number;
-    getY(): number;
+	constructor(x: number, y: number) {
+		this.x = x;
+		this.y = y;
+	}
 
-    setX(posX : number): void;
-    setY(posY : number): void;
+	getX(): number {
+		return this.x;
+	}
+	getY(): number {
+		return this.y;
+	}
+
+	setX(posX: number): void {
+		this.x = posX;
+	}
+	setY(posY: number): void {
+		this.y = posY;
+	}
 }
