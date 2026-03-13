@@ -106,6 +106,6 @@ export default class JeuSoloView extends View {
 	private renderEnnemy(c: Coordonee){
 		const i = new Image();
 		i.src = '../public/img/ennemyTemp.jpg'
-		this.render
+		this.render(c, this.image)
 	}
 }
