@@ -41,11 +41,17 @@ export default class JeuSolo extends Jeu {
 		super.update(this.getJoueur());
 
 		this.socket.emit('render', this.getCoordonee());
+
+		super.updateEnnemy(this.getEnnemy(), this.getJoueur())
 		this.socket.emit('initEnnemy', {x: this.e.getX(), y: this.e.getY()});
 	}
 
 	getJoueur() {
 		return this.j;
+	}
+
+	getEnnemy() {
+		return this.e;
 	}
 
 	getCoordonee() {

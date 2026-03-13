@@ -1,3 +1,4 @@
+import type { Ennemy } from '../common/Ennemy';
 import Joueur  from '../common/Joueur.ts';
 
 export default class Jeu {
@@ -20,6 +21,43 @@ export default class Jeu {
 			j.setX(this.WORLD_WIDTH - this.PLAYER_SIZE);
 		if (j.getY() > this.WORLD_HEIGHT - this.PLAYER_SIZE)
 			j.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
+
+		// if (j.x < 0) j.x = 0;
+		// if (j.y < 0) j.y = 0;
+		// if (j.x > this.WORLD_WIDTH - this.PLAYER_SIZE)
+		// 	j.x = this.WORLD_WIDTH - this.PLAYER_SIZE;
+		// if (j.y > this.WORLD_HEIGHT - this.PLAYER_SIZE)
+		// 	j.y = this.WORLD_HEIGHT - this.PLAYER_SIZE;
+	}
+
+	updateEnnemy(e: Ennemy, j: Joueur) {
+		this.updateSpeed(e);
+
+		if (Math.abs(e.getX() - j.getX()) > 300){
+			if (e.getX() > j.getX()){
+				e.setX(e.getX() + (e.speed * -1));
+			}else if (e.getX() < j.getX()){
+				e.setX(e.getX() + (e.speed * 1));
+			}
+		}
+
+		if (Math.abs(e.getY() - j.getY()) > 300){
+			if (e.getY() > j.getY()){
+				e.setY(e.getY() + (e.speed * -1));
+			}else if (e.getY() < j.getY()){
+				e.setY(e.getY() + (e.speed * 1));
+			}
+		}
+
+		// j.x += j.vx * j.speed;
+		// j.y += j.vy * j.speed;
+
+		if (e.getX() < 0) e.setX(0);
+		if (e.getY() < 0) e.setY(0);
+		if (e.getX() > this.WORLD_WIDTH - this.PLAYER_SIZE)
+			e.setX(this.WORLD_WIDTH - this.PLAYER_SIZE);
+		if (e.getY() > this.WORLD_HEIGHT - this.PLAYER_SIZE)
+			e.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
 
 		// if (j.x < 0) j.x = 0;
 		// if (j.y < 0) j.y = 0;
