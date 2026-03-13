@@ -60,7 +60,7 @@ export default class JeuSoloView extends View {
 		this.context.clearRect(0, 0, 1920, 1080);
 
 		this.context.drawImage(this.image, c.x, c.y, 50, 50);
-	};
+	}
 	private resampleCanvas() {
 		this.socket.emit('initTailleEcran', {
 			width: this.canvas.width,
@@ -69,16 +69,16 @@ export default class JeuSoloView extends View {
 	}
 
 	private selectDirection(e: KeyboardEvent) {
-    if (e.key === 'd') this.vx = 1;
-    if (e.key === 'q') this.vx = -1;
-    if (e.key === 'z') this.vy = -1;
-    if (e.key === 's') this.vy = 1; 
-}
+		if (e.key === 'd') this.vx = 1;
+		if (e.key === 'q') this.vx = -1;
+		if (e.key === 'z') this.vy = -1;
+		if (e.key === 's') this.vy = 1;
+	}
 
-private arretDirection(e: KeyboardEvent) {
-    if (e.key === 'd' || e.key === 'q') this.vx = 0;
-    if (e.key === 'z' || e.key === 's') this.vy = 0;
-}
+	private arretDirection(e: KeyboardEvent) {
+		if (e.key === 'd' || e.key === 'q') this.vx = 0;
+		if (e.key === 'z' || e.key === 's') this.vy = 0;
+	}
 
 	private realCordonee(c: Coordonee): Coordonee {
 		const ratioX = c.x / 1920;
@@ -87,6 +87,6 @@ private arretDirection(e: KeyboardEvent) {
 		const realX = ratioX * this.canvas.width;
 		const realY = ratioY * this.canvas.height;
 
-		return {x: realX, y: realY};
+		return { x: realX, y: realY };
 	}
 }
