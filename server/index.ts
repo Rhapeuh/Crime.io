@@ -3,6 +3,7 @@ import { env } from 'process';
 import { Server as IOServer } from 'socket.io';
 import JeuSolo from './JeuSolo.ts';
 import type { Socket } from 'socket.io';
+import { randomInt } from 'crypto';
 
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
@@ -13,22 +14,33 @@ const httpServer = http.createServer((_req, res) => {
 httpServer.listen(9876, () => {
 	console.log(`Server running at http://localhost:9876/`); // <-- pour verif que le serveur tourne bien
 });
-let jeu: JeuSolo;
+
+const partiesEnCours = new Map<string, JeuSolo>();
+
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
-	startNewGame(socket);
-	console.log(`Nouvelle connexion du client ${socket.id}`);
+    socket.emit('premiereConnexion', genereNom());
+	socket.on('createSoloView', (pseudo: string) => {startNewGame(pseudo, socket)})
 
 	socket.on('disconnect', () => {
-		console.log(`Deconnexion du client ${socket.id}`);
-	});
-
-	socket.on('reset', startNewGame);
-
+        if (partiesEnCours.has(socket.id)) {
+            partiesEnCours.get(socket.id)?.destroy();
+            partiesEnCours.delete(socket.id);
+        }
+    });
 });
 
 
-function startNewGame(socket : Socket){
-	jeu = new JeuSolo(socket as Socket);
+function startNewGame(pseudo: string, socket : Socket){
+	if (partiesEnCours.has(socket.id)) {
+        partiesEnCours.get(socket.id)?.destroy();
+    }
+    
+    const nouveauJeu = new JeuSolo(pseudo, socket);
+    partiesEnCours.set(socket.id, nouveauJeu);
+}
+
+function genereNom(): string {
+        return `Joueur${randomInt(10000)}`; 
 }

@@ -2,7 +2,7 @@ import View from './View';
 
 interface Route {
 	path: string;
-	view: View;
+	getView: () => View;
 }
 
 /**
@@ -15,7 +15,7 @@ export default class Router {
 	 * @example `Router.routes = [{ path: '/help', view: helpView, title: 'Support' }]`
 	 */
 	static routes: Route[];
-	static currentRoute: Route;
+	static currentView: View | null = null;
 
 	/**
 	 * Setter qui indique au `Router` la balise HTML contenant le menu de navigation.
@@ -48,11 +48,11 @@ export default class Router {
 		});
 		if (route) {
 			// on masque la vue précédente
-			if (this.currentRoute) {
-				this.currentRoute.view.hide();
+			if (this.currentView) {
+				this.currentView.destroy();
 			}
-			this.currentRoute = route;
-			route.view.show();
+			this.currentView = route.getView();
+			this.currentView.show()
 
 			// History API : ajout d'une entrée dans l'historique du navigateur
 			// pour pouvoir utiliser les boutons précédent/suivant

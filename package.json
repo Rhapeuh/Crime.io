@@ -17,7 +17,7 @@
     "client:build": "tsc && vite build",
     "client:preview": "vite preview",
     "server": "node .",
-    "server:watch": "node --watch ."
+    "server:watch": "node --watch-path=./server --watch-path=./common server/index.ts"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
