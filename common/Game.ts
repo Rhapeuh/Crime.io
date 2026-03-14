@@ -1,13 +1,13 @@
+import { Ennemy } from './Ennemy';
 import Joueur from './Joueur.ts';
-// import Ennemy from './Ennemy.ts';
 
 export default class Game {
 	joueurs: Array<Joueur>;
-	// ennemies: Array<Ennemy>;
+	ennemies: Array<Ennemy>;
 
 	constructor() {
 		this.joueurs = new Array<Joueur>();
-		// this.ennemies = new Array<Ennemy>();
+		this.ennemies = new Array<Ennemy>();
 	}
 
 	addJoueur(joueur: Joueur) {
@@ -20,10 +20,10 @@ export default class Game {
 		});
 	}
 
-	// addEnnemy(ennemy: Ennemy) {
-	// 	this.ennemies.push(ennemy);
-	// }
-	// removeEnnemy(ennemy: Ennemy) {
-	// 	this.ennemies = this.ennemies.filter(e => e !== ennemy);
-	// }
+	addEnnemy(ennemy: Ennemy) {
+		this.ennemies.push(ennemy);
+	}
+	removeEnnemy(ennemy: Ennemy) {
+		this.ennemies = this.ennemies.filter(e => e !== ennemy);
+	}
 }
