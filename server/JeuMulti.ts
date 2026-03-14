@@ -1,13 +1,13 @@
 import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
-import type { Server } from 'node:http';
+import { Server as IOServer } from 'socket.io';
 
 export default class JeuMulti extends Jeu {
 	private listJoueurs: Map<string, Joueur> = new Map();
-	private io: Server;
+	private io: IOServer;
 
-	constructor(io: Server) {
+	constructor(io: IOServer) {
 		super();
 		this.io = io;
 
