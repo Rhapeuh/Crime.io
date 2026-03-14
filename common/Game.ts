@@ -15,9 +15,7 @@ export default class Game {
 	}
 
 	removeJoueur(joueur: Joueur) {
-		this.joueurs = this.joueurs.filter(j => {
-			j !== joueur;
-		});
+		this.joueurs = this.joueurs.filter(j => j !== joueur);
 	}
 
 	// addEnnemy(ennemy: Ennemy) {
