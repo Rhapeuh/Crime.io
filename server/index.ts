@@ -20,8 +20,8 @@ const partiesEnCours = new Map<string, JeuSolo>();
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
-    socket.emit('premiereConnexion', genereNom())
-	socket.on('createSoloView', () => {startNewGame(socket)})
+    socket.emit('premiereConnexion', genereNom());
+	socket.on('createSoloView', (pseudo: string) => {startNewGame(pseudo, socket)})
 
 	socket.on('disconnect', () => {
         if (partiesEnCours.has(socket.id)) {
@@ -32,12 +32,12 @@ io.on('connection', socket => {
 });
 
 
-function startNewGame(socket : Socket){
+function startNewGame(pseudo: string, socket : Socket){
 	if (partiesEnCours.has(socket.id)) {
         partiesEnCours.get(socket.id)?.destroy();
     }
     
-    const nouveauJeu = new JeuSolo(socket);
+    const nouveauJeu = new JeuSolo(pseudo, socket);
     partiesEnCours.set(socket.id, nouveauJeu);
 }
 

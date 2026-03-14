@@ -11,64 +11,64 @@ export default class JeuSoloView extends View {
 	private image: HTMLImageElement;
 	private socket;
 
-	constructor(element: HTMLElement, socket: Socket) {
-        super(element);
-        this.socket = socket;
-		socket.emit('createSoloView')
+	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
+		super(element);
+		this.socket = socket;
+		socket.emit('createSoloView', pseudo);
 
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleKeyUp = this.handleKeyUp.bind(this);
-        this.handleRender = this.handleRender.bind(this);
-        this.handleInitImage = this.handleInitImage.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
+		this.handleKeyUp = this.handleKeyUp.bind(this);
+		this.handleRender = this.handleRender.bind(this);
+		this.handleInitImage = this.handleInitImage.bind(this);
 
-        this.canvas = this.element.querySelector('canvas')!;
-        this.context = this.canvas.getContext('2d')!;
-        this.image = new Image();
+		this.canvas = this.element.querySelector('canvas')!;
+		this.context = this.canvas.getContext('2d')!;
+		this.image = new Image();
 
-        this.canvas.width = 1920;
-        this.canvas.height = 1080;
+		this.canvas.width = 1920;
+		this.canvas.height = 1080;
 
-        this.socket.on('initImage', this.handleInitImage);
-        this.socket.on('render', this.handleRender);
+		this.socket.on('initImage', this.handleInitImage);
+		this.socket.on('render', this.handleRender);
 
-        this.resampleCanvas();
-        this.initEvents();
+		this.resampleCanvas();
+		this.initEvents();
 
-        Router.setMenuElement(element);
-    }
+		Router.setMenuElement(element);
+	}
 
 	private handleInitImage(c: Coordonee) {
-        this.afficherImage(this.realCordonee(c));
-    }
+		this.afficherImage(this.realCordonee(c));
+	}
 
-    private handleRender(c: Coordonee) {
-        this.render(this.realCordonee(c));
-    }
+	private handleRender(c: Coordonee) {
+		this.render(this.realCordonee(c));
+	}
 
-    private initEvents() {
-        window.addEventListener('keydown', this.handleKeyDown);
-        window.addEventListener('keyup', this.handleKeyUp);
-    }
+	private initEvents() {
+		window.addEventListener('keydown', this.handleKeyDown);
+		window.addEventListener('keyup', this.handleKeyUp);
+	}
 
-    private handleKeyDown(e: KeyboardEvent) {
-        this.selectDirection(e);
-        this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
-    }
+	private handleKeyDown(e: KeyboardEvent) {
+		this.selectDirection(e);
+		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+	}
 
-    private handleKeyUp(e: KeyboardEvent) {
-        this.arretDirection(e);
-        this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
-    }
+	private handleKeyUp(e: KeyboardEvent) {
+		this.arretDirection(e);
+		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+	}
 
 	destroy() {
-        super.destroy();
+		super.destroy();
 
-        window.removeEventListener('keydown', this.handleKeyDown);
-        window.removeEventListener('keyup', this.handleKeyUp);
+		window.removeEventListener('keydown', this.handleKeyDown);
+		window.removeEventListener('keyup', this.handleKeyUp);
 
-        this.socket.off('initImage', this.handleInitImage);
-        this.socket.off('render', this.handleRender);
-    }
+		this.socket.off('initImage', this.handleInitImage);
+		this.socket.off('render', this.handleRender);
+	}
 
 	private afficherImage(c: Coordonee) {
 		this.image.src = '/images/persoTemp.jpg';

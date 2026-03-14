@@ -3,14 +3,13 @@ import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
 
 export default class JeuSolo extends Jeu {
-
-	private j = new Joueur('temp', { x: 50, y: 50 }, 0, 0, 1);
-	
-	private socket;
+	private j: Joueur;
+	private socket: Socket;
 	private gameLoop: NodeJS.Timeout;
 
-	constructor(socket: Socket) {0
+	constructor(pseudo: string, socket: Socket) {
 		super();
+		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1);
 		this.socket = socket;
 		socket.emit('initImage', this.getCoordonee());
 
@@ -19,16 +18,16 @@ export default class JeuSolo extends Jeu {
 		});
 
 		this.gameLoop = setInterval(() => {
-            this.update();
-        }, 1000 / 60);
+			this.update();
+		}, 1000 / 60);
 	}
 
 	destroy() {
-        clearInterval(this.gameLoop);
+		clearInterval(this.gameLoop);
 
-        this.socket.removeAllListeners('updateInput');
-        this.socket.removeAllListeners('initTailleEcran');
-    }
+		this.socket.removeAllListeners('updateInput');
+		this.socket.removeAllListeners('initTailleEcran');
+	}
 
 	updateInput(vx: number, vy: number) {
 		this.j.setVX(vx);
