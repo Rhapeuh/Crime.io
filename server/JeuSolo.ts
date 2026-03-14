@@ -14,7 +14,7 @@ export default class JeuSolo extends Jeu {
 		socket.emit('initImage', this.getCoordonee());
 
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
-			this.updateInput(input.vx, input.vy);
+			this.updateInput(this.j, input.vx, input.vy);
 		});
 
 		this.gameLoop = setInterval(() => {
@@ -27,11 +27,6 @@ export default class JeuSolo extends Jeu {
 
 		this.socket.removeAllListeners('updateInput');
 		this.socket.removeAllListeners('initTailleEcran');
-	}
-
-	updateInput(vx: number, vy: number) {
-		this.j.setVX(vx);
-		this.j.setVY(vy);
 	}
 
 	update() {
