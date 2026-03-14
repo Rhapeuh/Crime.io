@@ -81,15 +81,27 @@ export default class JeuMultiView extends View {
     }
 
     private selectDirection(e: KeyboardEvent) {
-        if (e.key === 'd') this.vx = 1;
-        if (e.key === 'q') this.vx = -1;
-        if (e.key === 'z') this.vy = -1;
-        if (e.key === 's') this.vy = 1;
+		if (e.key === 'd' || e.key === 'ArrowRight') this.vx = 1;
+		if (e.key === 'q' || e.key === 'ArrowLeft') this.vx = -1;
+		if (e.key === 'z' || e.key === 'ArrowUp') this.vy = -1;
+		if (e.key === 's' || e.key === 'ArrowDown') this.vy = 1;
     }
 
     private arretDirection(e: KeyboardEvent) {
-        if (e.key === 'd' || e.key === 'q') this.vx = 0;
-        if (e.key === 'z' || e.key === 's') this.vy = 0;
+		if (
+			e.key === 'd' ||
+			e.key === 'q' ||
+			e.key === 'ArrowRight' ||
+			e.key === 'ArrowLeft'
+		)
+			this.vx = 0;
+		if (
+			e.key === 'z' ||
+			e.key === 's' ||
+			e.key === 'ArrowUp' ||
+			e.key === 'ArrowDown'
+		)
+			this.vy = 0;
     }
 
     private realCordonee(c: Coordonee): Coordonee {

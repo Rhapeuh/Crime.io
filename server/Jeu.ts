@@ -1,5 +1,4 @@
 import Joueur  from '../common/Joueur.ts';
-import Game  from '../common/Game.ts';
 import { BasicEnnemy } from '../common/BasicEnnemy.ts';
 import { randomInt } from 'node:crypto';
 
