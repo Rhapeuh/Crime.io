@@ -1,11 +1,10 @@
-import { randomInt } from 'node:crypto';
 import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
 
 export default class JeuSolo extends Jeu {
 
-	private j = new Joueur(this.genereNom(), { x: 50, y: 50 }, 0, 0, 1);
+	private j = new Joueur('temp', { x: 50, y: 50 }, 0, 0, 1);
 	
 	private socket;
 	private gameLoop: NodeJS.Timeout;
@@ -49,8 +48,4 @@ export default class JeuSolo extends Jeu {
 	getCoordonee() {
 		return { x: this.j.getX(), y: this.j.getY() };
 	}
-
-	genereNom(): string {
-        return `Joueur ${randomInt(10000)}`; 
-    }
 }

@@ -3,6 +3,7 @@ import { env } from 'process';
 import { Server as IOServer } from 'socket.io';
 import JeuSolo from './JeuSolo.ts';
 import type { Socket } from 'socket.io';
+import { randomInt } from 'crypto';
 
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
@@ -19,6 +20,7 @@ const partiesEnCours = new Map<string, JeuSolo>();
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
+    socket.emit('premiereConnexion', genereNom())
 	socket.on('createSoloView', () => {startNewGame(socket)})
 
 	socket.on('disconnect', () => {
@@ -37,4 +39,8 @@ function startNewGame(socket : Socket){
     
     const nouveauJeu = new JeuSolo(socket);
     partiesEnCours.set(socket.id, nouveauJeu);
+}
+
+function genereNom(): string {
+        return `Joueur${randomInt(10000)}`; 
 }
