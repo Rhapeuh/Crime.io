@@ -4,7 +4,7 @@ export default class Jeu {
 	private WORLD_WIDTH = 1920;
 	private WORLD_HEIGHT = 1080;
 	private PLAYER_SIZE = 50;
-	private max_speed: number = 10;
+	private max_speed: number = 15;
 
 	update(j: Joueur) {
 		this.updateSpeed(j);

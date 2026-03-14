@@ -2,6 +2,7 @@ import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
 import { Server as IOServer } from 'socket.io';
+import Game from '../common/Game.ts'
 
 export default class JeuMulti extends Jeu {
 	private listJoueurs: Map<string, Joueur> = new Map();
@@ -17,7 +18,7 @@ export default class JeuMulti extends Jeu {
 	}
 
 	ajouterJoueur(socket: Socket, pseudo: string) {
-		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1);
+		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
 		this.listJoueurs.set(socket.id, newJoueur);
 
 		socket.emit('renderMulti', this.preparerDonnée());
@@ -51,11 +52,10 @@ export default class JeuMulti extends Jeu {
 	}
 
     private preparerDonnée() {
-        return Array.from(this.listJoueurs.values()).map(joueur => {
-            return {
-                pseudo: joueur.getPseudo(),
-                c: joueur.getCoordonee()
-            };
-        });
+		const  g = new Game();
+		for(const j of this.listJoueurs.values()){
+			g.addJoueur(j)
+		}
+		return g
     }
 }
