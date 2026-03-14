@@ -4,16 +4,17 @@ import Jeu from './Jeu.ts';
 import Game from '../common/Game.ts';
 
 export default class JeuSolo extends Jeu {
-	private j: Joueur;
+	private j: Joueur
 	private socket: Socket;
 	private gameLoop: NodeJS.Timeout;
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
+		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3)
+		this.game.addJoueur(this.j);
 		this.socket = socket;
 
-		this.socket.emit('renderSolo', this.preparerDonnee())
+		this.socket.emit('renderSolo', this.game)
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			this.updateInput(this.j, input.vx, input.vy);
 		});
@@ -29,6 +30,10 @@ export default class JeuSolo extends Jeu {
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
+
+		socket.on('quitterMulti', () => {
+			this.game = new Game();
+		});
 	}
 
 	destroy() {
@@ -40,16 +45,10 @@ export default class JeuSolo extends Jeu {
 	update() {
 		super.update(this.getJoueur());
 
-		this.socket.emit('renderSolo', this.preparerDonnee());
+		this.socket.emit('renderSolo', this.game);
 	}
 
 	getJoueur() {
 		return this.j;
-	}
-
-	preparerDonnee() {
-		const g = new Game()
-		g.addJoueur(this.j)
-		return g;
 	}
 }

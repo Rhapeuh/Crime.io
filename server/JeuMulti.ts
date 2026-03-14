@@ -2,7 +2,6 @@ import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
 import { Server as IOServer } from 'socket.io';
-import Game from '../common/Game.ts'
 
 export default class JeuMulti extends Jeu {
 	private listJoueurs: Map<string, Joueur> = new Map();
@@ -21,11 +20,12 @@ export default class JeuMulti extends Jeu {
 		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
 		this.listJoueurs.set(socket.id, newJoueur);
 
-		socket.emit('renderMulti', this.preparerDonnée());
+		socket.emit('renderMulti', this.game);
 
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			const joueur = this.listJoueurs.get(socket.id);
 			if (joueur) {
+				this.game.addJoueur(joueur);
 				this.updateInput(joueur, input.vx, input.vy);
 			}
 		});
@@ -35,11 +35,12 @@ export default class JeuMulti extends Jeu {
 		});
 
         socket.on('quitterMulti', () => {
-					this.retirerJoueur(socket.id);
+			this.retirerJoueur(socket.id);
 		});
 	}
 
 	retirerJoueur(socketId: string) {
+		this.game.removeJoueur(this.listJoueurs.get(socketId)!)
 		this.listJoueurs.delete(socketId);
 	}
 
@@ -48,14 +49,6 @@ export default class JeuMulti extends Jeu {
             super.update(joueur);
         }
 
-		this.io.emit('renderMulti', this.preparerDonnée());
+		this.io.emit('renderMulti', this.game);
 	}
-
-    private preparerDonnée() {
-		const  g = new Game();
-		for(const j of this.listJoueurs.values()){
-			g.addJoueur(j)
-		}
-		return g
-    }
 }

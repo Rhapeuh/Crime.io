@@ -66,6 +66,8 @@ export default class JeuSoloView extends View {
 		window.removeEventListener('mouseup', this.handleShooting);
 
 		this.socket.off('render', this.handleRender);
+
+		this.socket.emit('quitterSolo');
 	}
 
 	render(g: Game) {
