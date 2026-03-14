@@ -27,9 +27,9 @@ export default class Joueur {
 	}
 
 	getPseudo(): string {
-		// TODO verifier le cas ou il est undefined
 		return this.pseudo!;
 	}
+
 	setPseudo(nouveauPseudo: string): void {
 		this.pseudo = nouveauPseudo;
 	}
@@ -65,6 +65,9 @@ export default class Joueur {
 	}
 	setSpeed(speed: number): void {
 		this.speed = speed;
+	}
+	getCoordonee(): Coordonee {
+		return this.coJoueur;
 	}
 
 	getVies(): number {

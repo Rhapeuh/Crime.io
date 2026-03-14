@@ -2,6 +2,7 @@ import View from './View';
 import Router from './Router';
 import { Socket } from 'socket.io-client';
 import type { Coordonee } from '../../common/types.ts';
+import Assets from './asset';
 
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;
@@ -11,76 +12,75 @@ export default class JeuSoloView extends View {
 	private image: HTMLImageElement;
 	private socket;
 
-	constructor(element: HTMLElement, socket: Socket) {
+	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element);
 		this.socket = socket;
+		socket.emit('rejoindreSolo', pseudo);
 
-		this.canvas = this.element.querySelector('canvas')!;
+		this.handleKeyDown = this.handleKeyDown.bind(this);
+		this.handleKeyUp = this.handleKeyUp.bind(this);
+		this.handleRender = this.handleRender.bind(this);
+		this.handleInitImage = this.handleInitImage.bind(this);
+
+		this.canvas = this.element.querySelector('.gameCanvasSolo')!;
 		this.context = this.canvas.getContext('2d')!;
-		this.image = new Image();
+		this.image = Assets.persoTemp1;
 
 		this.canvas.width = 1920;
 		this.canvas.height = 1080;
 
-		socket.on('initImage', (c: Coordonee) => {
-			this.afficherImage(this.realCordonee(c));
-		});
+		this.socket.on('initImage', this.handleInitImage);
+		this.socket.on('render', this.handleRender);
 
-		this.resampleCanvas();
 		this.initEvents();
-
-		socket.on('render', (c: Coordonee) => {
-			this.render(this.realCordonee(c), this.image);
-		});
-
-
 
 		Router.setMenuElement(element);
 	}
 
+	private handleInitImage(c: Coordonee) {
+		this.render(this.realCordonee(c));
+	}
+
+	private handleRender(c: Coordonee) {
+		this.render(this.realCordonee(c));
+	}
+
 	private initEvents() {
-		window.addEventListener('keydown', e => {
-			this.selectDirection(e);
-			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		window.addEventListener('keydown', this.handleKeyDown);
+		window.addEventListener('keyup', this.handleKeyUp);
+	}
 
-			// POUR LES ABILITIES (PARRY et autres)
-			this.handleAbilities(e);
+	private handleKeyDown(e: KeyboardEvent) {
+		this.selectDirection(e);
+		this.handleAbilities(e);
+		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+	}
 
-			if (this.killPlayer(e)){
-				this.socket.emit('killtest');
-				document.querySelector('.rejouer')?.setAttribute('style', 'display:inline');
-			} 
-		});
-		window.addEventListener('keyup', e => {
-			this.arretDirection(e);
-			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
-		});
+	private handleKeyUp(e: KeyboardEvent) {
+		this.arretDirection(e);
+		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+	}
+
+	destroy() {
+		super.destroy();
+
+		window.removeEventListener('keydown', this.handleKeyDown);
+		window.removeEventListener('keyup', this.handleKeyUp);
+
+		this.socket.off('initImage', this.handleInitImage);
+		this.socket.off('render', this.handleRender);
+	}
+
+	render(c: Coordonee) {
+		this.context.clearRect(0, 0, 1920, 1080);
+
+		this.context.drawImage(this.image, c.x, c.y, 50, 50);
 	}
 
 	private handleAbilities(e: KeyboardEvent) {
 		if (e.key === ' ') {
 			this.socket.emit('playerParry');
 		}
-	}
-
-	private afficherImage(c: Coordonee) {
-		this.image.src = '/images/persoTemp.jpg';
-		this.image.onload = () => {
-			requestAnimationFrame(() => {
-				this.render(c, this.image);
-			});
-		};
-	}
-
-	render(c: Coordonee, i: HTMLImageElement) {
-		this.context.clearRect(0, 0, 1920, 1080);
-		this.context.drawImage(i, c.x, c.y, 50, 50);
-	}
-	private resampleCanvas() {
-		this.socket.emit('initTailleEcran', {
-			width: this.canvas.width,
-			height: this.canvas.height,
-		});
 	}
 
 	private selectDirection(e: KeyboardEvent) {

@@ -22,5 +22,5 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["client/src", "server", "common/types.ts", "common/Ennemy.ts"]
+	"include": ["client/src", "server"]
 }

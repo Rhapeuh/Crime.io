@@ -23,4 +23,8 @@ export default class View {
 	hide() {
 		this.element.classList.remove('active');
 	}
+
+	destroy() {
+        this.hide();
+    }
 }
