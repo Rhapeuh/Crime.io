@@ -57,7 +57,9 @@ export default class Router {
 			// History API : ajout d'une entrée dans l'historique du navigateur
 			// pour pouvoir utiliser les boutons précédent/suivant
 			if (!skipPushState) {
-				window.history.pushState(null, '', path);
+				if (window.location.pathname !== path) {
+					window.history.pushState(null, '', path);
+				}
 			}
 		}
 	}

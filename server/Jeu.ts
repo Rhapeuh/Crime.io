@@ -31,4 +31,9 @@ export default class Jeu {
 		if (j.getY() > this.WORLD_HEIGHT - this.PLAYER_SIZE)
 			j.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
 	}
+
+	updateInput(j: Joueur, vx: number, vy: number) {
+		j.setVX(vx);
+		j.setVY(vy);
+	}
 }
