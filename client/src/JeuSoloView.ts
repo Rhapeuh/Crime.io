@@ -22,7 +22,7 @@ export default class JeuSoloView extends View {
 		this.handleRender = this.handleRender.bind(this);
 		this.handleInitImage = this.handleInitImage.bind(this);
 
-		this.canvas = this.element.querySelector('canvas')!;
+		this.canvas = this.element.querySelector('.gameCanvasSolo')!;
 		this.context = this.canvas.getContext('2d')!;
 		this.image = Assets.persoTemp1;
 

@@ -32,7 +32,7 @@ async function lancerJeu() {
         
         window.onpopstate = () => Router.navigate(document.location.pathname, true);
     } catch (erreur) {
-        console.error("❌ Erreur lors du chargement des images :", erreur);
+        console.error("Erreur lors du chargement des images :", erreur);
     }
 }
 

@@ -22,7 +22,7 @@ export default class JeuMultiView extends View {
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.handleRender = this.handleRender.bind(this);
 
-        this.canvas = this.element.querySelector('canvas')!;
+        this.canvas = this.element.querySelector('.gameCanvasMulti')!;
         this.context = this.canvas.getContext('2d')!;
 
         this.canvas.width = 1920;
@@ -62,6 +62,8 @@ export default class JeuMultiView extends View {
         window.removeEventListener('keyup', this.handleKeyUp);
 
         this.socket.off('render', this.handleRender);
+        
+        this.socket.emit('quitterMulti');
     }
 
     render(listJoueurs: {pseudo: string, c: Coordonee}[]) {

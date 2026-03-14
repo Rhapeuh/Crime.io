@@ -32,6 +32,10 @@ export default class JeuMulti extends Jeu {
 		socket.on('disconnect', () => {
 			this.retirerJoueur(socket.id);
 		});
+
+        socket.on('quitterMulti', () => {
+					this.retirerJoueur(socket.id);
+		});
 	}
 
 	retirerJoueur(socketId: string) {
