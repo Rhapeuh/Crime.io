@@ -6,19 +6,24 @@ export default class Joueur {
 	vx: number;
 	vy: number;
 	speed: number;
+	vies: number;
+	invincibilite: boolean;
 
 	constructor(
 		pseudo: string,
 		coJoueur: Coordonee,
 		vx: number,
 		vy: number,
-		speed: number
+		speed: number,
+		vies: number
 	) {
 		this.pseudo = pseudo;
 		this.coJoueur = coJoueur;
 		this.vx = vx;
 		this.vy = vy;
 		this.speed = speed;
+		this.vies = vies;
+		this.invincibilite = false;
 	}
 
 	getPseudo(): string {
@@ -63,5 +68,28 @@ export default class Joueur {
 	}
 	getCoordonee(): Coordonee {
 		return this.coJoueur;
+	}
+
+	getVies(): number {
+		return this.vies;
+	}
+	setVies(vies: number) {
+		this.vies = vies;
+	}
+	enleverVies(damages: number) {
+		this.vies = this.vies - damages;
+	}
+	ajouterVies(vies: number) {
+		this.vies = this.vies + vies;
+	}
+
+	public mettreInvincible() {
+		this.invincibilite = true;
+	}
+	public enleverInvincible() {
+		this.invincibilite = false;
+	}
+	public isInvincible(): boolean {
+		return this.invincibilite === true;
 	}
 }
