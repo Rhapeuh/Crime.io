@@ -33,6 +33,8 @@ export default class JeuSoloView extends View {
 			this.render(this.realCordonee(c), this.image);
 		});
 
+
+
 		Router.setMenuElement(element);
 	}
 
@@ -43,6 +45,11 @@ export default class JeuSoloView extends View {
 
 			// POUR LES ABILITIES (PARRY et autres)
 			this.handleAbilities(e);
+
+			if (this.killPlayer(e)){
+				this.socket.emit('killtest');
+				document.querySelector('.rejouer')?.setAttribute('style', 'display:inline');
+			} 
 		});
 		window.addEventListener('keyup', e => {
 			this.arretDirection(e);
@@ -67,7 +74,6 @@ export default class JeuSoloView extends View {
 
 	render(c: Coordonee, i: HTMLImageElement) {
 		this.context.clearRect(0, 0, 1920, 1080);
-
 		this.context.drawImage(i, c.x, c.y, 50, 50);
 	}
 	private resampleCanvas() {
@@ -97,5 +103,9 @@ export default class JeuSoloView extends View {
 		const realY = ratioY * this.canvas.height;
 
 		return { x: realX, y: realY };
+	}
+
+	private killPlayer(e: KeyboardEvent) : boolean{
+		return e.key === 'k';
 	}
 }

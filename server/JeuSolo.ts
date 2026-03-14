@@ -30,6 +30,10 @@ export default class JeuSolo extends Jeu {
 			}, 500);
 		});
 		setInterval(() => this.update(), 1000 / 60);
+
+		socket.on('killtest', () => {
+			this.j.setVies(0);
+		});
 	}
 
 	updateInput(vx: number, vy: number) {
@@ -40,7 +44,13 @@ export default class JeuSolo extends Jeu {
 	update() {
 		super.update(this.getJoueur());
 
-		this.socket.emit('render', this.getCoordonee());
+		// modifié un peu le render pour tester le kill
+		if (this.j.getVies() > 0 ){
+			this.socket.emit('render', this.getCoordonee());
+			
+		}else{
+			this.socket.emit('render', {x: -100, y: -100});
+		} 
 
 		super.updateEnnemy(this.getEnnemy(), this.getJoueur())
 		this.socket.emit('initEnnemy', {x: this.e.getX(), y: this.e.getY()});
