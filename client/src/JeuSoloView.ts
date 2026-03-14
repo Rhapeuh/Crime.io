@@ -42,6 +42,8 @@ export default class JeuSoloView extends View {
 	private initEvents() {
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
+		window.addEventListener('mousedown', this.handleShooting);
+		window.addEventListener('mouseup', this.handleShooting);
 	}
 
 	private handleKeyDown(e: KeyboardEvent) {
@@ -60,6 +62,8 @@ export default class JeuSoloView extends View {
 
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
+		window.removeEventListener('mousedown', this.handleShooting);
+		window.removeEventListener('mouseup', this.handleShooting);
 
 		this.socket.off('render', this.handleRender);
 	}
@@ -82,16 +86,36 @@ export default class JeuSoloView extends View {
 		}
 	}
 
+	private handleShooting(e: MouseEvent) {
+		if (e.type === 'mouseup') {
+			this.socket.emit('shooting', false);
+		} else {
+			this.socket.emit('shooting', true);
+		}
+	}
+
 	private selectDirection(e: KeyboardEvent) {
-		if (e.key === 'd') this.vx = 1;
-		if (e.key === 'q') this.vx = -1;
-		if (e.key === 'z') this.vy = -1;
-		if (e.key === 's') this.vy = 1;
+		if (e.key === 'd' || e.key === 'ArrowRight') this.vx = 1;
+		if (e.key === 'q' || e.key === 'ArrowLeft') this.vx = -1;
+		if (e.key === 'z' || e.key === 'ArrowUp') this.vy = -1;
+		if (e.key === 's' || e.key === 'ArrowDown') this.vy = 1;
 	}
 
 	private arretDirection(e: KeyboardEvent) {
-		if (e.key === 'd' || e.key === 'q') this.vx = 0;
-		if (e.key === 'z' || e.key === 's') this.vy = 0;
+		if (
+			e.key === 'd' ||
+			e.key === 'q' ||
+			e.key === 'ArrowRight' ||
+			e.key === 'ArrowLeft'
+		)
+			this.vx = 0;
+		if (
+			e.key === 'z' ||
+			e.key === 's' ||
+			e.key === 'ArrowUp' ||
+			e.key === 'ArrowDown'
+		)
+			this.vy = 0;
 	}
 
 	private realCordonee(c: Coordonee): Coordonee {
