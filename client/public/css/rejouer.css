@@ -1,3 +1,3 @@
-.rejouer{
-	display: none;
+.rejouer > a{
+	display: inline;
 }

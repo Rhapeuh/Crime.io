@@ -20,6 +20,7 @@ const routes = [
 	{ path: '/credit', getView: () => new CreditView(document.querySelector('.viewContent > .credit')!) },
 	{ path: '/jeuSolo', getView: () => new JeuSoloView(document.querySelector('.viewContent > .jeuSolo')!, socket, pseudoInput.value) },
 	{ path: '/jeuMulti', getView: () => new JeuMultiView(document.querySelector('.viewContent > .jeuMulti')!, socket, pseudoInput.value) },
+	//{ path: '/retour', getView: () => new RetourView(document.querySelector('.viewContent > .retour')!) },
 ];
 
 Router.routes = routes;

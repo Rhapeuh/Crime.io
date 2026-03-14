@@ -1,10 +1,14 @@
 import Joueur  from '../common/Joueur.ts';
+import Game  from '../common/Game.ts';
+import { BasicEnnemy } from '../common/BasicEnnemy.ts';
+import { randomInt } from 'node:crypto';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
 	private WORLD_HEIGHT = 1080;
 	private PLAYER_SIZE = 50;
 	private max_speed: number = 10;
+	private game : Game = new Game();
 
 	update(j: Joueur) {
 		this.updateSpeed(j);
@@ -35,5 +39,9 @@ export default class Jeu {
 	updateInput(j: Joueur, vx: number, vy: number) {
 		j.setVX(vx);
 		j.setVY(vy);
+	}
+
+	genererBot(){
+		this.game.addEnnemy(new BasicEnnemy("",{x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT)},0, 0, 1, 100));
 	}
 }

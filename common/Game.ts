@@ -1,4 +1,4 @@
-import { Ennemy } from './Ennemy';
+import { Ennemy } from './Ennemy.ts';
 import Joueur from './Joueur.ts';
 
 export default class Game {

@@ -1,5 +1,5 @@
 import Joueur from './Joueur.ts';
-import { Coordonee } from './types.ts';
+import type { Coordonee } from './types.ts';
 
 export class Ennemy extends Joueur {
 	constructor(
