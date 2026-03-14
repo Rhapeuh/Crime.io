@@ -42,7 +42,7 @@ export default class JeuSoloView extends View {
     }
 
     private handleRender(c: Coordonee) {
-        this.render(this.realCordonee(c), this.image);
+        this.render(this.realCordonee(c));
     }
 
     private initEvents() {
@@ -53,19 +53,12 @@ export default class JeuSoloView extends View {
     private handleKeyDown(e: KeyboardEvent) {
         this.selectDirection(e);
         this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
-        this.handleAbilities(e);
     }
 
     private handleKeyUp(e: KeyboardEvent) {
         this.arretDirection(e);
         this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
     }
-
-	private handleAbilities(e: KeyboardEvent) {
-		if (e.key === ' ') {
-			this.socket.emit('playerParry');
-		}
-	}
 
 	destroy() {
         super.destroy();
@@ -81,15 +74,15 @@ export default class JeuSoloView extends View {
 		this.image.src = '/images/persoTemp.jpg';
 		this.image.onload = () => {
 			requestAnimationFrame(() => {
-				this.render(c, this.image);
+				this.render(c);
 			});
 		};
 	}
 
-	render(c: Coordonee, i: HTMLImageElement) {
+	render(c: Coordonee) {
 		this.context.clearRect(0, 0, 1920, 1080);
 
-		this.context.drawImage(i, c.x, c.y, 50, 50);
+		this.context.drawImage(this.image, c.x, c.y, 50, 50);
 	}
 	private resampleCanvas() {
 		this.socket.emit('initTailleEcran', {

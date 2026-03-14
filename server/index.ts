@@ -15,6 +15,7 @@ httpServer.listen(9876, () => {
 });
 
 const partiesEnCours = new Map<string, JeuSolo>();
+
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
