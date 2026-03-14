@@ -3,6 +3,8 @@ import Router from './Router';
 import { Socket } from 'socket.io-client';
 import type { Coordonee } from '../../common/types.ts';
 import Assets from './asset';
+import type Game from '../../common/Game';
+import type Joueur from '../../common/Joueur';
 
 export default class JeuMultiView extends View {
     private monPseudo: string;
@@ -30,14 +32,13 @@ export default class JeuMultiView extends View {
 
         this.socket.on('renderMulti', this.handleRender);
 
-        this.resampleCanvas();
         this.initEvents();
 
         Router.setMenuElement(element);
     }
 
-    private handleRender(listJoueurs: {pseudo: string, c: Coordonee}[]) {
-        this.render(listJoueurs)
+    private handleRender(game: Game) {
+        this.render(game)
     }
 
     private initEvents() {
@@ -66,21 +67,17 @@ export default class JeuMultiView extends View {
         this.socket.emit('quitterMulti');
     }
 
-    render(listJoueurs: {pseudo: string, c: Coordonee}[]) {
+    render(game: Game) {
         this.context.clearRect(0, 0, 1920, 1080);
-
-        for(const j of listJoueurs){
-            const currentClient = j.pseudo === this.monPseudo;
-            const coord = this.realCordonee(j.c)
-            currentClient ? this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50) : this.context.drawImage(Assets.persoTemp2, coord.x, coord.y, 50, 50);
-        }
+        this.renderJoueur(game.joueurs)
     }
 
-    private resampleCanvas() {
-        this.socket.emit('initTailleEcran', {
-            width: this.canvas.width,
-            height: this.canvas.height,
-        });
+    private renderJoueur(listJoueur: Joueur[]){
+        for(const j of listJoueur){
+            const currentClient = j.pseudo === this.monPseudo;
+            const coord = this.realCordonee(j.coJoueur)
+            currentClient ? this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50) : this.context.drawImage(Assets.persoTemp2, coord.x, coord.y, 50, 50);
+        }
     }
 
     private selectDirection(e: KeyboardEvent) {

@@ -1,6 +1,7 @@
 import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
+import Game from '../common/Game.ts';
 
 export default class JeuSolo extends Jeu {
 	private j: Joueur;
@@ -11,8 +12,8 @@ export default class JeuSolo extends Jeu {
 		super();
 		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
 		this.socket = socket;
-		socket.emit('initImage', this.getCoordonee());
 
+		this.socket.emit('renderSolo', this.preparerDonnee())
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			this.updateInput(this.j, input.vx, input.vy);
 		});
@@ -36,20 +37,21 @@ export default class JeuSolo extends Jeu {
 		clearInterval(this.gameLoop);
 
 		this.socket.removeAllListeners('updateInput');
-		this.socket.removeAllListeners('initTailleEcran');
 	}
 
 	update() {
 		super.update(this.getJoueur());
 
-		this.socket.emit('render', this.getCoordonee());
+		this.socket.emit('renderSolo', this.preparerDonnee());
 	}
 
 	getJoueur() {
 		return this.j;
 	}
 
-	getCoordonee() {
-		return { x: this.j.getX(), y: this.j.getY() };
+	preparerDonnee() {
+		const g = new Game()
+		g.addJoueur(this.j)
+		return g;
 	}
 }

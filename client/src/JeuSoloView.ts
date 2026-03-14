@@ -3,13 +3,14 @@ import Router from './Router';
 import { Socket } from 'socket.io-client';
 import type { Coordonee } from '../../common/types.ts';
 import Assets from './asset';
+import type Game from '../../common/Game.ts';
+import type Joueur from '../../common/Joueur';
 
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;
 	private canvas: HTMLCanvasElement;
 	private vx: number = 0;
 	private vy: number = 0;
-	private image: HTMLImageElement;
 	private socket;
 
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
@@ -20,29 +21,22 @@ export default class JeuSoloView extends View {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
-		this.handleInitImage = this.handleInitImage.bind(this);
 
 		this.canvas = this.element.querySelector('.gameCanvasSolo')!;
 		this.context = this.canvas.getContext('2d')!;
-		this.image = Assets.persoTemp1;
 
 		this.canvas.width = 1920;
 		this.canvas.height = 1080;
 
-		this.socket.on('initImage', this.handleInitImage);
-		this.socket.on('render', this.handleRender);
+		this.socket.on('renderSolo', this.handleRender);
 
 		this.initEvents();
 
 		Router.setMenuElement(element);
 	}
 
-	private handleInitImage(c: Coordonee) {
-		this.render(this.realCordonee(c));
-	}
-
-	private handleRender(c: Coordonee) {
-		this.render(this.realCordonee(c));
+	private handleRender(g: Game) {
+		this.render(g);
 	}
 
 	private initEvents() {
@@ -67,14 +61,19 @@ export default class JeuSoloView extends View {
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
 
-		this.socket.off('initImage', this.handleInitImage);
 		this.socket.off('render', this.handleRender);
 	}
 
-	render(c: Coordonee) {
+	render(g: Game) {
 		this.context.clearRect(0, 0, 1920, 1080);
+		if (g.joueurs) this.renderJoueur(g.joueurs);
+	}
 
-		this.context.drawImage(this.image, c.x, c.y, 50, 50);
+	renderJoueur(listJoueurs: Joueur[]) {
+		for (const j of listJoueurs) {
+			const coord = this.realCordonee(j.coJoueur);
+			this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50);
+		}
 	}
 
 	private handleAbilities(e: KeyboardEvent) {
