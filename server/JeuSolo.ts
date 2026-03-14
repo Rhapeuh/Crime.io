@@ -17,6 +17,14 @@ export default class JeuSolo extends Jeu {
 			this.updateInput(this.j, input.vx, input.vy);
 		});
 
+		socket.on('playerParry', () => {
+			// CoolDown à prévoir
+			this.j.mettreInvincible();
+			setTimeout(() => {
+				this.j.enleverInvincible();
+			}, 500);
+		});
+
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);

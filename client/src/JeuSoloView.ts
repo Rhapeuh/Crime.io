@@ -52,6 +52,7 @@ export default class JeuSoloView extends View {
 
 	private handleKeyDown(e: KeyboardEvent) {
 		this.selectDirection(e);
+		this.handleAbilities(e);
 		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
 	}
 
@@ -74,6 +75,12 @@ export default class JeuSoloView extends View {
 		this.context.clearRect(0, 0, 1920, 1080);
 
 		this.context.drawImage(this.image, c.x, c.y, 50, 50);
+	}
+
+	private handleAbilities(e: KeyboardEvent) {
+		if (e.key === ' ') {
+			this.socket.emit('playerParry');
+		}
 	}
 
 	private selectDirection(e: KeyboardEvent) {
