@@ -13,22 +13,27 @@ const httpServer = http.createServer((_req, res) => {
 httpServer.listen(9876, () => {
 	console.log(`Server running at http://localhost:9876/`); // <-- pour verif que le serveur tourne bien
 });
-let jeu: JeuSolo;
+
+const partiesEnCours = new Map<string, JeuSolo>();
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 io.on('connection', socket => {
-	startNewGame(socket);
-	console.log(`Nouvelle connexion du client ${socket.id}`);
+	socket.on('createSoloView', () => {startNewGame(socket)})
 
 	socket.on('disconnect', () => {
-		console.log(`Deconnexion du client ${socket.id}`);
-	});
-
-	socket.on('reset', startNewGame);
-
+        if (partiesEnCours.has(socket.id)) {
+            partiesEnCours.get(socket.id)?.destroy();
+            partiesEnCours.delete(socket.id);
+        }
+    });
 });
 
 
 function startNewGame(socket : Socket){
-	jeu = new JeuSolo(socket as Socket);
+	if (partiesEnCours.has(socket.id)) {
+        partiesEnCours.get(socket.id)?.destroy();
+    }
+    
+    const nouveauJeu = new JeuSolo(socket);
+    partiesEnCours.set(socket.id, nouveauJeu);
 }

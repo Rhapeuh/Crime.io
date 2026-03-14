@@ -11,13 +11,12 @@ export default class JeuSolo extends Jeu {
 	private e = new BasicEnnemy('ennemy', { x: 200, y: 200 }, 0, 0, 1); // tempNom
 	
 	private socket;
+	private gameLoop: NodeJS.Timeout;
 
 	constructor(socket: Socket) {0
 		super();
 		this.socket = socket;
 		socket.emit('initImage', this.getCoordonee());
-
-		socket.emit('premiereConnexion', "tu t'est bien connecté");
 
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			this.updateInput(input.vx, input.vy);
@@ -29,8 +28,18 @@ export default class JeuSolo extends Jeu {
 				this.j.enleverInvincible();
 			}, 500);
 		});
-		setInterval(() => this.update(), 1000 / 60);
+		this.gameLoop = setInterval(() => {
+            this.update();
+        }, 1000 / 60);
 	}
+
+	destroy() {
+        clearInterval(this.gameLoop);
+
+        this.socket.removeAllListeners('updateInput');
+        this.socket.removeAllListeners('playerParry');
+        this.socket.removeAllListeners('initTailleEcran');
+    }
 
 	updateInput(vx: number, vy: number) {
 		this.j.setVX(vx);

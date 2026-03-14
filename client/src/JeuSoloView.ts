@@ -12,49 +12,70 @@ export default class JeuSoloView extends View {
 	private socket;
 
 	constructor(element: HTMLElement, socket: Socket) {
-		super(element);
-		this.socket = socket;
+        super(element);
+        this.socket = socket;
+		socket.emit('createSoloView')
 
-		this.canvas = this.element.querySelector('canvas')!;
-		this.context = this.canvas.getContext('2d')!;
-		this.image = new Image();
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleKeyUp = this.handleKeyUp.bind(this);
+        this.handleRender = this.handleRender.bind(this);
+        this.handleInitImage = this.handleInitImage.bind(this);
 
-		this.canvas.width = 1920;
-		this.canvas.height = 1080;
+        this.canvas = this.element.querySelector('canvas')!;
+        this.context = this.canvas.getContext('2d')!;
+        this.image = new Image();
 
-		socket.on('initImage', (c: Coordonee) => {
-			this.afficherImage(this.realCordonee(c));
-		});
+        this.canvas.width = 1920;
+        this.canvas.height = 1080;
 
-		this.resampleCanvas();
-		this.initEvents();
+        this.socket.on('initImage', this.handleInitImage);
+        this.socket.on('render', this.handleRender);
 
-		socket.on('render', (c: Coordonee) => {
-			this.render(this.realCordonee(c), this.image);
-		});
+        this.resampleCanvas();
+        this.initEvents();
 
-		Router.setMenuElement(element);
-	}
+        Router.setMenuElement(element);
+    }
 
-	private initEvents() {
-		window.addEventListener('keydown', e => {
-			this.selectDirection(e);
-			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+	private handleInitImage(c: Coordonee) {
+        this.afficherImage(this.realCordonee(c));
+    }
 
-			// POUR LES ABILITIES (PARRY et autres)
-			this.handleAbilities(e);
-		});
-		window.addEventListener('keyup', e => {
-			this.arretDirection(e);
-			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
-		});
-	}
+    private handleRender(c: Coordonee) {
+        this.render(this.realCordonee(c), this.image);
+    }
+
+    private initEvents() {
+        window.addEventListener('keydown', this.handleKeyDown);
+        window.addEventListener('keyup', this.handleKeyUp);
+    }
+
+    private handleKeyDown(e: KeyboardEvent) {
+        this.selectDirection(e);
+        this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+        this.handleAbilities(e);
+    }
+
+    private handleKeyUp(e: KeyboardEvent) {
+        this.arretDirection(e);
+        this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+    }
 
 	private handleAbilities(e: KeyboardEvent) {
 		if (e.key === ' ') {
 			this.socket.emit('playerParry');
 		}
 	}
+
+	destroy() {
+        super.destroy();
+
+        window.removeEventListener('keydown', this.handleKeyDown);
+        window.removeEventListener('keyup', this.handleKeyUp);
+
+        this.socket.off('initImage', this.handleInitImage);
+        this.socket.off('render', this.handleRender);
+    }
 
 	private afficherImage(c: Coordonee) {
 		this.image.src = '/images/persoTemp.jpg';
