@@ -96,38 +96,38 @@ h1 {
     color: #a9a9a9;
 }
 
-.barre-verticale.gauche {
-	border-top-right-radius: 25px;
-	border-bottom-right-radius: 25px;
-}
-
 .menuGauche {
     display: flex;
     grid-column: 1;
     justify-self: start;
     height: 100vh;
+	position: relative;
+    z-index: 10;
 }
 
 .colonne.gauche {
+	position: absolute;
 	transform: translateY(0%);
     background-color: #ACA3A3;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+    align-items: start;
     height: 100vh;
+	transition: width 2s ease-in-out;
 }
 
 .colonne.gauche > div {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30vh; 
-	height: 115px;
+    height: 31vh; 
+	width: 114px;
+	margin: 18px;
 	border-radius: 15px;
     white-space: nowrap; 
-    transform: rotate(-90deg);
 	background-color: #D8C8C8;
+	cursor: pointer;
 }
 
 .colonne.gauche a {
@@ -135,4 +135,28 @@ h1 {
     font-weight: bold;
     text-transform: uppercase;
     display: block;
+	transform: rotate(-180deg);
+	writing-mode: vertical-rl;
+}
+
+.barre-verticale.gauche {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    position: absolute;
+    left: 150px;
+    transition: left 2s ease-in-out; 
+}
+
+.menuGauche:has(.ouvert) .barre-verticale.gauche {
+    left: 800px;
+}
+
+.ouvert {
+    width: 800px;
+}
+
+.accueil:has(.ouvert) .menuJeu {
+filter: blur(2px) brightness(0.8);
+transition: filter 0.4s;
+pointer-events: none;
 }
