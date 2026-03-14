@@ -6,19 +6,22 @@ export default class Joueur {
 	vx: number;
 	vy: number;
 	speed: number;
+	vies: number;
 
 	constructor(
 		pseudo: string,
 		coJoueur: Coordonee,
 		vx: number,
 		vy: number,
-		speed: number
+		speed: number,
+		vies: number
 	) {
 		this.pseudo = pseudo;
 		this.coJoueur = coJoueur;
 		this.vx = vx;
 		this.vy = vy;
 		this.speed = speed;
+		this.vies = vies;
 	}
 
 	getPseudo(): string {
@@ -60,5 +63,18 @@ export default class Joueur {
 	}
 	setSpeed(speed: number): void {
 		this.speed = speed;
+	}
+
+	getVies(): number {
+		return this.vies;
+	}
+	setVies(vies: number) {
+		this.vies = vies;
+	}
+	enleverVies(damages: number) {
+		this.vies = this.vies - damages;
+	}
+	ajouterVies(vies: number) {
+		this.vies = this.vies + vies;
 	}
 }

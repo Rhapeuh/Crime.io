@@ -9,7 +9,7 @@ export default class JeuSolo extends Jeu {
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1);
+		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
 		this.socket = socket;
 		socket.emit('initImage', this.getCoordonee());
 
