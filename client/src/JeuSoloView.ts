@@ -2,6 +2,7 @@ import View from './View';
 import Router from './Router';
 import { Socket } from 'socket.io-client';
 import type { Coordonee } from '../../common/types.ts';
+import Assets from './asset';
 
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;
@@ -14,7 +15,7 @@ export default class JeuSoloView extends View {
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element);
 		this.socket = socket;
-		socket.emit('createSoloView', pseudo);
+		socket.emit('rejoindreSolo', pseudo);
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -23,7 +24,7 @@ export default class JeuSoloView extends View {
 
 		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
-		this.image = new Image();
+		this.image = Assets.persoTemp1;
 
 		this.canvas.width = 1920;
 		this.canvas.height = 1080;
@@ -31,14 +32,13 @@ export default class JeuSoloView extends View {
 		this.socket.on('initImage', this.handleInitImage);
 		this.socket.on('render', this.handleRender);
 
-		this.resampleCanvas();
 		this.initEvents();
 
 		Router.setMenuElement(element);
 	}
 
 	private handleInitImage(c: Coordonee) {
-		this.afficherImage(this.realCordonee(c));
+		this.render(this.realCordonee(c));
 	}
 
 	private handleRender(c: Coordonee) {
@@ -70,25 +70,10 @@ export default class JeuSoloView extends View {
 		this.socket.off('render', this.handleRender);
 	}
 
-	private afficherImage(c: Coordonee) {
-		this.image.src = '/images/persoTemp.jpg';
-		this.image.onload = () => {
-			requestAnimationFrame(() => {
-				this.render(c);
-			});
-		};
-	}
-
 	render(c: Coordonee) {
 		this.context.clearRect(0, 0, 1920, 1080);
 
 		this.context.drawImage(this.image, c.x, c.y, 50, 50);
-	}
-	private resampleCanvas() {
-		this.socket.emit('initTailleEcran', {
-			width: this.canvas.width,
-			height: this.canvas.height,
-		});
 	}
 
 	private selectDirection(e: KeyboardEvent) {

@@ -61,4 +61,7 @@ export default class Joueur {
 	setSpeed(speed: number): void {
 		this.speed = speed;
 	}
+	getCoordonee(): Coordonee {
+		return this.coJoueur;
+	}
 }

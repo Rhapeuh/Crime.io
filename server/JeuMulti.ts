@@ -20,7 +20,7 @@ export default class JeuMulti extends Jeu {
 		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1);
 		this.listJoueurs.set(socket.id, newJoueur);
 
-		socket.emit('initImage', newJoueur);
+		socket.emit('renderMulti', this.preparerDonnée());
 
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			const joueur = this.listJoueurs.get(socket.id);
@@ -43,6 +43,15 @@ export default class JeuMulti extends Jeu {
             super.update(joueur);
         }
 
-		this.io.emit('renderMulti', this.listJoueurs);
+		this.io.emit('renderMulti', this.preparerDonnée());
 	}
+
+    private preparerDonnée() {
+        return Array.from(this.listJoueurs.values()).map(joueur => {
+            return {
+                pseudo: joueur.getPseudo(),
+                c: joueur.getCoordonee()
+            };
+        });
+    }
 }
