@@ -11,7 +11,7 @@ export default class JeuMulti extends Jeu {
 		super();
 		this.io = io;
 
-		setInterval(() => {
+		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
 	}
@@ -55,5 +55,9 @@ export default class JeuMulti extends Jeu {
 		super.update();
 
 		this.io.emit('renderMulti', this.game);
+	}
+
+	getNbJoueurs() {
+		return this.game.getNbJoueurs();
 	}
 }

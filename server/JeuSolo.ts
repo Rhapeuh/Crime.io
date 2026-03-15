@@ -1,12 +1,10 @@
 import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
-import Game from '../common/Game.ts';
 
 export default class JeuSolo extends Jeu {
 	private j: Joueur;
 	private socket: Socket;
-	private gameLoop: NodeJS.Timeout;
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
@@ -36,14 +34,10 @@ export default class JeuSolo extends Jeu {
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
-
-		socket.on('quitterMulti', () => {
-			this.game = new Game();
-		});
 	}
 
 	destroy() {
-		clearInterval(this.gameLoop);
+		super.destroy();
 
 		this.socket.removeAllListeners('updateInput');
 		this.socket.removeAllListeners('playerParry');

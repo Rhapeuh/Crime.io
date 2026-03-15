@@ -19,6 +19,9 @@ export default class Game {
 	removeJoueur(joueur: Joueur) {
 		this.joueurs = this.joueurs.filter(j => j !== joueur);
 	}
+	getNbJoueurs(): number {
+		return this.joueurs.length;
+	}
 
 	addBullet(bullet: Bullet) {
 		this.bullets.push(bullet);
@@ -33,7 +36,13 @@ export default class Game {
 	removeEnnemy(ennemy: Ennemy) {
 		this.ennemies = this.ennemies.filter(e => e !== ennemy);
 	}
-	getNbEnnemy(): number{
+	getNbEnnemy(): number {
 		return this.ennemies.length;
+	}
+
+	public clearAll() {
+		this.joueurs = [];
+		this.ennemies = [];
+		this.bullets = [];
 	}
 }

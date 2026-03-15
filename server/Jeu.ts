@@ -15,7 +15,16 @@ export default class Jeu {
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
 	private maxSpawnDelay = 3000;
+	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
+
+	public destroy() {
+		if (this.gameLoop) {
+			clearInterval(this.gameLoop);
+		}
+		this.game.clearAll();
+		this.game.bullets = [];
+	}
 
 	protected update() {
 		this.handleEnemySpawning();
