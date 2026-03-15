@@ -7,14 +7,36 @@
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/jeu.css" />
     <link rel="stylesheet" href="/css/accueil.css" />
+    <link rel="stylesheet" href="/css/score.css" />
+
 	<script type="module" src="/src/main.ts"></script>
 </head>
 <body>
     <div class="viewContent activeOnly">
         <section class="accueil">
+            <section class="menuGauche">
+                <div class="colonne gauche">
+                    <div class="inventaires">
+                        <a></a>
+                    </div>
+                    <div class="Scores">
+                        <a>Meilleurs Scores</a>
+                    </div>
+                    <div class="credits">
+                        <a></a>
+                    </div>
+                    <section class="fond"></section>
+                </div>
+                <div class="barre-verticale gauche"> </div>
+            </section>
+            <section class="menuJeu">
+                <input type="text" class="pseudo-input" placeholder="Pseudo" maxlength="15" />
+                <a href="/jeuSolo">Solo</a>
+                <a href="/jeuMulti">Multijoueur</a>
+            </section>
             <section class="titre">
-                <div class="barre-verticale"></div>
-                <div class="colonne-titre">
+                <div class="barre-verticale droite"></div>
+                <div class="colonne">
                     <h1>Titre</h1>
                     <h1>Titre</h1>
                     <h1>Titre</h1>
@@ -22,17 +44,6 @@
                     <h1>Titre</h1>
                 </div>
             </section>
-            <section class="menuJeu">
-                <input type="text" class="pseudo-input" placeholder="Pseudo" maxlength="15" />
-                <a href="/jeuSolo">Solo</a>
-                <a href="/jeuMulti">Multijoueur</a>
-            </section>
-            <section class="menuGauche">
-                <a href="/">Inventaire</a>
-                <a href="/">Musique</a>
-                <a href="/credit">Crédit</a>
-            </section>
-            
         </section>
         <section class="credit">
             <h2>Crédits</h2>
