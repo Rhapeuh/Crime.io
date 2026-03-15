@@ -102,14 +102,14 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			const coord = this.realCordonee(j.coJoueur);
+			const coord = this.realCordonee(j.co);
 			this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50);
 		}
 	}
 
 	private renderBullets(bullets: Bullet[]) {
 		for (const b of bullets) {
-			const coord = this.realCordonee({ x: b.x, y: b.y });
+			const coord = this.realCordonee({ x: b.co.x, y: b.co.y });
 			this.context.drawImage(
 				Assets.ennemyTemp,
 				coord.x,

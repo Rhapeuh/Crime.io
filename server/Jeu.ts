@@ -6,7 +6,7 @@ export default class Jeu {
 	private WORLD_WIDTH = 1920;
 	private WORLD_HEIGHT = 1080;
 	private PLAYER_SIZE = 50;
-	private max_speed: number = 15;
+	private max_speed: number = 10;
 	game: Game = new Game();
 
 	update(j: Joueur) {
@@ -48,7 +48,7 @@ export default class Jeu {
 			angle = Math.atan2(vy, vx);
 		}
 
-		const nouvelleBalle = new Bullet({ x: j.getX(), y: j.getY() }, angle, 8, j);
+		const nouvelleBalle = new Bullet({ x: j.getX(), y: j.getY() }, angle, 15, j);
 		this.game.addBullet(nouvelleBalle);
 	}
 
