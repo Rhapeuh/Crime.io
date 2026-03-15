@@ -114,7 +114,7 @@ h1 {
     justify-content: space-around;
     align-items: start;
     height: 100vh;
-	transition: width 2s ease-in-out;
+	transition: width 2s linear;
 }
 
 .colonne.gauche > div {
@@ -128,6 +128,7 @@ h1 {
     white-space: nowrap; 
 	background-color: #D8C8C8;
 	cursor: pointer;
+	transition: width 1s linear; 
 }
 
 .colonne.gauche a {
@@ -144,19 +145,42 @@ h1 {
     border-bottom-right-radius: 25px;
     position: absolute;
     left: 150px;
-    transition: left 2s ease-in-out; 
+    transition: left 2s linear; 
 }
 
-.menuGauche:has(.ouvert) .barre-verticale.gauche {
-    left: 800px;
+.fond{
+	left: 150px;
+	position: absolute;
+    background-color: #D8C8C8;
+    height: 95.4%;
+	width: 20px;
+	transition: width 2s linear;
+	z-index: 20;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
 }
 
-.ouvert {
-    width: 800px;
+.accueil:has(.ouvert) {
+	.menuJeu {
+		filter: blur(2px) brightness(0.8);
+		transition: filter 0.4s;
+		pointer-events: none;
+	}
+	.barre-verticale.gauche {
+		left: 800px;
+	}
+
+	.fond {
+		width: 630px;
+	}
+
+	.colonne.gauche{
+		width: 800px;
+	}
 }
 
-.accueil:has(.ouvert) .menuJeu {
-filter: blur(2px) brightness(0.8);
-transition: filter 0.4s;
-pointer-events: none;
+.colonne.gauche > div.btn-cliquer {
+	width: 135px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
 }
