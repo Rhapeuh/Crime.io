@@ -1,3 +1,8 @@
+@font-face {
+	font-family: titreFont; 
+  	src: url(font/telematic-font/Telematic-BL5aV.ttf);
+}
+
 .accueil {
 	display: grid;
 	width: 100vw;
@@ -35,11 +40,15 @@ a {
 }
 
 .titre {
+	color: #7700de;
+
+	font-family: titreFont;
 	display: flex;
 	grid-column: 3;
     justify-self: end;
     height: 100vh;
     overflow: hidden;
+	font-weight: bold;
 }
 
 h1 {
@@ -63,10 +72,10 @@ h1 {
 }
 
 .colonne {
+	background-color: #bbff00;
 	width: 150px;
-	background-color: #ACA3A3;
-	transform: translateY(-30%);
-	height: 150%;
+	transform: translateY(-40%);
+	height: 170%;
 }
 
 .barre-verticale {
@@ -76,6 +85,7 @@ h1 {
 }
 
 .barre-verticale.droite {
+	display: none;
 	border-top-left-radius: 25px;
 	border-bottom-left-radius: 25px;
 }
