@@ -16,18 +16,22 @@ export default class JeuView extends View {
 	vy: number = 0;
 	socket;
 
-	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
+	constructor(
+		element: HTMLElement,
+		socket: Socket,
+		pseudo: string,
+		canvas: HTMLCanvasElement
+	) {
 		super(element);
 		this.monPseudo = pseudo;
 		this.socket = socket;
-		socket.emit('rejoindreSolo', pseudo);
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 
-		this.canvas = this.element.querySelector('.gameCanvasSolo')!;
+		this.canvas = canvas;
 		this.context = this.canvas.getContext('2d')!;
 
 		this.canvas.width = 1920;
@@ -75,6 +79,8 @@ export default class JeuView extends View {
 		window.removeEventListener('keyup', this.handleKeyUp);
 		window.removeEventListener('mousedown', this.handleShooting);
 		window.removeEventListener('mouseup', this.handleShooting);
+
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
 	private selectDirection(e: KeyboardEvent) {
@@ -99,13 +105,16 @@ export default class JeuView extends View {
 		this.context.clearRect(0, 0, 1920, 1080);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.bullets) this.renderBullets(g.bullets);
-        if (g.ennemies) this.renderEnnemies(g.ennemies);
+		if (g.ennemies) this.renderEnnemies(g.ennemies);
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
+			const currentClient = j.pseudo === this.monPseudo;
 			const coord = this.realCordonee(j.co);
-			this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50);
+			currentClient
+				? this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50)
+				: this.context.drawImage(Assets.persoTemp2, coord.x, coord.y, 50, 50);
 		}
 	}
 
@@ -122,12 +131,12 @@ export default class JeuView extends View {
 		}
 	}
 
-    private renderEnnemies(listEnnemies: Ennemy[]){
-        for(const e of listEnnemies){
-            const coord = this.realCordonee(e.co)
-            this.context.drawImage(Assets.ennemyTemp, coord.x, coord.y, 50, 50);
-        }
-    }
+	private renderEnnemies(listEnnemies: Ennemy[]) {
+		for (const e of listEnnemies) {
+			const coord = this.realCordonee(e.co);
+			this.context.drawImage(Assets.ennemyTemp, coord.x, coord.y, 50, 50);
+		}
+	}
 
 	private realCordonee(c: Coordonee): Coordonee {
 		const ratioX = c.x / 1920;

@@ -5,8 +5,8 @@ export default class JeuMultiView extends JeuView {
 
 
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
-		super(element, socket, pseudo);
-
+		super(element, socket, pseudo, element.querySelector('.gameCanvasMulti')!);
+		socket.emit('rejoindreMulti', pseudo);
 		this.socket.on('renderMulti', this.handleRender);
 	}
 
@@ -14,5 +14,7 @@ export default class JeuMultiView extends JeuView {
 		this.socket.off('renderMulti', this.handleRender);
 
 		this.socket.emit('quitterMulti');
+
+		super.destroy();
 	}
 }
