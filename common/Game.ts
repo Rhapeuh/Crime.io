@@ -33,4 +33,7 @@ export default class Game {
 	removeEnnemy(ennemy: Ennemy) {
 		this.ennemies = this.ennemies.filter(e => e !== ennemy);
 	}
+	getNbEnnemy(): number{
+		return this.ennemies.length;
+	}
 }

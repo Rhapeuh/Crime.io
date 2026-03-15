@@ -10,13 +10,15 @@ export default class Jeu {
 	private WORLD_WIDTH = 1920;
 	private WORLD_HEIGHT = 1080;
 	private max_speed: number = 10;
+	private maxEnemies = 10;
+	private maxEnnemiesSpawning = 4;
+	private nextSpawnTime = 0;
+	private minSpawnDelay = 100;
+	private maxSpawnDelay = 3000;
 	game: Game = new Game();
 
-	constructor() {
-		this.addEnnemy();
-	}
-
 	protected update() {
+		this.handleEnemySpawning();
 		for (const j of this.game.joueurs.values()) {
 			this.updateJoueur(j);
 		}
@@ -52,13 +54,11 @@ export default class Jeu {
 
 		if (e.getX() - halfW < 0) e.setX(halfW);
 
-		if (e.getX() + halfW > this.WORLD_WIDTH)
-			e.setX(this.WORLD_WIDTH - halfW);
+		if (e.getX() + halfW > this.WORLD_WIDTH) e.setX(this.WORLD_WIDTH - halfW);
 
 		if (e.getY() - halfH < 0) e.setY(halfH);
 
-		if (e.getY() + halfH > this.WORLD_HEIGHT)
-			e.setY(this.WORLD_HEIGHT - halfH);
+		if (e.getY() + halfH > this.WORLD_HEIGHT) e.setY(this.WORLD_HEIGHT - halfH);
 	}
 
 	protected updateInput(j: Joueur, vx: number, vy: number) {
@@ -73,8 +73,6 @@ export default class Jeu {
 		if (vx != 0 || vy != 0) {
 			angle = Math.atan2(vy, vx);
 		}
-
-		console.log(angle)
 
 		const nouvelleBalle = new Bullet(
 			{ x: j.getX(), y: j.getY() },
@@ -102,14 +100,14 @@ export default class Jeu {
 		});
 	}
 
-	protected addEnnemy() {
-		this.game.addEnnemy(new Ennemy({ x: 200, y: 200 }));
+	protected addEnnemy(e: Ennemy) {
+		this.game.addEnnemy(e);
 	}
 
 	protected updateEnnemy(e: Ennemy) {
 		const j = this.game.joueurs[0];
 
-		if(!e.estEnVie()) this.game.removeEnnemy(e)
+		if (!e.estEnVie()) this.game.removeEnnemy(e);
 
 		if (e.getX() > j.getX()) {
 			e.setX(e.getX() + e.speed * -1);
@@ -129,7 +127,7 @@ export default class Jeu {
 		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
 	}
 
-	private checkCollision(entityA: Entities,entityB: Entities,): boolean {
+	private checkCollision(entityA: Entities, entityB: Entities): boolean {
 		const halfWA = entityA.getWidth() / 2;
 		const halfHA = entityA.getHeight() / 2;
 		const halfWB = entityB.getWidth() / 2;
@@ -146,5 +144,26 @@ export default class Jeu {
 		const bottomB = entityB.getY() + halfHB;
 
 		return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
+	}
+
+	private handleEnemySpawning() {
+		const now = Date.now();
+
+		if (
+			this.game.getNbEnnemy() < this.maxEnemies &&
+			now >= this.nextSpawnTime
+		) {
+			let nbASpawn = randomInt(this.maxEnnemiesSpawning);
+			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
+				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
+
+			for (let i = 0; i < nbASpawn; i++)
+				this.addEnnemy(new Ennemy(this.randomCoordonee()));
+
+			const randomDelay =
+				Math.random() * (this.maxSpawnDelay - this.minSpawnDelay) +
+				this.minSpawnDelay;
+			this.nextSpawnTime = now + randomDelay;
+		}
 	}
 }
