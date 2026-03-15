@@ -3,6 +3,8 @@ import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
 import Ennemy from '../common/Ennemy.ts';
 import type Entities from '../common/Entities';
+import type { Coordonee } from '../common/types';
+import { randomInt } from 'crypto';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
@@ -21,11 +23,11 @@ export default class Jeu {
 		}
 		this.updateBullets();
 
-		if (this.game.joueurs.length !== 0) {
-			for (const e of this.game.ennemies.values()) {
-				this.updateEnnemy(e);
-			}
-		}
+		// if (this.game.joueurs.length !== 0) {
+		// 	for (const e of this.game.ennemies.values()) {
+		// 		this.updateEnnemy(e);
+		// 	}
+		// }
 	}
 
 	private updateJoueur(j: Joueur) {
@@ -102,5 +104,9 @@ export default class Jeu {
 			e.setY(e.getY() + e.speed * 1);
 		}
 		this.verifCoordonee(e);
+	}
+
+	protected randomCoordonee(): Coordonee {
+		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
 	}
 }

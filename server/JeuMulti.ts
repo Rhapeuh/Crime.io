@@ -17,7 +17,7 @@ export default class JeuMulti extends Jeu {
 	}
 
 	ajouterJoueur(socket: Socket, pseudo: string) {
-		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 1, 3, 50, 50);
+		const newJoueur = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
 		this.listJoueurs.set(socket.id, newJoueur);
 		this.game.addJoueur(newJoueur);
 
