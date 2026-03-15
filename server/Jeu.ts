@@ -1,12 +1,13 @@
+import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
-import Joueur  from '../common/Joueur.ts';
+import Joueur from '../common/Joueur.ts';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
 	private WORLD_HEIGHT = 1080;
 	private PLAYER_SIZE = 50;
 	private max_speed: number = 15;
-	game: Game = new Game()
+	game: Game = new Game();
 
 	update(j: Joueur) {
 		this.updateSpeed(j);
@@ -25,7 +26,7 @@ export default class Jeu {
 		return j.getVX() != 0 || j.getVY() != 0;
 	}
 
-	private verifCoordonee(j: Joueur){
+	private verifCoordonee(j: Joueur) {
 		if (j.getX() < 0) j.setX(0);
 		if (j.getY() < 0) j.setY(0);
 		if (j.getX() > this.WORLD_WIDTH - this.PLAYER_SIZE)
@@ -37,5 +38,24 @@ export default class Jeu {
 	updateInput(j: Joueur, vx: number, vy: number) {
 		j.setVX(vx);
 		j.setVY(vy);
+	}
+
+	addBullet(j: Joueur) {
+		const vx = j.getVX();
+		const vy = j.getVY();
+		let angle = 0;
+		if (vx != 0 || vy != 0) {
+			angle = Math.atan2(vy, vx);
+		}
+
+		const nouvelleBalle = new Bullet({ x: j.getX(), y: j.getY() }, angle, 8, j);
+		this.game.addBullet(nouvelleBalle);
+	}
+
+	protected updateBullets() {
+		this.game.bullets.map(b => {
+			b.update();
+			if (b.shouldBeDeleted()) this.game.removeBullet(b);
+		});
 	}
 }

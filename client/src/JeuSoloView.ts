@@ -5,6 +5,7 @@ import type { Coordonee } from '../../common/types.ts';
 import Assets from './asset';
 import type Game from '../../common/Game.ts';
 import type Joueur from '../../common/Joueur';
+import type Bullet from '../../common/Bullet';
 
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;
@@ -21,6 +22,7 @@ export default class JeuSoloView extends View {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
+		this.handleShooting = this.handleShooting.bind(this);
 
 		this.canvas = this.element.querySelector('.gameCanvasSolo')!;
 		this.context = this.canvas.getContext('2d')!;
@@ -73,12 +75,26 @@ export default class JeuSoloView extends View {
 	render(g: Game) {
 		this.context.clearRect(0, 0, 1920, 1080);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
+		if (g.bullets) this.renderBullets(g.bullets);
 	}
 
 	renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
 			const coord = this.realCordonee(j.coJoueur);
 			this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50);
+		}
+	}
+
+	renderBullets(bullets: Bullet[]) {
+		for (const b of bullets) {
+			const coord = this.realCordonee({ x: b.x, y: b.y });
+			this.context.drawImage(
+				Assets.ennemyTemp,
+				coord.x,
+				coord.y,
+				b.width,
+				b.height
+			);
 		}
 	}
 

@@ -30,24 +30,32 @@ export default class JeuMulti extends Jeu {
 			}
 		});
 
+		socket.on('shooting', (shooting: boolean) => {
+			if (shooting) {
+				const joueur = this.listJoueurs.get(socket.id);
+				if (joueur) this.addBullet(joueur);
+			}
+		});
+
 		socket.on('disconnect', () => {
 			this.retirerJoueur(socket.id);
 		});
 
-        socket.on('quitterMulti', () => {
+		socket.on('quitterMulti', () => {
 			this.retirerJoueur(socket.id);
 		});
 	}
 
 	retirerJoueur(socketId: string) {
-		this.game.removeJoueur(this.listJoueurs.get(socketId)!)
+		this.game.removeJoueur(this.listJoueurs.get(socketId)!);
 		this.listJoueurs.delete(socketId);
 	}
 
 	update() {
-		for(const joueur of this.listJoueurs.values()){
-            super.update(joueur);
-        }
+		for (const joueur of this.listJoueurs.values()) {
+			super.update(joueur);
+		}
+		this.updateBullets();
 
 		this.io.emit('renderMulti', this.game);
 	}
