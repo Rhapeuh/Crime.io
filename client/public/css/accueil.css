@@ -149,15 +149,18 @@ h1 {
 }
 
 .fond{
+	display: flex;
+	flex-direction: column;
 	left: 150px;
 	position: absolute;
     background-color: #D8C8C8;
     height: 95.4%;
 	width: 20px;
 	transition: width 2s linear;
-	z-index: 20;
 	border-top-right-radius: 15px;
 	border-bottom-right-radius: 15px;
+	overflow-y: auto;
+	align-items: center;
 }
 
 .accueil:has(.ouvert) {
@@ -177,10 +180,19 @@ h1 {
 	.colonne.gauche{
 		width: 800px;
 	}
+
+	.fond > * {
+		opacity: 1;
+	}
 }
 
 .colonne.gauche > div.btn-cliquer {
 	width: 135px;
 	border-top-right-radius: 0px;
 	border-bottom-right-radius: 0px;
+}
+
+.fond > * {
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }

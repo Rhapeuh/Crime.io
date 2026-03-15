@@ -1,13 +1,16 @@
 import Router from './Router';
 import View from './View';
+import Score from './Score';
 
 export default class AcceuilView extends View {
 	private menuGauche: HTMLElement;
 	private dernierElement: HTMLElement | null = null;
+	private fondElement: HTMLElement;
 
 	constructor(element: HTMLElement) {
 		super(element);
 		this.menuGauche = this.element.querySelector('.colonne.gauche')!;
+		this.fondElement = this.element.querySelector('.fond')!;
 		this.setMenuInterne();
 		Router.setMenuElement(this.element);
 	}
@@ -27,6 +30,7 @@ export default class AcceuilView extends View {
 					this.dernierElement = element as HTMLElement;
 					this.ouvrirTiroir();
 				}
+				this.injecterHTML();
 			});
 		});
 
@@ -39,17 +43,27 @@ export default class AcceuilView extends View {
 			) {
 				this.fermerTiroir();
 			}
+			this.injecterHTML()
 		});
 	}
 
 	ouvrirTiroir() {
 		this.menuGauche.classList.add('ouvert');
 		this.dernierElement?.classList.add('btn-cliquer');
+		this.fondElement.innerHTML = Score.genererTableauScores();
 	}
 
 	fermerTiroir() {
 		this.menuGauche.classList.remove('ouvert');
 		this.dernierElement?.classList.remove('btn-cliquer');
 		this.dernierElement = null;
+	}
+
+	private injecterHTML() {
+		this.fondElement.innerHTML = "";
+
+		if (this.dernierElement?.className.includes('Scores')) {
+            this.fondElement.innerHTML = Score.genererTableauScores();
+		}
 	}
 }
