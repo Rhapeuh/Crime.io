@@ -6,6 +6,8 @@ export default class Entities {
 	vx: number;
 	vy: number;
 	speed: number;
+	width: number;
+	height: number;
 	vie?: number;
 
 	constructor(
@@ -13,6 +15,8 @@ export default class Entities {
 		vx: number,
 		vy: number,
 		speed: number,
+		width: number,
+		height: number,
 		pseudo?: string,
 		vie?: number
 	) {
@@ -21,6 +25,8 @@ export default class Entities {
 		this.vx = vx;
 		this.vy = vy;
 		this.speed = speed;
+		this.width = width;
+		this.height = height;
 		this.vie = vie;
 	}
 

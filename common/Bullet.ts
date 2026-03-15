@@ -4,8 +4,6 @@ import type Joueur from './Joueur';
 
 export default class Bullet extends Entities {
 	createdAt: Coordonee;
-	width: number;
-	height: number;
 	active: boolean;
 	angle: number;
 	bulletRange: number;
@@ -18,11 +16,9 @@ export default class Bullet extends Entities {
 		joueur: Joueur,
 		bulletRange: number = 1000
 	) {
-		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed);
+		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed, 20, 10);
 		this.createdAt = co;
 		this.angle = angle;
-		this.width = 20;
-		this.height = 10;
 		this.active = true;
 		this.joueur = joueur;
 		this.bulletRange = bulletRange;

@@ -2,6 +2,7 @@ import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
 import Ennemy from '../common/Ennemy.ts';
+import type Entities from '../common/Entities';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
@@ -10,7 +11,24 @@ export default class Jeu {
 	private max_speed: number = 10;
 	game: Game = new Game();
 
-	update(j: Joueur) {
+	constructor() {
+		this.addEnnemy();
+	}
+
+	protected update() {
+		for (const j of this.game.joueurs.values()) {
+			this.updateJoueur(j);
+		}
+		this.updateBullets();
+
+		if (this.game.joueurs.length !== 0) {
+			for (const e of this.game.ennemies.values()) {
+				this.updateEnnemy(e);
+			}
+		}
+	}
+
+	private updateJoueur(j: Joueur) {
 		this.updateSpeed(j);
 		j.setX(j.getX() + j.getVX() * j.getSpeed());
 		j.setY(j.getY() + j.getVY() * j.getSpeed());
@@ -27,7 +45,7 @@ export default class Jeu {
 		return j.getVX() != 0 || j.getVY() != 0;
 	}
 
-	private verifCoordonee(j: Joueur) {
+	private verifCoordonee(j: Entities) {
 		if (j.getX() < 0) j.setX(0);
 		if (j.getY() < 0) j.setY(0);
 		if (j.getX() > this.WORLD_WIDTH - this.PLAYER_SIZE)
@@ -69,27 +87,20 @@ export default class Jeu {
 		this.game.addEnnemy(new Ennemy({ x: 200, y: 200 }));
 	}
 
-	protected updateEnnemy(e: Ennemy, j: Joueur) {
-		if (Math.abs(e.getX() - j.getX()) > 300) {
-			if (e.getX() > j.getX()) {
-				e.setX(e.getX() + e.speed * -1);
-			} else if (e.getX() < j.getX()) {
-				e.setX(e.getX() + e.speed * 1);
-			}
+	protected updateEnnemy(e: Ennemy) {
+		const j = this.game.joueurs[0];
+
+		if (e.getX() > j.getX()) {
+			e.setX(e.getX() + e.speed * -1);
+		} else if (e.getX() < j.getX()) {
+			e.setX(e.getX() + e.speed * 1);
 		}
 
-		if (Math.abs(e.getY() - j.getY()) > 300) {
-			if (e.getY() > j.getY()) {
-				e.setY(e.getY() + e.speed * -1);
-			} else if (e.getY() < j.getY()) {
-				e.setY(e.getY() + e.speed * 1);
-			}
+		if (e.getY() > j.getY()) {
+			e.setY(e.getY() + e.speed * -1);
+		} else if (e.getY() < j.getY()) {
+			e.setY(e.getY() + e.speed * 1);
 		}
-		if (e.getX() < 0) e.setX(0);
-		if (e.getY() < 0) e.setY(0);
-		if (e.getX() > this.WORLD_WIDTH - this.PLAYER_SIZE)
-			e.setX(this.WORLD_WIDTH - this.PLAYER_SIZE);
-		if (e.getY() > this.WORLD_HEIGHT - this.PLAYER_SIZE)
-			e.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
+		this.verifCoordonee(e);
 	}
 }

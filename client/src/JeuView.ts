@@ -6,6 +6,7 @@ import type Joueur from '../../common/Joueur';
 import Assets from './asset';
 import type Bullet from '../../common/Bullet';
 import type { Coordonee } from '../../common/types';
+import type Ennemy from '../../common/Ennemy';
 
 export default class JeuView extends View {
 	monPseudo: string;
@@ -98,6 +99,7 @@ export default class JeuView extends View {
 		this.context.clearRect(0, 0, 1920, 1080);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.bullets) this.renderBullets(g.bullets);
+        if (g.ennemies) this.renderEnnemies(g.ennemies);
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {
@@ -107,9 +109,9 @@ export default class JeuView extends View {
 		}
 	}
 
-	private renderBullets(bullets: Bullet[]) {
-		for (const b of bullets) {
-			const coord = this.realCordonee({ x: b.co.x, y: b.co.y });
+	private renderBullets(listBullets: Bullet[]) {
+		for (const b of listBullets) {
+			const coord = this.realCordonee(b.co);
 			this.context.drawImage(
 				Assets.ennemyTemp,
 				coord.x,
@@ -119,6 +121,13 @@ export default class JeuView extends View {
 			);
 		}
 	}
+
+    private renderEnnemies(listEnnemies: Ennemy[]){
+        for(const e of listEnnemies){
+            const coord = this.realCordonee(e.co)
+            this.context.drawImage(Assets.ennemyTemp, coord.x, coord.y, 50, 50);
+        }
+    }
 
 	private realCordonee(c: Coordonee): Coordonee {
 		const ratioX = c.x / 1920;

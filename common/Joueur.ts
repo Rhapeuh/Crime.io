@@ -7,12 +7,12 @@ export default class Joueur extends Entities{
 	constructor(
 		pseudo: string,
 		coJoueur: Coordonee,
-		vx: number,
-		vy: number,
 		speed: number,
-		vies: number
+		vies: number,
+		width: number,
+		height: number,
 	) {
-		super(coJoueur, vx, vy, speed, pseudo, vies)
+		super(coJoueur, 0, 0, speed, width, height, pseudo, vies)
 		this.invincibilite = false;
 	}
 

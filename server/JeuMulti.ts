@@ -17,7 +17,7 @@ export default class JeuMulti extends Jeu {
 	}
 
 	ajouterJoueur(socket: Socket, pseudo: string) {
-		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
+		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 1, 3, 50, 50);
 		this.listJoueurs.set(socket.id, newJoueur);
 		this.game.addJoueur(newJoueur);
 
@@ -52,10 +52,7 @@ export default class JeuMulti extends Jeu {
 	}
 
 	update() {
-		for (const joueur of this.listJoueurs.values()) {
-			super.update(joueur);
-		}
-		this.updateBullets();
+		super.update();
 
 		this.io.emit('renderMulti', this.game);
 	}
