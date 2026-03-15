@@ -2,6 +2,7 @@ import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
 import Ennemy from '../common/Ennemy.ts';
+import { BasicEnnemy } from '../common/BasicEnnemy.ts';
 import type Entities from '../common/Entities';
 import type { Coordonee } from '../common/types';
 import { randomInt } from 'crypto';
@@ -75,8 +76,15 @@ export default class Jeu {
 		j.setVY(vy);
 	}
 
-	genererBot(){
-		this.game.addEnnemy(new BasicEnnemy("",{x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT)},0, 0, 1, 100));
+	genererBot() {
+		this.game.addEnnemy(
+			new BasicEnnemy({
+				x: randomInt(this.WORLD_WIDTH),
+				y: randomInt(this.WORLD_HEIGHT),
+			})
+		);
+	}
+
 	protected addBullet(j: Joueur) {
 		const vx = j.getVX();
 		const vy = j.getVY();

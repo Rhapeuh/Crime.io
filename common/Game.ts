@@ -1,4 +1,3 @@
-import { Ennemy } from './Ennemy.ts';
 import Joueur from './Joueur.ts';
 import Bullet from './Bullet.ts';
 import Ennemy from './Ennemy.ts';
