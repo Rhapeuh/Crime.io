@@ -78,4 +78,19 @@ export default class Entities {
 	setY(y: number) {
 		this.co.y = y;
 	}
+
+	encaisserDegat() {
+		if (this.vie) this.vie -= 1;
+	}
+
+	estEnVie(): boolean {
+		return (this.vie ?? 0) > 0;
+	}
+
+	getWidth() {
+		return this.width;
+	}
+	getHeight() {
+		return this.height;
+	}
 }

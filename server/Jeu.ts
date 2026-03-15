@@ -22,11 +22,11 @@ export default class Jeu {
 		}
 		this.updateBullets();
 
-		// if (this.game.joueurs.length !== 0) {
-		// 	for (const e of this.game.ennemies.values()) {
-		// 		this.updateEnnemy(e);
-		// 	}
-		// }
+		if (this.game.joueurs.length !== 0) {
+			for (const e of this.game.ennemies.values()) {
+				this.updateEnnemy(e);
+			}
+		}
 	}
 
 	private updateJoueur(j: Joueur) {
@@ -74,6 +74,8 @@ export default class Jeu {
 			angle = Math.atan2(vy, vx);
 		}
 
+		console.log(angle)
+
 		const nouvelleBalle = new Bullet(
 			{ x: j.getX(), y: j.getY() },
 			angle,
@@ -84,8 +86,18 @@ export default class Jeu {
 	}
 
 	protected updateBullets() {
-		this.game.bullets.map(b => {
+		this.game.bullets.forEach(b => {
 			b.update();
+
+			for (const e of this.game.ennemies.values()) {
+				if (this.checkCollision(b, e)) {
+					e.encaisserDegat();
+					this.game.removeBullet(b);
+
+					return;
+				}
+			}
+
 			if (b.shouldBeDeleted()) this.game.removeBullet(b);
 		});
 	}
@@ -96,6 +108,8 @@ export default class Jeu {
 
 	protected updateEnnemy(e: Ennemy) {
 		const j = this.game.joueurs[0];
+
+		if(!e.estEnVie()) this.game.removeEnnemy(e)
 
 		if (e.getX() > j.getX()) {
 			e.setX(e.getX() + e.speed * -1);
@@ -115,15 +129,22 @@ export default class Jeu {
 		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
 	}
 
-	private checkCollision(
-		entityA: Entities,
-		entityB: Entities,
-		distanceMax: number
-	): boolean {
-		const dx = entityA.getX() - entityB.getX();
-		const dy = entityA.getY() - entityB.getY();
+	private checkCollision(entityA: Entities,entityB: Entities,): boolean {
+		const halfWA = entityA.getWidth() / 2;
+		const halfHA = entityA.getHeight() / 2;
+		const halfWB = entityB.getWidth() / 2;
+		const halfHB = entityB.getHeight() / 2;
 
-		const distance = Math.sqrt(dx * dx + dy * dy);
-		return distance < distanceMax;
+		const leftA = entityA.getX() - halfWA;
+		const rightA = entityA.getX() + halfWA;
+		const topA = entityA.getY() - halfHA;
+		const bottomA = entityA.getY() + halfHA;
+
+		const leftB = entityB.getX() - halfWB;
+		const rightB = entityB.getX() + halfWB;
+		const topB = entityB.getY() - halfHB;
+		const bottomB = entityB.getY() + halfHB;
+
+		return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
 	}
 }

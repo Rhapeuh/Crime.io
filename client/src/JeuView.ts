@@ -151,7 +151,7 @@ export default class JeuView extends View {
 				coord.x - e.width / 2,
 				coord.y - e.height / 2,
 				e.width,
-				e.width
+				e.height
 			);
 		}
 	}
