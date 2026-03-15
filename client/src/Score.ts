@@ -1,9 +1,8 @@
-import TopScores from './data/score.json';
+import type { scores } from "../../common/types";
 
 export default class Score {
-	static genererTableauScores(): string {
+	static genererTableauScores(listeScore: scores[]): string {
 		const i = 1;
-		const listeScore = TopScores.topScore;
 		listeScore.sort((a, b) => b.score - a.score).slice(0, 20);
 		let res = `<div class="scores-header">
                         <h2>Les Meilleurs Scores</h2>
@@ -22,7 +21,7 @@ export default class Score {
 			res += `<tr>
                         <td class="col-rank">${i + 1}</td>
                         <td class="col-pseudo">${s.pseudo}</td>
-                        <td class="col-score">${s.score.toLocaleString()}</td>
+                        <td class="col-score">${s.score}</td>
                         <td class="col-date">${s.date}</td>
                     </tr>`;
 		});
