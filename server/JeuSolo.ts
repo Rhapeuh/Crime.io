@@ -46,6 +46,8 @@ export default class JeuSolo extends Jeu {
 		clearInterval(this.gameLoop);
 
 		this.socket.removeAllListeners('updateInput');
+		this.socket.removeAllListeners('playerParry');
+		this.socket.removeAllListeners('shooting');
 	}
 
 	update() {

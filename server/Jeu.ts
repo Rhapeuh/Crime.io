@@ -1,6 +1,7 @@
 import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
+import Ennemy from '../common/Ennemy.ts';
 
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
@@ -35,12 +36,12 @@ export default class Jeu {
 			j.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
 	}
 
-	updateInput(j: Joueur, vx: number, vy: number) {
+	protected updateInput(j: Joueur, vx: number, vy: number) {
 		j.setVX(vx);
 		j.setVY(vy);
 	}
 
-	addBullet(j: Joueur) {
+	protected addBullet(j: Joueur) {
 		const vx = j.getVX();
 		const vy = j.getVY();
 		let angle = 0;
@@ -48,7 +49,12 @@ export default class Jeu {
 			angle = Math.atan2(vy, vx);
 		}
 
-		const nouvelleBalle = new Bullet({ x: j.getX(), y: j.getY() }, angle, 15, j);
+		const nouvelleBalle = new Bullet(
+			{ x: j.getX(), y: j.getY() },
+			angle,
+			15,
+			j
+		);
 		this.game.addBullet(nouvelleBalle);
 	}
 
@@ -57,5 +63,33 @@ export default class Jeu {
 			b.update();
 			if (b.shouldBeDeleted()) this.game.removeBullet(b);
 		});
+	}
+
+	protected addEnnemy() {
+		this.game.addEnnemy(new Ennemy({ x: 200, y: 200 }));
+	}
+
+	protected updateEnnemy(e: Ennemy, j: Joueur) {
+		if (Math.abs(e.getX() - j.getX()) > 300) {
+			if (e.getX() > j.getX()) {
+				e.setX(e.getX() + e.speed * -1);
+			} else if (e.getX() < j.getX()) {
+				e.setX(e.getX() + e.speed * 1);
+			}
+		}
+
+		if (Math.abs(e.getY() - j.getY()) > 300) {
+			if (e.getY() > j.getY()) {
+				e.setY(e.getY() + e.speed * -1);
+			} else if (e.getY() < j.getY()) {
+				e.setY(e.getY() + e.speed * 1);
+			}
+		}
+		if (e.getX() < 0) e.setX(0);
+		if (e.getY() < 0) e.setY(0);
+		if (e.getX() > this.WORLD_WIDTH - this.PLAYER_SIZE)
+			e.setX(this.WORLD_WIDTH - this.PLAYER_SIZE);
+		if (e.getY() > this.WORLD_HEIGHT - this.PLAYER_SIZE)
+			e.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
 	}
 }
