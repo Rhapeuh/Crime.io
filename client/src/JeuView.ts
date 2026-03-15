@@ -113,8 +113,20 @@ export default class JeuView extends View {
 			const currentClient = j.pseudo === this.monPseudo;
 			const coord = this.realCordonee(j.co);
 			currentClient
-				? this.context.drawImage(Assets.persoTemp1, coord.x, coord.y, 50, 50)
-				: this.context.drawImage(Assets.persoTemp2, coord.x, coord.y, 50, 50);
+				? this.context.drawImage(
+						Assets.persoTemp1,
+						coord.x - j.width / 2,
+						coord.y - j.height / 2,
+						j.width,
+						j.height
+					)
+				: this.context.drawImage(
+						Assets.persoTemp2,
+						coord.x - j.width / 2,
+						coord.y - j.height / 2,
+						j.width,
+						j.height
+					);
 		}
 	}
 
@@ -123,8 +135,8 @@ export default class JeuView extends View {
 			const coord = this.realCordonee(b.co);
 			this.context.drawImage(
 				Assets.ennemyTemp,
-				coord.x,
-				coord.y,
+				coord.x - b.width / 2,
+				coord.y - b.height / 2,
 				b.width,
 				b.height
 			);
@@ -134,7 +146,13 @@ export default class JeuView extends View {
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
 			const coord = this.realCordonee(e.co);
-			this.context.drawImage(Assets.ennemyTemp, coord.x, coord.y, 50, 50);
+			this.context.drawImage(
+				Assets.ennemyTemp,
+				coord.x - e.width / 2,
+				coord.y - e.height / 2,
+				e.width,
+				e.width
+			);
 		}
 	}
 

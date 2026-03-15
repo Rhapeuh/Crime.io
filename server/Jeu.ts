@@ -9,7 +9,6 @@ import { randomInt } from 'crypto';
 export default class Jeu {
 	private WORLD_WIDTH = 1920;
 	private WORLD_HEIGHT = 1080;
-	private PLAYER_SIZE = 50;
 	private max_speed: number = 10;
 	game: Game = new Game();
 
@@ -47,13 +46,19 @@ export default class Jeu {
 		return j.getVX() != 0 || j.getVY() != 0;
 	}
 
-	private verifCoordonee(j: Entities) {
-		if (j.getX() < 0) j.setX(0);
-		if (j.getY() < 0) j.setY(0);
-		if (j.getX() > this.WORLD_WIDTH - this.PLAYER_SIZE)
-			j.setX(this.WORLD_WIDTH - this.PLAYER_SIZE);
-		if (j.getY() > this.WORLD_HEIGHT - this.PLAYER_SIZE)
-			j.setY(this.WORLD_HEIGHT - this.PLAYER_SIZE);
+	private verifCoordonee(e: Entities) {
+		const halfW = e.getWidth() / 2;
+		const halfH = e.getHeight() / 2;
+
+		if (e.getX() - halfW < 0) e.setX(halfW);
+
+		if (e.getX() + halfW > this.WORLD_WIDTH)
+			e.setX(this.WORLD_WIDTH - halfW);
+
+		if (e.getY() - halfH < 0) e.setY(halfH);
+
+		if (e.getY() + halfH > this.WORLD_HEIGHT)
+			e.setY(this.WORLD_HEIGHT - halfH);
 	}
 
 	protected updateInput(j: Joueur, vx: number, vy: number) {
@@ -108,5 +113,17 @@ export default class Jeu {
 
 	protected randomCoordonee(): Coordonee {
 		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
+	}
+
+	private checkCollision(
+		entityA: Entities,
+		entityB: Entities,
+		distanceMax: number
+	): boolean {
+		const dx = entityA.getX() - entityB.getX();
+		const dy = entityA.getY() - entityB.getY();
+
+		const distance = Math.sqrt(dx * dx + dy * dy);
+		return distance < distanceMax;
 	}
 }
