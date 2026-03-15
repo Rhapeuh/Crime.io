@@ -16,7 +16,7 @@ socket.on(
 );
 
 const routes = [
-	{ path: '/', getView: () => new AcceuilView(document.querySelector('.viewContent > .accueil')!) },
+	{ path: '/', getView: () => new AcceuilView(document.querySelector('.viewContent > .accueil')!, socket) },
 	{ path: '/credit', getView: () => new CreditView(document.querySelector('.viewContent > .credit')!) },
 	{ path: '/jeuSolo', getView: () => new JeuSoloView(document.querySelector('.viewContent > .jeuSolo')!, socket, pseudoInput.value) },
 	{ path: '/jeuMulti', getView: () => new JeuMultiView(document.querySelector('.viewContent > .jeuMulti')!, socket, pseudoInput.value) },

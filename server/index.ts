@@ -5,6 +5,7 @@ import JeuSolo from './JeuSolo.ts';
 import type { Socket } from 'socket.io';
 import { randomInt } from 'crypto';
 import JeuMulti from './JeuMulti.ts';
+import TopScores from './data/score.json' with { type: 'json' };
 
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
@@ -49,6 +50,10 @@ io.on('connection', socket => {
 			partiesSoloEnCours.get(socket.id)?.destroy();
 			partiesSoloEnCours.delete(socket.id);
 		}
+	});
+
+	socket.on('demandeScore', () => {
+		socket.emit('envoiScore', TopScores.topScore);
 	});
 });
 
