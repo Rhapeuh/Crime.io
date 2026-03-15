@@ -34,10 +34,6 @@ a {
 	margin: 10px;
 }
 
-.menuGauche {
-	display: none;
-}
-
 .titre {
 	display: flex;
 	grid-column: 3;
@@ -50,7 +46,7 @@ h1 {
 	font-size: 100px;
 	letter-spacing: 10px;
 
-    margin-left: 10px;
+    margin-left: 20px;
 
 	writing-mode: vertical-rl;
 
@@ -66,8 +62,8 @@ h1 {
 	}
 }
 
-.colonne-titre {
-	width: 120px;
+.colonne {
+	width: 150px;
 	background-color: #ACA3A3;
 	transform: translateY(-30%);
 	height: 150%;
@@ -77,8 +73,11 @@ h1 {
 	width: 40px;
 	height: 100%;
 	background-color: #8B5C5C;
-	border-top-left-radius: 40px;
-	border-bottom-left-radius: 40px;
+}
+
+.barre-verticale.droite {
+	border-top-left-radius: 25px;
+	border-bottom-left-radius: 25px;
 }
 
 .pseudo-input {
@@ -95,4 +94,105 @@ h1 {
 
 .pseudo-input::placeholder {
     color: #a9a9a9;
+}
+
+.menuGauche {
+    display: flex;
+    grid-column: 1;
+    justify-self: start;
+    height: 100vh;
+	position: relative;
+    z-index: 10;
+}
+
+.colonne.gauche {
+	position: absolute;
+	transform: translateY(0%);
+    background-color: #ACA3A3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: start;
+    height: 100vh;
+	transition: width 2s linear;
+}
+
+.colonne.gauche > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 31vh; 
+	width: 114px;
+	margin: 18px;
+	border-radius: 15px;
+    white-space: nowrap; 
+	background-color: #D8C8C8;
+	cursor: pointer;
+	transition: width 1s linear; 
+}
+
+.colonne.gauche a {
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: block;
+	transform: rotate(-180deg);
+	writing-mode: vertical-rl;
+}
+
+.barre-verticale.gauche {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    position: absolute;
+    left: 150px;
+    transition: left 2s linear; 
+}
+
+.fond{
+	display: flex;
+	flex-direction: column;
+	left: 150px;
+	position: absolute;
+    background-color: #D8C8C8;
+    height: 95.4%;
+	width: 20px;
+	transition: width 2s linear;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	overflow-y: auto;
+	align-items: center;
+}
+
+.accueil:has(.ouvert) {
+	.menuJeu {
+		filter: blur(2px) brightness(0.8);
+		transition: filter 0.4s;
+		pointer-events: none;
+	}
+	.barre-verticale.gauche {
+		left: 800px;
+	}
+
+	.fond {
+		width: 630px;
+	}
+
+	.colonne.gauche{
+		width: 800px;
+	}
+
+	.fond > * {
+		opacity: 1;
+	}
+}
+
+.colonne.gauche > div.btn-cliquer {
+	width: 135px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.fond > * {
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }

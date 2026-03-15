@@ -1,15 +1,8 @@
-import Joueur from './Joueur.ts';
+import Entities from './Entities.ts';
 import type { Coordonee } from './types.ts';
 
-export class Ennemy extends Joueur {
-	constructor(
-		pseudo: string,
-		coJoueur: Coordonee,
-		vx: number,
-		vy: number,
-		speed: number,
-		vies: number
-	) {
-		super(pseudo, coJoueur, vx, vy, speed, vies);
+export default class Ennemy extends Entities {
+	constructor(co: Coordonee) {
+		super(co, 0, 0, 3, 50, 50, undefined, 1);
 	}
 }

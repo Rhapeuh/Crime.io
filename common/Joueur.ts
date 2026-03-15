@@ -1,86 +1,32 @@
 import type { Coordonee } from './types.ts';
+import Entities from './Entities.ts'
 
-export default class Joueur {
-	pseudo?: string;
-	coJoueur: Coordonee;
-	vx: number;
-	vy: number;
-	speed: number;
-	vies: number;
+export default class Joueur extends Entities{
 	invincibilite: boolean;
 
 	constructor(
 		pseudo: string,
 		coJoueur: Coordonee,
-		vx: number,
-		vy: number,
 		speed: number,
-		vies: number
+		vies: number,
+		width: number,
+		height: number,
 	) {
-		this.pseudo = pseudo;
-		this.coJoueur = coJoueur;
-		this.vx = vx;
-		this.vy = vy;
-		this.speed = speed;
-		this.vies = vies;
+		super(coJoueur, 0, 0, speed, width, height, pseudo, vies)
 		this.invincibilite = false;
 	}
 
-	getPseudo(): string {
-		return this.pseudo!;
-	}
-
-	setPseudo(nouveauPseudo: string): void {
-		this.pseudo = nouveauPseudo;
-	}
-
-	getX(): number {
-		return this.coJoueur.x;
-	}
-	getY(): number {
-		return this.coJoueur.y;
-	}
-	setX(posX: number): void {
-		this.coJoueur.x = posX;
-	}
-	setY(posY: number): void {
-		this.coJoueur.y = posY;
-	}
-
-	getVX(): number {
-		return this.vx;
-	}
-	getVY(): number {
-		return this.vy;
-	}
-	setVX(vecteurX: number): void {
-		this.vx = vecteurX;
-	}
-	setVY(vecteurY: number): void {
-		this.vy = vecteurY;
-	}
-
-	getSpeed(): number {
-		return this.speed;
-	}
-	setSpeed(speed: number): void {
-		this.speed = speed;
-	}
-	getCoordonee(): Coordonee {
-		return this.coJoueur;
-	}
-
 	getVies(): number {
-		return this.vies;
+		return this.vie!;
 	}
 	setVies(vies: number) {
-		this.vies = vies;
+		this.vie = vies;
 	}
 	enleverVies(damages: number) {
-		this.vies = this.vies - damages;
+		this.vie = this.vie! - damages;
 	}
 	ajouterVies(vies: number) {
-		this.vies = this.vies + vies;
+		this.vie = this.vie! + vies;
 	}
 
 	public mettreInvincible() {
@@ -90,6 +36,6 @@ export default class Joueur {
 		this.invincibilite = false;
 	}
 	public isInvincible(): boolean {
-		return this.invincibilite === true;
+		return this.invincibilite;
 	}
 }

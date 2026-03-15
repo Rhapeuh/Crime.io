@@ -1,21 +1,26 @@
 import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
-import Game from '../common/Game.ts';
 
 export default class JeuSolo extends Jeu {
 	private j: Joueur;
 	private socket: Socket;
-	private gameLoop: NodeJS.Timeout;
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
+		this.j = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
+		this.game.addJoueur(this.j);
 		this.socket = socket;
 
-		this.socket.emit('renderSolo', this.preparerDonnee())
+		this.socket.emit('renderSolo', this.game);
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			this.updateInput(this.j, input.vx, input.vy);
+		});
+
+		socket.on('shooting', (shooting: boolean) => {
+			if (shooting) {
+				this.addBullet(this.j);
+			}
 		});
 
 		socket.on('playerParry', () => {
@@ -34,24 +39,16 @@ export default class JeuSolo extends Jeu {
 	}
 
 	destroy() {
-		clearInterval(this.gameLoop);
+		super.destroy();
 
 		this.socket.removeAllListeners('updateInput');
+		this.socket.removeAllListeners('playerParry');
+		this.socket.removeAllListeners('shooting');
 	}
 
 	update() {
-		super.update(this.getJoueur());
+		super.update();
 
-		this.socket.emit('renderSolo', this.preparerDonnee());
-	}
-
-	getJoueur() {
-		return this.j;
-	}
-
-	preparerDonnee() {
-		const g = new Game()
-		g.addJoueur(this.j)
-		return g;
+		this.socket.emit('renderSolo', this.game);
 	}
 }

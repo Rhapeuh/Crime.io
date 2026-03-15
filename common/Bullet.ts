@@ -1,39 +1,49 @@
-import { Coordonee } from '../common/types.ts';
+import type { Coordonee } from '../common/types.ts';
+import Entities from './Entities.ts';
+import type Joueur from './Joueur';
 
-class Bullet {
-	x: number;
-	y: number;
-	speed: number;
-	width: number;
-	height: number;
+export default class Bullet extends Entities {
+	createdAt: Coordonee;
 	active: boolean;
-	angle: number;
-	vx: number;
-	vy: number;
+	bulletRange: number;
+	joueur: Joueur;
+	private hit: boolean = false;
 
-	constructor(coordonee: Coordonee, angle: number, speed: number) {
-		this.x = coordonee.x;
-		this.y = coordonee.y;
-		this.speed = speed;
-		this.angle = angle;
-		this.width = 5;
-		this.height = 10;
+	constructor(
+		co: Coordonee,
+		angle: number,
+		speed: number,
+		joueur: Joueur,
+		bulletRange: number = 1000
+	) {
+		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed, 20, 10);
+		this.createdAt = co;
 		this.active = true;
-		this.vx = Math.cos(angle) * speed;
-		this.vy = Math.sin(angle) * speed;
-	}
-
-	getCoordonee(): Coordonee {
-		return { x: this.x, y: this.y };
+		this.joueur = joueur;
+		this.bulletRange = bulletRange;
 	}
 
 	update() {
-		this.x = this.x + this.vx;
-		this.y = this.y + this.vy;
+		this.setCoordonee({ x: this.getX() + this.vx, y: this.getY() + this.vy });
 	}
 
-	setCoordonee(coordonee: Coordonee) {
-		this.x = coordonee.x;
-		this.y = coordonee.y;
+	shouldBeDeleted(): boolean {
+		if (
+			this.getX() + this.bulletRange < this.createdAt.x ||
+			this.getX() - this.bulletRange > this.createdAt.x ||
+			this.getY() + this.bulletRange < this.createdAt.y ||
+			this.getY() - this.bulletRange > this.createdAt.y
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public setHit(value: boolean) {
+		this.hit = value;
+	}
+	public hasHit(): boolean {
+		return this.hit;
 	}
 }

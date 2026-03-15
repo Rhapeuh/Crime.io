@@ -2,7 +2,6 @@ import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
 import { Server as IOServer } from 'socket.io';
-import Game from '../common/Game.ts'
 
 export default class JeuMulti extends Jeu {
 	private listJoueurs: Map<string, Joueur> = new Map();
@@ -12,16 +11,17 @@ export default class JeuMulti extends Jeu {
 		super();
 		this.io = io;
 
-		setInterval(() => {
+		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
 	}
 
 	ajouterJoueur(socket: Socket, pseudo: string) {
-		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
+		const newJoueur = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
 		this.listJoueurs.set(socket.id, newJoueur);
+		this.game.addJoueur(newJoueur);
 
-		socket.emit('renderMulti', this.preparerDonnée());
+		socket.emit('renderMulti', this.game);
 
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
 			const joueur = this.listJoueurs.get(socket.id);
@@ -30,32 +30,34 @@ export default class JeuMulti extends Jeu {
 			}
 		});
 
+		socket.on('shooting', (shooting: boolean) => {
+			if (shooting) {
+				const joueur = this.listJoueurs.get(socket.id);
+				if (joueur) this.addBullet(joueur);
+			}
+		});
+
 		socket.on('disconnect', () => {
 			this.retirerJoueur(socket.id);
 		});
 
-        socket.on('quitterMulti', () => {
-					this.retirerJoueur(socket.id);
+		socket.on('quitterMulti', () => {
+			this.retirerJoueur(socket.id);
 		});
 	}
 
 	retirerJoueur(socketId: string) {
+		this.game.removeJoueur(this.listJoueurs.get(socketId)!);
 		this.listJoueurs.delete(socketId);
 	}
 
 	update() {
-		for(const joueur of this.listJoueurs.values()){
-            super.update(joueur);
-        }
+		super.update();
 
-		this.io.emit('renderMulti', this.preparerDonnée());
+		this.io.emit('renderMulti', this.game);
 	}
 
-    private preparerDonnée() {
-		const  g = new Game();
-		for(const j of this.listJoueurs.values()){
-			g.addJoueur(j)
-		}
-		return g
-    }
+	getNbJoueurs() {
+		return this.game.getNbJoueurs();
+	}
 }
