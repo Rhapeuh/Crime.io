@@ -11,13 +11,13 @@ export default class JeuMulti extends Jeu {
 		super();
 		this.io = io;
 
-		setInterval(() => {
+		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
 	}
 
 	ajouterJoueur(socket: Socket, pseudo: string) {
-		const newJoueur = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
+		const newJoueur = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
 		this.listJoueurs.set(socket.id, newJoueur);
 		this.game.addJoueur(newJoueur);
 
@@ -30,12 +30,19 @@ export default class JeuMulti extends Jeu {
 			}
 		});
 
-		socket.on('shooting', (shooting: boolean) => {
-			if (shooting) {
-				const joueur = this.listJoueurs.get(socket.id);
-				if (joueur) this.addBullet(joueur);
+		socket.on(
+			'shooting',
+			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+				if (donnee.active) {
+					const j = this.listJoueurs.get(socket.id);
+					if (j) {
+						const realX = this.WORLD_WIDTH * donnee.pourcentX;
+						const realY = this.WORLD_HEIGHT * donnee.pourcentY;
+						this.addBullet(j, realX, realY);
+					}
+				}
 			}
-		});
+		);
 
 		socket.on('disconnect', () => {
 			this.retirerJoueur(socket.id);
@@ -52,11 +59,12 @@ export default class JeuMulti extends Jeu {
 	}
 
 	update() {
-		for (const joueur of this.listJoueurs.values()) {
-			super.update(joueur);
-		}
-		this.updateBullets();
+		super.update();
 
 		this.io.emit('renderMulti', this.game);
+	}
+
+	getNbJoueurs() {
+		return this.game.getNbJoueurs();
 	}
 }

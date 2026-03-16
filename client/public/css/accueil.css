@@ -69,17 +69,6 @@ h1 {
 	height: 150%;
 }
 
-.barre-verticale {
-	width: 40px;
-	height: 100%;
-	background-color: #8B5C5C;
-}
-
-.barre-verticale.droite {
-	border-top-left-radius: 25px;
-	border-bottom-left-radius: 25px;
-}
-
 .pseudo-input {
     height: 44px;
     width: 220px;
@@ -114,7 +103,7 @@ h1 {
     justify-content: space-around;
     align-items: start;
     height: 100vh;
-	transition: width 2s linear;
+	transition: width 0.2s linear;
 }
 
 .colonne.gauche > div {
@@ -128,7 +117,7 @@ h1 {
     white-space: nowrap; 
 	background-color: #D8C8C8;
 	cursor: pointer;
-	transition: width 1s linear; 
+	transition: width 0.05s linear;
 }
 
 .colonne.gauche a {
@@ -140,14 +129,6 @@ h1 {
 	writing-mode: vertical-rl;
 }
 
-.barre-verticale.gauche {
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    position: absolute;
-    left: 150px;
-    transition: left 2s linear; 
-}
-
 .fond{
 	display: flex;
 	flex-direction: column;
@@ -155,8 +136,8 @@ h1 {
 	position: absolute;
     background-color: #D8C8C8;
     height: 95.4%;
-	width: 20px;
-	transition: width 2s linear;
+	width: 0px;
+	transition: width 0.2s linear;
 	border-top-right-radius: 15px;
 	border-bottom-right-radius: 15px;
 	overflow-y: auto;
@@ -168,9 +149,6 @@ h1 {
 		filter: blur(2px) brightness(0.8);
 		transition: filter 0.4s;
 		pointer-events: none;
-	}
-	.barre-verticale.gauche {
-		left: 800px;
 	}
 
 	.fond {

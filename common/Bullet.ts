@@ -1,63 +1,37 @@
 import type { Coordonee } from '../common/types.ts';
+import Entities from './Entities.ts';
 import type Joueur from './Joueur';
 
-export default class Bullet {
-	x: number;
-	y: number;
-	createdAtX: number;
-	createdAtY: number;
-	speed: number;
-	width: number;
-	height: number;
+export default class Bullet extends Entities {
+	createdAt: Coordonee;
 	active: boolean;
-	angle: number;
-	vx: number;
-	vy: number;
 	bulletRange: number;
 	joueur: Joueur;
 
 	constructor(
-		coordonee: Coordonee,
+		co: Coordonee,
 		angle: number,
 		speed: number,
 		joueur: Joueur,
 		bulletRange: number = 1000
 	) {
-		this.x = coordonee.x;
-		this.y = coordonee.y;
-		this.createdAtX = coordonee.x;
-		this.createdAtY = coordonee.y;
-		this.speed = speed;
-		this.angle = angle;
-		this.width = 20;
-		this.height = 10;
+		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed, 20, 10);
+		this.createdAt = co;
 		this.active = true;
-		this.vx = Math.cos(angle) * speed;
-		this.vy = Math.sin(angle) * speed;
 		this.joueur = joueur;
 		this.bulletRange = bulletRange;
 	}
 
-	getCoordonee(): Coordonee {
-		return { x: this.x, y: this.y };
-	}
-
 	update() {
-		this.x = this.x + this.vx;
-		this.y = this.y + this.vy;
-	}
-
-	setCoordonee(coordonee: Coordonee) {
-		this.x = coordonee.x;
-		this.y = coordonee.y;
+		this.setCoordonee({ x: this.getX() + this.vx, y: this.getY() + this.vy });
 	}
 
 	shouldBeDeleted(): boolean {
 		if (
-			this.x + this.bulletRange < this.createdAtX ||
-			this.x - this.bulletRange > this.createdAtX ||
-			this.y + this.bulletRange < this.createdAtY ||
-			this.y - this.bulletRange > this.createdAtY
+			this.getX() + this.bulletRange < this.createdAt.x ||
+			this.getX() - this.bulletRange > this.createdAt.x ||
+			this.getY() + this.bulletRange < this.createdAt.y ||
+			this.getY() - this.bulletRange > this.createdAt.y
 		) {
 			return true;
 		} else {

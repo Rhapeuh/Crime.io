@@ -1,16 +1,14 @@
 import type { Socket } from 'socket.io';
 import Joueur from '../common/Joueur.ts';
 import Jeu from './Jeu.ts';
-import Game from '../common/Game.ts';
 
 export default class JeuSolo extends Jeu {
 	private j: Joueur;
 	private socket: Socket;
-	private gameLoop: NodeJS.Timeout;
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(pseudo, { x: 50, y: 50 }, 0, 0, 1, 3);
+		this.j = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
 		this.game.addJoueur(this.j);
 		this.socket = socket;
 
@@ -19,9 +17,11 @@ export default class JeuSolo extends Jeu {
 			this.updateInput(this.j, input.vx, input.vy);
 		});
 
-		socket.on('shooting', (shooting: boolean) => {
-			if (shooting) {
-				this.addBullet(this.j);
+		socket.on('shooting', (donnee: {active: boolean, pourcentX: number, pourcentY: number}) => {
+			if (donnee.active) {
+				const realX = this.WORLD_WIDTH * donnee.pourcentX
+				const realY = this.WORLD_HEIGHT * donnee.pourcentY
+				this.addBullet(this.j, realX, realY);
 			}
 		});
 
@@ -36,26 +36,19 @@ export default class JeuSolo extends Jeu {
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
-
-		socket.on('quitterMulti', () => {
-			this.game = new Game();
-		});
 	}
 
 	destroy() {
-		clearInterval(this.gameLoop);
+		super.destroy();
 
 		this.socket.removeAllListeners('updateInput');
+		this.socket.removeAllListeners('playerParry');
+		this.socket.removeAllListeners('shooting');
 	}
 
 	update() {
-		super.update(this.getJoueur());
-		this.updateBullets();
+		super.update();
 
 		this.socket.emit('renderSolo', this.game);
-	}
-
-	getJoueur() {
-		return this.j;
 	}
 }
