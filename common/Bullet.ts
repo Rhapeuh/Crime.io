@@ -7,7 +7,6 @@ export default class Bullet extends Entities {
 	active: boolean;
 	bulletRange: number;
 	joueur: Joueur;
-	private hit: boolean = false;
 
 	constructor(
 		co: Coordonee,
@@ -38,12 +37,5 @@ export default class Bullet extends Entities {
 		} else {
 			return false;
 		}
-	}
-
-	public setHit(value: boolean) {
-		this.hit = value;
-	}
-	public hasHit(): boolean {
-		return this.hit;
 	}
 }

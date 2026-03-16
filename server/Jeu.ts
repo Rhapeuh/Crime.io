@@ -7,8 +7,8 @@ import type { Coordonee } from '../common/types';
 import { randomInt } from 'crypto';
 
 export default class Jeu {
-	private WORLD_WIDTH = 1920;
-	private WORLD_HEIGHT = 1080;
+	protected WORLD_WIDTH = 1920;
+	protected WORLD_HEIGHT = 1080;
 	private max_speed: number = 10;
 	private maxEnemies = 10;
 	private maxEnnemiesSpawning = 4;
@@ -75,13 +75,10 @@ export default class Jeu {
 		j.setVY(vy);
 	}
 
-	protected addBullet(j: Joueur) {
-		const vx = j.getVX();
-		const vy = j.getVY();
-		let angle = 0;
-		if (vx != 0 || vy != 0) {
-			angle = Math.atan2(vy, vx);
-		}
+	protected addBullet(j: Joueur, targetX: number, targetY: number) {
+		const dx = targetX - j.getX();
+		const dy = targetY - j.getY();
+		const angle = Math.atan2(dy, dx);
 
 		const nouvelleBalle = new Bullet(
 			{ x: j.getX(), y: j.getY() },
@@ -90,6 +87,7 @@ export default class Jeu {
 			j
 		);
 		this.game.addBullet(nouvelleBalle);
+		
 	}
 
 	protected updateBullets() {
