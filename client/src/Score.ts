@@ -4,19 +4,20 @@ export default class Score {
 	static genererTableauScores(listeScore: scores[]): string {
 		const i = 1;
 		listeScore.sort((a, b) => b.score - a.score).slice(0, 20);
-		let res = `<div class="scores-header">
-                        <h2>Les Meilleurs Scores</h2>
-                    </div>
-                    <table class="tableau-scores">
-                        <thead>
-                            <tr>
-                                <th>Rang</th>
-                                <th>Joueur</th>
-                                <th>Score</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+		let res = `<div class="score_open">
+                        <div class="scores-header">
+                            <h2>Les Meilleurs Scores</h2>
+                        </div>
+                        <table class="tableau-scores">
+                            <thead>
+                                <tr>
+                                    <th>Rang</th>
+                                    <th>Joueur</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
 		listeScore.forEach(s => {
 			res += `<tr>
                         <td class="col-rank">${i + 1}</td>
@@ -25,6 +26,6 @@ export default class Score {
                         <td class="col-date">${s.date}</td>
                     </tr>`;
 		});
-		return res + `</tbody></table>`;
+		return res + `</tbody></table></div>`;
 	}
 }

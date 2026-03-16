@@ -1,20 +1,37 @@
+@import url("palette.css");
+
 @font-face {
 	font-family: titreFont; 
   	src: url(font/telematic-font/Telematic-BL5aV.ttf);
 }
 
+@font-face {
+	font-family: gaucheFont; 
+  	src: url(font/atures-font/Atures900PersonalUseOnly-oZMB.ttf);
+}
+
+@font-face {
+	font-family: baseFont; 
+  	src: url(font/telematic-font/Telematic-BL5aV.ttf);
+}
+
+
+
 .accueil {
 	display: grid;
 	width: 100vw;
 	height: 100vh;
-	background-color: #d9d9d9;
+	background-color: var(--black2);
 	overflow: hidden;
 	grid-template-columns: 1fr 1fr 1fr;
 }
 
 a {
 	text-decoration: none;
-	color: black;
+}
+
+.menuJeu a{
+	color : var(--black1);
 }
 
 .menuJeu {
@@ -40,7 +57,7 @@ a {
 }
 
 .titre {
-	color: #7700de;
+	color: var(--electric-purple2);
 
 	font-family: titreFont;
 	display: flex;
@@ -72,7 +89,7 @@ h1 {
 }
 
 .colonne {
-	background-color: #bbff00;
+	background-color: var(--electric-citrus1);
 	width: 150px;
 	transform: translateY(-40%);
 	height: 170%;
@@ -106,13 +123,13 @@ h1 {
 .colonne.gauche {
 	position: absolute;
 	transform: translateY(0%);
-    background-color: #ACA3A3;
-    display: flex;
+    background-color: var(--electric-citrus1);
+    display: grid;
     flex-direction: column;
     justify-content: space-around;
     align-items: start;
     height: 100vh;
-	transition: width 0.2s linear;
+	transition: 0.1s width 0.1s linear;
 }
 
 .colonne.gauche > div {
@@ -124,16 +141,14 @@ h1 {
 	margin: 18px;
 	border-radius: 15px;
     white-space: nowrap; 
-	background-color: #D8C8C8;
 	cursor: pointer;
-	transition: width 0.05s linear;
+	transition: 0.1s width 0.05s linear;
 }
 
 .colonne.gauche a {
-    font-size: 20px;
+    font-size: 38px;
     font-weight: bold;
     text-transform: uppercase;
-    display: block;
 	transform: rotate(-180deg);
 	writing-mode: vertical-rl;
 }
@@ -141,14 +156,12 @@ h1 {
 .fond{
 	display: flex;
 	flex-direction: column;
-	left: 150px;
 	position: absolute;
-    background-color: #D8C8C8;
-    height: 95.4%;
+	left: 150px;
+    background-color: var(--electric-citrus1);
+    height: 100%;
 	width: 0px;
-	transition: width 0.2s linear;
-	border-top-right-radius: 15px;
-	border-bottom-right-radius: 15px;
+	transition: 0.1s width 0.1s linear;
 	overflow-y: auto;
 	align-items: center;
 }
@@ -156,30 +169,62 @@ h1 {
 .accueil:has(.ouvert) {
 	.menuJeu {
 		filter: blur(2px) brightness(0.8);
-		transition: filter 0.4s;
+		transition: 0.1s filter 0.1s;
 		pointer-events: none;
 	}
 
 	.fond {
-		width: 630px;
-	}
+		transition: 0.1s width 0.1s ease;
 
-	.colonne.gauche{
-		width: 800px;
+
+		width: 630px;
+
 	}
 
 	.fond > * {
+		transition: 0.1s opacity 0.1s;
+		transition: 0.1s width 0.1s ease;
+
 		opacity: 1;
+	}
+
+	.score_open{
+		transition: 0.1s width 0.1s ease;
+		width: 92%;
 	}
 }
 
-.colonne.gauche > div.btn-cliquer {
-	width: 135px;
+.colonne.gauche > div.btn-cliquer > a {
+	transition: 0.1s font-size 0.1s;
+	font-size: 44px;
 	border-top-right-radius: 0px;
 	border-bottom-right-radius: 0px;
+}
+.colonne.gauche > div > a{
+	transition: 0.1s font-size 0.1s;
+	font-family: gaucheFont;
+	font-weight: bolder;
 }
 
 .fond > * {
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: 0.1s opacity 0.3s ease;
 }
+
+h2{
+	text-align: center;
+}
+
+.score_open{
+	margin: 20px;
+	height: 100%;
+	width: 92%;
+	border: 4px black solid;
+	border-radius: 18px;
+	background-color: var(--electric-purple1);
+
+	table{
+		width: 92%;
+	}
+}
+
