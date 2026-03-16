@@ -17,9 +17,11 @@ export default class JeuSolo extends Jeu {
 			this.updateInput(this.j, input.vx, input.vy);
 		});
 
-		socket.on('shooting', (shooting: boolean) => {
-			if (shooting) {
-				this.addBullet(this.j);
+		socket.on('shooting', (donnee: {active: boolean, pourcentX: number, pourcentY: number}) => {
+			if (donnee.active) {
+				const realX = this.WORLD_WIDTH * donnee.pourcentX
+				const realY = this.WORLD_HEIGHT * donnee.pourcentY
+				this.addBullet(this.j, realX, realY);
 			}
 		});
 

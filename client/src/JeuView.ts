@@ -54,10 +54,20 @@ export default class JeuView extends View {
 	}
 
 	private handleShooting(e: MouseEvent) {
-		if (e.type === 'mouseup') {
-			this.socket.emit('shooting', false);
-		} else {
-			this.socket.emit('shooting', true);
+		if (e.type === 'mousedown') {
+			const rectangle = this.canvas.getBoundingClientRect();
+
+			const mouseX = e.clientX - rectangle.left;
+			const mouseY = e.clientY - rectangle.top;
+
+			const pourcentX = mouseX / window.innerWidth;
+			const pourcentY = mouseY / window.innerHeight;
+
+			this.socket.emit('shooting', {
+				active: true,
+				pourcentX: pourcentX,
+				pourcentY: pourcentY,
+			});
 		}
 	}
 

@@ -30,12 +30,19 @@ export default class JeuMulti extends Jeu {
 			}
 		});
 
-		socket.on('shooting', (shooting: boolean) => {
-			if (shooting) {
-				const joueur = this.listJoueurs.get(socket.id);
-				if (joueur) this.addBullet(joueur);
+		socket.on(
+			'shooting',
+			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+				if (donnee.active) {
+					const j = this.listJoueurs.get(socket.id);
+					if (j) {
+						const realX = this.WORLD_WIDTH * donnee.pourcentX;
+						const realY = this.WORLD_HEIGHT * donnee.pourcentY;
+						this.addBullet(j, realX, realY);
+					}
+				}
 			}
-		});
+		);
 
 		socket.on('disconnect', () => {
 			this.retirerJoueur(socket.id);
