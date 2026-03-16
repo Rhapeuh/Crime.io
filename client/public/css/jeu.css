@@ -6,7 +6,7 @@
 	top: 0;
 	left: 0;
 	border: none;
-    pointer-events: none;
+	z-index: 0;
 }
 
 .jeuSolo, .jeuMulti {
@@ -15,6 +15,7 @@
     height: 100vh;
     overflow: hidden;
     background-color: #0a0a0a;
+	z-index: 2;
 }
 
 .hud {
@@ -64,6 +65,7 @@
     position: absolute;
     bottom: 20px;
     left: 20px;
+    z-index: 10;
     color: white;
     text-decoration: none;
     font-family: 'Segoe UI', Tahoma, sans-serif;
