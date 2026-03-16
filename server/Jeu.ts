@@ -76,15 +76,6 @@ export default class Jeu {
 		j.setVY(vy);
 	}
 
-	genererBot() {
-		this.game.addEnnemy(
-			new BasicEnnemy({
-				x: randomInt(this.WORLD_WIDTH),
-				y: randomInt(this.WORLD_HEIGHT),
-			})
-		);
-	}
-
 	protected addBullet(j: Joueur, targetX: number, targetY: number) {
 		const dx = targetX - j.getX();
 		const dy = targetY - j.getY();
