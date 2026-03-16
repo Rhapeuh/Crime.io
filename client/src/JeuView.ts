@@ -12,6 +12,7 @@ export default class JeuView extends View {
 	monPseudo: string;
 	context: CanvasRenderingContext2D;
 	canvas: HTMLCanvasElement;
+	hudElement: HTMLDivElement;
 	vx: number = 0;
 	vy: number = 0;
 	socket;
@@ -36,6 +37,8 @@ export default class JeuView extends View {
 
 		this.canvas.width = 1920;
 		this.canvas.height = 1080;
+
+		this.hudElement = this.element.querySelector('.hud')!;
 
 		this.initEvents();
 
@@ -90,7 +93,7 @@ export default class JeuView extends View {
 		window.removeEventListener('mousedown', this.handleShooting);
 		window.removeEventListener('mouseup', this.handleShooting);
 
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
 	private selectDirection(e: KeyboardEvent) {
@@ -117,7 +120,6 @@ export default class JeuView extends View {
 			this.vy = 0;
 	}
 
-
 	private handleAbilities(e: KeyboardEvent) {
 		if (e.key === ' ') {
 			this.socket.emit('playerParry');
@@ -129,6 +131,19 @@ export default class JeuView extends View {
 		if (g.bullets) this.renderBullets(g.bullets);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
+		this.renderHud(g.joueurs);
+	}
+
+	private renderHud(listJoueurs: Joueur[]) {
+		const currentClient = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		if (currentClient) {
+			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
+				currentClient.pseudo!;
+			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
+				currentClient.vie!
+			);
+			this.hudElement.querySelector('.info-score')!.innerHTML = 'score';
+		}
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {

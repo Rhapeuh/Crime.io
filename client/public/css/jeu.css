@@ -8,3 +8,7 @@
 	border: none;
     pointer-events: none;
 }
+
+.noselect {
+	user-select: none;
+}
