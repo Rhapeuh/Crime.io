@@ -52,26 +52,36 @@ export default class JeuView extends View {
 	private initEvents() {
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
-		window.addEventListener('mousedown', this.handleShooting);
-		window.addEventListener('mouseup', this.handleShooting);
+		this.canvas.addEventListener('mousedown', this.handleShooting);
+		this.canvas.addEventListener('mouseup', this.handleShooting);
 	}
 
 	private handleShooting(e: MouseEvent) {
-		if (e.type === 'mousedown') {
-			const rectangle = this.canvas.getBoundingClientRect();
+		const rect = this.canvas.getBoundingClientRect();
 
-			const mouseX = e.clientX - rectangle.left;
-			const mouseY = e.clientY - rectangle.top;
+		// Calculer le ratio auquel le canva a été redimenssioné
+		const scale = Math.min(
+			rect.width / this.canvas.width,
+			rect.height / this.canvas.height
+		);
 
-			const pourcentX = mouseX / window.innerWidth;
-			const pourcentY = mouseY / window.innerHeight;
+		// Dimensions rééles du client grâce au ratio
+		const visualWidth = this.canvas.width * scale;
+		const visualHeight = this.canvas.height * scale;
 
-			this.socket.emit('shooting', {
-				active: true,
-				pourcentX: pourcentX,
-				pourcentY: pourcentY,
-			});
-		}
+		// Canva centré dcp on fait l'offset du vide sur le côté puis /2 pour le centre
+		const offsetX = (rect.width - visualWidth) / 2;
+		const offsetY = (rect.height - visualHeight) / 2;
+
+		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
+		const canvasX = (e.clientX - rect.left - offsetX) / scale;
+		const canvasY = (e.clientY - rect.top - offsetY) / scale;
+
+		this.socket.emit('shooting', {
+			active: e.type === 'mousedown',
+			pourcentX: canvasX / this.canvas.width,
+			pourcentY: canvasY / this.canvas.height,
+		});
 	}
 
 	private handleKeyDown(e: KeyboardEvent) {
