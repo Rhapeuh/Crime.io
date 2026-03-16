@@ -6,3 +6,16 @@ body {
 .viewContent.activeOnly > section:not(.active) {
 	display: none;
 }
+
+:root {
+    --electric-pink : #ff00d9;
+    --electric-citrus : #bbff00;
+    --electric-blue1 : #5400FF;
+    --electric-blue2 : #2e00e6;
+    --electric-purple1 : #7300ff;
+    --electric-purple2 : #7700de;
+}
+
+.noselect {
+	user-select: none;
+}
