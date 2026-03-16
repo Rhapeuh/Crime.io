@@ -126,8 +126,8 @@ export default class JeuView extends View {
 
 	private render(g: Game) {
 		this.context.clearRect(0, 0, 1920, 1080);
-		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.bullets) this.renderBullets(g.bullets);
+		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
 	}
 
