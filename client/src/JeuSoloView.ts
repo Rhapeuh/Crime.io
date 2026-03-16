@@ -10,6 +10,7 @@ import type Bullet from '../../common/Bullet';
 export default class JeuSoloView extends View {
 	private context: CanvasRenderingContext2D;
 	private canvas: HTMLCanvasElement;
+	private hudElement: HTMLDivElement;
 	private vx: number = 0;
 	private vy: number = 0;
 	private socket;
@@ -26,6 +27,7 @@ export default class JeuSoloView extends View {
 
 		this.canvas = this.element.querySelector('.gameCanvasSolo')!;
 		this.context = this.canvas.getContext('2d')!;
+		this.hudElement = this.element.querySelector('.hud')!;
 
 		this.canvas.width = 1920;
 		this.canvas.height = 1080;
@@ -76,6 +78,12 @@ export default class JeuSoloView extends View {
 		this.context.clearRect(0, 0, 1920, 1080);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.bullets) this.renderBullets(g.bullets);
+		this.renderHud(g.joueurs[0]);
+	}
+
+	renderHud(j: Joueur) {
+		this.hudElement.querySelector<HTMLDivElement>('.vies')!.innerHTML =
+			'❤️'.repeat(j.vies);
 	}
 
 	renderJoueur(listJoueurs: Joueur[]) {
