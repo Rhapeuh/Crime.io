@@ -12,10 +12,13 @@
 
 @font-face {
 	font-family: baseFont; 
-  	src: url(font/telematic-font/Telematic-BL5aV.ttf);
+  	src: url(font/averox-font/Averox-rgY9y.ttf);
 }
 
-
+html{
+	font-family: baseFont;
+	font-weight: 900;
+}
 
 .accueil {
 	display: grid;
@@ -105,6 +108,7 @@ h1 {
 	margin: 10px;
 	padding-left: 15px;
 	transition: border-radius 0.1s ease;
+	font-weight: 500;
 }
 
 .pseudo-input:hover{
@@ -116,6 +120,7 @@ h1 {
 .pseudo-input:focus{
 	color: var(--electric-purple1);
 	border-color: var(--electric-citrus1);
+	background-color: var(--black4);
 
 	transition: border-color 0.3s ease, color 0.125s ease;
 }
