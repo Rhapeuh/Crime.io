@@ -176,14 +176,12 @@ h1 {
 	.fond {
 		transition: 0.1s width 0.1s ease;
 
-
 		width: 630px;
-
 	}
 
+	
 	.fond > * {
 		transition: 0.1s opacity 0.1s;
-		transition: 0.1s width 0.1s ease;
 
 		opacity: 1;
 	}
@@ -207,7 +205,7 @@ h1 {
 }
 
 .fond > * {
-    opacity: 0;
+    opacity: 1;
     transition: 0.1s opacity 0.3s ease;
 }
 

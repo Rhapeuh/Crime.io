@@ -34,7 +34,8 @@ export default class AcceuilView extends View {
 					this.dernierElement = element as HTMLElement;
 					this.ouvrirTiroir();
 				}
-				this.injecterHTML();
+				setTimeout(() => {this.injecterHTML()}, 200);
+				
 			});
 		});
 
