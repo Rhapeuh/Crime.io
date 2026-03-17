@@ -30,6 +30,8 @@ export default class JeuView extends View {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
+		this.handleMouseDown = this.handleMouseDown.bind(this);
+		this.handleMouseUp = this.handleMouseUp.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 
 		this.canvas = canvas;
@@ -50,38 +52,37 @@ export default class JeuView extends View {
 	}
 
 	private initEvents() {
+		window.addEventListener('contextmenu', e => e.preventDefault());
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
-		this.canvas.addEventListener('mousedown', this.handleShooting);
-		this.canvas.addEventListener('mouseup', this.handleShooting);
+		this.canvas.addEventListener('mousedown', this.handleMouseDown);
+		this.canvas.addEventListener('mouseup', this.handleMouseUp);
+	}
+
+	private handleMouseUp(e: MouseEvent) {
+		this.handleShooting(e);
+	}
+
+	private handleMouseDown(e: MouseEvent) {
+		this.handleShooting(e);
+		this.handleDirectionMouse(e);
+	}
+
+	private handleDirectionMouse(e: MouseEvent) {
+		const { x, y } = this.realClickCoordonee(e);
+		// 2 = clique gauche
+		if (e.buttons === 2) this.socket.emit('directionMouse', { x, y });
 	}
 
 	private handleShooting(e: MouseEvent) {
-		const rect = this.canvas.getBoundingClientRect();
-
-		// Calculer le ratio auquel le canva a été redimenssioné
-		const scale = Math.min(
-			rect.width / this.canvas.width,
-			rect.height / this.canvas.height
-		);
-
-		// Dimensions rééles du client grâce au ratio
-		const visualWidth = this.canvas.width * scale;
-		const visualHeight = this.canvas.height * scale;
-
-		// Canva centré dcp on fait l'offset du vide sur le côté puis /2 pour le centre
-		const offsetX = (rect.width - visualWidth) / 2;
-		const offsetY = (rect.height - visualHeight) / 2;
-
-		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
-		const canvasX = (e.clientX - rect.left - offsetX) / scale;
-		const canvasY = (e.clientY - rect.top - offsetY) / scale;
-
-		this.socket.emit('shooting', {
-			active: e.type === 'mousedown',
-			pourcentX: canvasX / this.canvas.width,
-			pourcentY: canvasY / this.canvas.height,
-		});
+		const { x, y } = this.realClickCoordonee(e);
+		// 1 = clique gauche
+		if (e.buttons === 1)
+			this.socket.emit('shooting', {
+				active: e.type === 'mousedown',
+				pourcentX: x / this.canvas.width,
+				pourcentY: y / this.canvas.height,
+			});
 	}
 
 	private handleKeyDown(e: KeyboardEvent) {
@@ -102,7 +103,9 @@ export default class JeuView extends View {
 		window.removeEventListener('keyup', this.handleKeyUp);
 		window.removeEventListener('mousedown', this.handleShooting);
 		window.removeEventListener('mouseup', this.handleShooting);
+	}
 
+	clearCanvas() {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
@@ -212,5 +215,28 @@ export default class JeuView extends View {
 		const realY = ratioY * this.canvas.height;
 
 		return { x: realX, y: realY };
+	}
+
+	private realClickCoordonee(e: MouseEvent): Coordonee {
+		const rect = this.canvas.getBoundingClientRect();
+
+		// Calculer le ratio auquel le canva a été redimenssioné
+		const scale = Math.min(
+			rect.width / this.canvas.width,
+			rect.height / this.canvas.height
+		);
+
+		// Dimensions rééles du client grâce au ratio
+		const visualWidth = this.canvas.width * scale;
+		const visualHeight = this.canvas.height * scale;
+
+		// Canva centré dcp on fait l'offset du vide sur le côté puis /2 pour le centre
+		const offsetX = (rect.width - visualWidth) / 2;
+		const offsetY = (rect.height - visualHeight) / 2;
+
+		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
+		const canvasX = (e.clientX - rect.left - offsetX) / scale;
+		const canvasY = (e.clientY - rect.top - offsetY) / scale;
+		return { x: canvasX, y: canvasY };
 	}
 }
