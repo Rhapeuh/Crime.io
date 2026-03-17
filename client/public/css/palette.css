@@ -1,8 +1,17 @@
 :root{
     --electric-pink : #ff00d9;
-    --electric-citrus : #bbff00;
+    --electric-citrus1 : #bbff00;
+    --electric-citrus2 : #9fd116;
     --electric-blue1 : #5400FF;
     --electric-blue2 : #2e00e6;
     --electric-purple1 : #7300ff;
-    --electric-purple1 : #7700de;
+    --electric-purple2 : #7700de;
+
+    --black1 : #101010;
+    --black2 : #404438;
+    --black3 : #292c24;
+    --black4 : #231c29;
+
+
+    --white1 : #dde6d2;
 }
