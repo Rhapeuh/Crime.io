@@ -15,11 +15,6 @@
   	src: url(font/averox-font/Averox-rgY9y.ttf);
 }
 
-html{
-	font-family: baseFont;
-	font-weight: 900;
-}
-
 .accueil {
 	display: grid;
 	width: 100vw;
@@ -45,16 +40,20 @@ a {
 }
 
 .menuJeu > a {
+	font-family: baseFont;
+	font-weight: 900;
+	color : var(--white1);
+	background-color: var(--black3);
+	border: 3px solid var(--white1);
+	border-radius: 6px;
+	font-size: 25px;
+
 	display: flex;
 	width: 250px;
 	height: 150px;
-	background-color: #aca3a3;
-	border-radius: 6px;
 	justify-content: center;
 	align-items: center;
-	font-size: 25px;
 	margin: 10px;
-	color : var(--black1);
 }
 
 .titre {
@@ -111,21 +110,25 @@ h1 {
 	font-weight: 500;
 }
 
-.pseudo-input:hover{
+.pseudo-input:hover,
+.menuJeu > a:hover{
 	border-radius: 12px;
 
 	transition: border-radius 0.1s ease;
 }
 
-.pseudo-input:focus{
+.pseudo-input:focus,
+.menuJeu > a:hover{
 	color: var(--electric-purple1);
 	border-color: var(--electric-citrus1);
 	background-color: var(--black4);
+	box-shadow: 0 0 1px 1px var(--electric-citrus2);
 
 	transition: border-color 0.3s ease, color 0.125s ease;
 }
 
-.pseudo-input:not(focus){
+.pseudo-input:not(focus),
+.menuJeu > a:not(focus){
 	transition: border-color 0.3s ease, color 0.125s ease;
 }
 
