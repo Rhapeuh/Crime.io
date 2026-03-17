@@ -8,11 +8,11 @@ export default class AcceuilView extends View {
 	private menuGauche: HTMLElement;
 	private dernierElement: HTMLElement | null = null;
 	private fondElement: HTMLElement;
-	private socket: Socket
+	private socket: Socket;
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
-		this.socket = socket
+		this.socket = socket;
 		this.menuGauche = this.element.querySelector('.colonne.gauche')!;
 		this.fondElement = this.element.querySelector('.fond')!;
 		this.setMenuInterne();
@@ -34,8 +34,9 @@ export default class AcceuilView extends View {
 					this.dernierElement = element as HTMLElement;
 					this.ouvrirTiroir();
 				}
-				setTimeout(() => {this.injecterHTML()}, 200);
-				
+				setTimeout(() => {		// pour l'animation de fermeture le avant de delete l'element
+					this.injecterHTML();
+				}, 200); 
 			});
 		});
 
@@ -66,23 +67,24 @@ export default class AcceuilView extends View {
 	private async injecterHTML() {
 		this.fondElement.innerHTML = '';
 		if (this.dernierElement?.className.includes('Scores')) {
-        this.fondElement.innerHTML = '<p>Chargement des scores...</p>';
+			this.fondElement.innerHTML = '<p>Chargement des scores...</p>';
 
-        try {
-            const listScore = await this.recupererScores();
-            this.fondElement.innerHTML = Score.genererTableauScores(listScore);
-        } catch (error) {
-            this.fondElement.innerHTML = '<p>Erreur lors du chargement des scores.</p>';
-        }
-    }
+			try {
+				const listScore = await this.recupererScores();
+				this.fondElement.innerHTML = Score.genererTableauScores(listScore);
+			} catch (error) {
+				this.fondElement.innerHTML =
+					'<p>Erreur lors du chargement des scores.</p>';
+			}
+		}
 	}
 
 	private recupererScores(): Promise<scores[]> {
-    return new Promise((resolve) => {
-        this.socket.emit('demandeScore');
-        this.socket.once('envoiScore', (data: scores[]) => {
-            resolve(data);
-        });
-    });
-}
+		return new Promise(resolve => {
+			this.socket.emit('demandeScore');
+			this.socket.once('envoiScore', (data: scores[]) => {
+				resolve(data);
+			});
+		});
+	}
 }
