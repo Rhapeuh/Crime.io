@@ -30,9 +30,6 @@ a {
 	text-decoration: none;
 }
 
-.menuJeu a{
-	color : var(--black1);
-}
 
 .menuJeu {
 	grid-column: 2;
@@ -49,11 +46,12 @@ a {
 	width: 250px;
 	height: 150px;
 	background-color: #aca3a3;
-	border-radius: 30px;
+	border-radius: 6px;
 	justify-content: center;
 	align-items: center;
 	font-size: 25px;
 	margin: 10px;
+	color : var(--black1);
 }
 
 .titre {
@@ -96,19 +94,34 @@ h1 {
 }
 
 .pseudo-input {
+	outline: none;
     height: 44px;
     width: 220px;
-    background-color: #ffffff;
-    border: 3px solid #aca3a3;
+    background-color: var(--black3);
+	color: var(--white1);
+	border:  3px solid var(--white1);
     border-radius: 6px;
     font-size: 22px;
-    color: #4a4a4a;
 	margin: 10px;
 	padding-left: 15px;
+	transition: border-radius 0.1s ease;
 }
 
-.pseudo-input::placeholder {
-    color: #a9a9a9;
+.pseudo-input:hover{
+	border-radius: 12px;
+
+	transition: border-radius 0.1s ease;
+}
+
+.pseudo-input:focus{
+	color: var(--electric-purple1);
+	border-color: var(--electric-citrus1);
+
+	transition: border-color 0.3s ease, color 0.125s ease;
+}
+
+.pseudo-input:not(focus){
+	transition: border-color 0.3s ease, color 0.125s ease;
 }
 
 .menuGauche {
