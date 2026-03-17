@@ -16,6 +16,7 @@ export default class JeuView extends View {
 	vx: number = 0;
 	vy: number = 0;
 	socket;
+	coordoneeMouseToGo: Coordonee | null = null;
 
 	constructor(
 		element: HTMLElement,
@@ -32,6 +33,7 @@ export default class JeuView extends View {
 		this.handleRender = this.handleRender.bind(this);
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseUp = this.handleMouseUp.bind(this);
+		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 
 		this.canvas = canvas;
@@ -49,6 +51,7 @@ export default class JeuView extends View {
 
 	handleRender(g: Game) {
 		this.render(g);
+		this.checkMouseMovement(g.joueurs);
 	}
 
 	private initEvents() {
@@ -57,6 +60,7 @@ export default class JeuView extends View {
 		window.addEventListener('keyup', this.handleKeyUp);
 		this.canvas.addEventListener('mousedown', this.handleMouseDown);
 		this.canvas.addEventListener('mouseup', this.handleMouseUp);
+		this.canvas.addEventListener('mousemove', this.handleMouseMove);
 	}
 
 	private handleMouseUp(e: MouseEvent) {
@@ -68,32 +72,82 @@ export default class JeuView extends View {
 		this.handleDirectionMouse(e);
 	}
 
+	private handleMouseMove(e: MouseEvent) {
+		if ((e.buttons & 2) !== 0) {
+			this.handleDirectionMouse(e);
+		}
+	}
+
 	private handleDirectionMouse(e: MouseEvent) {
-		const { x, y } = this.realClickCoordonee(e);
-		// 2 = clique gauche
-		if (e.buttons === 2) this.socket.emit('directionMouse', { x, y });
+		// 2 = clique droit / '&' détermine si le bit 2 est allumé
+		if (e.button === 2 || (e.buttons & 2) !== 0) {
+			this.coordoneeMouseToGo = this.realClickCoordonee(e);
+		}
 	}
 
 	private handleShooting(e: MouseEvent) {
 		const { x, y } = this.realClickCoordonee(e);
-		// 1 = clique gauche
-		if (e.buttons === 1)
+		// 0 = clique gauche
+		if (e.button === 0) {
 			this.socket.emit('shooting', {
 				active: e.type === 'mousedown',
 				pourcentX: x / this.canvas.width,
 				pourcentY: y / this.canvas.height,
 			});
+		}
+	}
+
+	private checkMouseMovement(listJoueurs: Joueur[]) {
+		if (!this.coordoneeMouseToGo) return;
+
+		const me = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		if (!me) return;
+
+		const dx = this.coordoneeMouseToGo.x - me.co.x;
+		const dy = this.coordoneeMouseToGo.y - me.co.y;
+		const distance = Math.hypot(dx, dy);
+
+		if (distance < (me.speed || 5)) {
+			this.coordoneeMouseToGo = null;
+			this.vx = 0;
+			this.vy = 0;
+			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		} else {
+			const newVx = dx / distance;
+			const newVy = dy / distance;
+
+			if (
+				Math.abs(this.vx - newVx) > 0.05 ||
+				Math.abs(this.vy - newVy) > 0.05
+			) {
+				this.vx = newVx;
+				this.vy = newVy;
+				this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+			}
+		}
 	}
 
 	private handleKeyDown(e: KeyboardEvent) {
+		if (this.coordoneeMouseToGo) {
+			this.vx = 0;
+			this.vy = 0;
+			this.coordoneeMouseToGo = null;
+		}
 		this.selectDirection(e);
 		this.handleAbilities(e);
-		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		this.socket.emit('updateInput', {
+			vx: this.vx,
+			vy: this.vy,
+		});
 	}
 
 	private handleKeyUp(e: KeyboardEvent) {
 		this.arretDirection(e);
-		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		this.coordoneeMouseToGo = null;
+		this.socket.emit('updateInput', {
+			vx: this.vx,
+			vy: this.vy,
+		});
 	}
 
 	destroy() {
@@ -101,8 +155,9 @@ export default class JeuView extends View {
 
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
-		window.removeEventListener('mousedown', this.handleShooting);
-		window.removeEventListener('mouseup', this.handleShooting);
+		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
+		this.canvas.removeEventListener('mouseup', this.handleMouseUp);
+		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
 	clearCanvas() {
