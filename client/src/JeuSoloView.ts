@@ -2,7 +2,6 @@ import { Socket } from 'socket.io-client';
 import JeuView from './JeuView';
 
 export default class JeuSoloView extends JeuView {
-
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element, socket, pseudo, element.querySelector('.gameCanvasSolo')!);
 		socket.emit('rejoindreSolo', pseudo);

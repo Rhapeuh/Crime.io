@@ -1,7 +1,7 @@
 import type { Coordonee } from './types.ts';
-import Entities from './Entities.ts'
+import Entities from './Entities.ts';
 
-export default class Joueur extends Entities{
+export default class Joueur extends Entities {
 	invincibilite: boolean;
 
 	constructor(
@@ -10,13 +10,13 @@ export default class Joueur extends Entities{
 		speed: number,
 		vies: number,
 		width: number,
-		height: number,
+		height: number
 	) {
-		super(coJoueur, 0, 0, speed, width, height, pseudo, vies)
+		super(coJoueur, 0, 0, speed, width, height, pseudo, vies);
 		this.invincibilite = false;
 	}
 
-	getVies(): number {
+	public getVies(): number {
 		return this.vie!;
 	}
 	setVies(vies: number) {

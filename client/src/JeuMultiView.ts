@@ -2,8 +2,6 @@ import { Socket } from 'socket.io-client';
 import JeuView from './JeuView';
 
 export default class JeuMultiView extends JeuView {
-
-
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element, socket, pseudo, element.querySelector('.gameCanvasMulti')!);
 		socket.emit('rejoindreMulti', pseudo);

@@ -12,9 +12,11 @@ export default class JeuView extends View {
 	monPseudo: string;
 	context: CanvasRenderingContext2D;
 	canvas: HTMLCanvasElement;
+	hudElement: HTMLDivElement;
 	vx: number = 0;
 	vy: number = 0;
 	socket;
+	coordoneeMouseToGo: Coordonee | null = null;
 
 	constructor(
 		element: HTMLElement,
@@ -29,6 +31,9 @@ export default class JeuView extends View {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
+		this.handleMouseDown = this.handleMouseDown.bind(this);
+		this.handleMouseUp = this.handleMouseUp.bind(this);
+		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 
 		this.canvas = canvas;
@@ -37,6 +42,8 @@ export default class JeuView extends View {
 		this.canvas.width = 1920;
 		this.canvas.height = 1080;
 
+		this.hudElement = this.element.querySelector('.hud')!;
+
 		this.initEvents();
 
 		Router.setMenuElement(element);
@@ -44,42 +51,103 @@ export default class JeuView extends View {
 
 	handleRender(g: Game) {
 		this.render(g);
+		this.checkMouseMovement(g.joueurs);
 	}
 
 	private initEvents() {
+		window.addEventListener('contextmenu', e => e.preventDefault());
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
-		window.addEventListener('mousedown', this.handleShooting);
-		window.addEventListener('mouseup', this.handleShooting);
+		this.canvas.addEventListener('mousedown', this.handleMouseDown);
+		this.canvas.addEventListener('mouseup', this.handleMouseUp);
+		this.canvas.addEventListener('mousemove', this.handleMouseMove);
+	}
+
+	private handleMouseUp(e: MouseEvent) {
+		this.handleShooting(e);
+	}
+
+	private handleMouseDown(e: MouseEvent) {
+		this.handleShooting(e);
+		this.handleDirectionMouse(e);
+	}
+
+	private handleMouseMove(e: MouseEvent) {
+		if ((e.buttons & 2) !== 0) {
+			this.handleDirectionMouse(e);
+		}
+	}
+
+	private handleDirectionMouse(e: MouseEvent) {
+		// 2 = clique droit / '&' détermine si le bit 2 est allumé
+		if (e.button === 2 || (e.buttons & 2) !== 0) {
+			this.coordoneeMouseToGo = this.realClickCoordonee(e);
+		}
 	}
 
 	private handleShooting(e: MouseEvent) {
-		if (e.type === 'mousedown') {
-			const rectangle = this.canvas.getBoundingClientRect();
-
-			const mouseX = e.clientX - rectangle.left;
-			const mouseY = e.clientY - rectangle.top;
-
-			const pourcentX = mouseX / window.innerWidth;
-			const pourcentY = mouseY / window.innerHeight;
-
+		const { x, y } = this.realClickCoordonee(e);
+		// 0 = clique gauche
+		if (e.button === 0) {
 			this.socket.emit('shooting', {
-				active: true,
-				pourcentX: pourcentX,
-				pourcentY: pourcentY,
+				active: e.type === 'mousedown',
+				pourcentX: x / this.canvas.width,
+				pourcentY: y / this.canvas.height,
 			});
 		}
 	}
 
+	private checkMouseMovement(listJoueurs: Joueur[]) {
+		if (!this.coordoneeMouseToGo) return;
+
+		const me = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		if (!me) return;
+
+		const dx = this.coordoneeMouseToGo.x - me.co.x;
+		const dy = this.coordoneeMouseToGo.y - me.co.y;
+		const distance = Math.hypot(dx, dy);
+
+		if (distance < (me.speed || 5)) {
+			this.coordoneeMouseToGo = null;
+			this.vx = 0;
+			this.vy = 0;
+			this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		} else {
+			const newVx = dx / distance;
+			const newVy = dy / distance;
+
+			if (
+				Math.abs(this.vx - newVx) > 0.05 ||
+				Math.abs(this.vy - newVy) > 0.05
+			) {
+				this.vx = newVx;
+				this.vy = newVy;
+				this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+			}
+		}
+	}
+
 	private handleKeyDown(e: KeyboardEvent) {
+		if (this.coordoneeMouseToGo) {
+			this.vx = 0;
+			this.vy = 0;
+			this.coordoneeMouseToGo = null;
+		}
 		this.selectDirection(e);
 		this.handleAbilities(e);
-		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		this.socket.emit('updateInput', {
+			vx: this.vx,
+			vy: this.vy,
+		});
 	}
 
 	private handleKeyUp(e: KeyboardEvent) {
 		this.arretDirection(e);
-		this.socket.emit('updateInput', { vx: this.vx, vy: this.vy });
+		this.coordoneeMouseToGo = null;
+		this.socket.emit('updateInput', {
+			vx: this.vx,
+			vy: this.vy,
+		});
 	}
 
 	destroy() {
@@ -87,10 +155,13 @@ export default class JeuView extends View {
 
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
-		window.removeEventListener('mousedown', this.handleShooting);
-		window.removeEventListener('mouseup', this.handleShooting);
+		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
+		this.canvas.removeEventListener('mouseup', this.handleMouseUp);
+		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
+	}
 
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	clearCanvas() {
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
 	private selectDirection(e: KeyboardEvent) {
@@ -117,7 +188,6 @@ export default class JeuView extends View {
 			this.vy = 0;
 	}
 
-
 	private handleAbilities(e: KeyboardEvent) {
 		if (e.key === ' ') {
 			this.socket.emit('playerParry');
@@ -129,6 +199,19 @@ export default class JeuView extends View {
 		if (g.bullets) this.renderBullets(g.bullets);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
+		this.renderHud(g.joueurs);
+	}
+
+	private renderHud(listJoueurs: Joueur[]) {
+		const currentClient = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		if (currentClient) {
+			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
+				currentClient.pseudo!;
+			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
+				currentClient.vie!
+			);
+			this.hudElement.querySelector('.info-score')!.innerHTML = 'score';
+		}
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {
@@ -187,5 +270,28 @@ export default class JeuView extends View {
 		const realY = ratioY * this.canvas.height;
 
 		return { x: realX, y: realY };
+	}
+
+	private realClickCoordonee(e: MouseEvent): Coordonee {
+		const rect = this.canvas.getBoundingClientRect();
+
+		// Calculer le ratio auquel le canva a été redimenssioné
+		const scale = Math.min(
+			rect.width / this.canvas.width,
+			rect.height / this.canvas.height
+		);
+
+		// Dimensions rééles du client grâce au ratio
+		const visualWidth = this.canvas.width * scale;
+		const visualHeight = this.canvas.height * scale;
+
+		// Canva centré dcp on fait l'offset du vide sur le côté puis /2 pour le centre
+		const offsetX = (rect.width - visualWidth) / 2;
+		const offsetY = (rect.height - visualHeight) / 2;
+
+		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
+		const canvasX = (e.clientX - rect.left - offsetX) / scale;
+		const canvasY = (e.clientY - rect.top - offsetY) / scale;
+		return { x: canvasX, y: canvasY };
 	}
 }
