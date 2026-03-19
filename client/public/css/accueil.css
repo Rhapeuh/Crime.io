@@ -188,9 +188,11 @@ h1 {
 }
 
 .accueil:has(.ouvert) {
-	.menuJeu {
+	.menuJeu{
+		/*
 		filter: blur(2px) brightness(0.8);
 		transition: 0.1s filter 0.1s;
+		*/
 		pointer-events: none;
 	}
 
@@ -200,12 +202,6 @@ h1 {
 		width: 630px;
 	}
 
-	
-	.fond > * {
-		transition: 0.1s opacity 0.1s;
-
-		opacity: 1;
-	}
 
 	.score_open{
 		transition: 0.1s width 0.1s ease;
@@ -225,11 +221,8 @@ h1 {
 	font-weight: bolder;
 }
 
-.fond > * {
-    opacity: 1;
-    transition: 0.1s opacity 0.3s ease;
-}
 
 h2{
+	color: var(--electric-purple2);
 	text-align: center;
 }

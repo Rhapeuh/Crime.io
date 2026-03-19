@@ -2,7 +2,7 @@
 	margin: 20px;
 	height: 100%;
 	width: 92%;
-	border: 4px black solid;
+	border: 4px var(--black1) solid;
 	border-radius: 18px;
 	background-color: var(--black3);
 
@@ -22,8 +22,8 @@
 }
 
 .tableau-scores th {
-	color: #8b5c5c;
-	border-bottom: 2px solid #8b5c5c;
+	color: var(--electric-pink);
+	border-bottom: 2px solid var(--electric-pink);
 	padding: 10px;
 }
 
@@ -31,7 +31,7 @@
     text-align: center;
 	padding: 12px 10px;
 	border-bottom: 1px solid #ddd;
-	color: #333;
+	color: var(--white1);
 }
 
 .col-rank {
@@ -43,7 +43,4 @@
 .col-score {
 	font-family: monospace;
 	font-size: 1.1rem;
-}
-.col-date {
-	color: #888;
 }
