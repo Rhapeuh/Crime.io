@@ -233,17 +233,3 @@ h1 {
 h2{
 	text-align: center;
 }
-
-.score_open{
-	margin: 20px;
-	height: 100%;
-	width: 92%;
-	border: 4px black solid;
-	border-radius: 18px;
-	background-color: var(--electric-purple1);
-
-	table{
-		width: 92%;
-	}
-}
-
