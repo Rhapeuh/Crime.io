@@ -2,7 +2,6 @@ import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
 import Ennemy from '../common/Ennemy.ts';
-import { BasicEnnemy } from '../common/BasicEnnemy.ts';
 import type Entities from '../common/Entities';
 import type { Coordonee } from '../common/types';
 import { randomInt } from 'crypto';
@@ -11,15 +10,15 @@ export default class Jeu {
 	protected WORLD_WIDTH = 1920;
 	protected WORLD_HEIGHT = 1080;
 	private max_speed: number = 10;
-	private maxEnemies = 10;
-	private maxEnnemiesSpawning = 4;
+	private maxEnemies = 1;
+	private maxEnnemiesSpawning = 1;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
-	private maxSpawnDelay = 3000;
+	private maxSpawnDelay = 300;
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
 
-	public destroy() {
+	protected destroy() {
 		if (this.gameLoop) {
 			clearInterval(this.gameLoop);
 		}
@@ -29,34 +28,15 @@ export default class Jeu {
 
 	protected update() {
 		this.handleEnemySpawning();
-		for (const j of this.game.joueurs.values()) {
-			this.updateJoueur(j);
-		}
+		this.updateJoueur();
 		this.updateBullets();
 
 		if (this.game.joueurs.length !== 0) {
-			for (const e of this.game.ennemies.values()) {
-				this.updateEnnemy(e);
-			}
+			this.updateEnnemy();
 		}
 	}
 
-	private updateJoueur(j: Joueur) {
-		this.updateSpeed(j);
-		j.setX(j.getX() + j.getVX() * j.getSpeed());
-		j.setY(j.getY() + j.getVY() * j.getSpeed());
-		this.verifCoordonee(j);
-	}
-
-	private updateSpeed(j: Joueur) {
-		if (this.seDeplace(j) && j.getSpeed() < this.max_speed)
-			j.setSpeed(j.getSpeed() + 0.2);
-		if (!this.seDeplace(j)) j.setSpeed(1);
-	}
-
-	private seDeplace(j: Joueur) {
-		return j.getVX() != 0 || j.getVY() != 0;
-	}
+	// gestion globale 
 
 	private verifCoordonee(e: Entities) {
 		const halfW = e.getWidth() / 2;
@@ -71,10 +51,61 @@ export default class Jeu {
 		if (e.getY() + halfH > this.WORLD_HEIGHT) e.setY(this.WORLD_HEIGHT - halfH);
 	}
 
+	protected randomCoordonee(): Coordonee {
+		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
+	}
+
+	private checkCollision(entityA: Entities, entityB: Entities): boolean {
+		const leftA = entityA.getX();
+		const rightA = entityA.getX() + entityA.getWidth();
+		const topA = entityA.getY();
+		const bottomA = entityA.getY() + entityA.getHeight();
+
+		const leftB = entityB.getX();
+		const rightB = entityB.getX() + entityB.getWidth();
+		const topB = entityB.getY();
+		const bottomB = entityB.getY() + entityB.getHeight();
+
+		return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
+	}
+
+	// Gestion du joueur
+
+	private updateJoueur() {
+		for (const j of this.game.joueurs.values()) {
+			// if(!j.estEnVie) this.joueurMort(j);
+			this.joueurToucher(j);
+			this.updateSpeed(j);
+			j.setX(j.getX() + j.getVX() * j.getSpeed());
+			j.setY(j.getY() + j.getVY() * j.getSpeed());
+			this.verifCoordonee(j);
+		}
+	}
+
+	private updateSpeed(j: Joueur) {
+		if (this.seDeplace(j) && j.getSpeed() < this.max_speed)
+			j.setSpeed(j.getSpeed() + 0.2);
+		if (!this.seDeplace(j)) j.setSpeed(1);
+	}
+
+	private seDeplace(j: Joueur) {
+		return j.getVX() != 0 || j.getVY() != 0;
+	}
+
 	protected updateInput(j: Joueur, vx: number, vy: number) {
 		j.setVX(vx);
 		j.setVY(vy);
 	}
+
+	private joueurToucher(j: Joueur){
+		for(const e of this.game.ennemies){
+			if(this.checkCollision(j, e)){
+				j.enleverVie();
+			}
+		}
+	}
+
+	// gestion des balle 
 
 	protected addBullet(j: Joueur, targetX: number, targetY: number) {
 		const dx = targetX - j.getX();
@@ -88,17 +119,16 @@ export default class Jeu {
 			j
 		);
 		this.game.addBullet(nouvelleBalle);
-		
 	}
 
-	protected updateBullets() {
+	private updateBullets() {
 		this.game.removeAllHit();
 		this.game.bullets.forEach(b => {
 			b.update();
-			
+
 			for (const e of this.game.ennemies.values()) {
 				if (this.checkCollision(b, e)) {
-					e.encaisserDegat();
+					e.enleverVie();
 					this.game.addBulletHit(b);
 					this.game.removeBullet(b);
 
@@ -110,15 +140,22 @@ export default class Jeu {
 		});
 	}
 
-	protected addEnnemy(e: Ennemy) {
+	// gestion des ennemis
+
+	private addEnnemy(e: Ennemy) {
 		this.game.addEnnemy(e);
 	}
 
-	protected updateEnnemy(e: Ennemy) {
+	private updateEnnemy() {
 		const j = this.game.joueurs[0];
 
-		if (!e.estEnVie()) this.game.removeEnnemy(e);
+		for (const e of this.game.ennemies) {
+			if (!e.estEnVie()) this.game.removeEnnemy(e);
+			this.mooveEnnemy(e, j);
+		}
+	}
 
+	private mooveEnnemy(e: Ennemy, j: Joueur) {
 		if (e.getX() > j.getX()) {
 			e.setX(e.getX() + e.speed * -1);
 		} else if (e.getX() < j.getX()) {
@@ -133,29 +170,6 @@ export default class Jeu {
 		this.verifCoordonee(e);
 	}
 
-	protected randomCoordonee(): Coordonee {
-		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
-	}
-
-	private checkCollision(entityA: Entities, entityB: Entities): boolean {
-		const halfWA = entityA.getWidth() / 2;
-		const halfHA = entityA.getHeight() / 2;
-		const halfWB = entityB.getWidth() / 2;
-		const halfHB = entityB.getHeight() / 2;
-
-		const leftA = entityA.getX() - halfWA;
-		const rightA = entityA.getX() + halfWA;
-		const topA = entityA.getY() - halfHA;
-		const bottomA = entityA.getY() + halfHA;
-
-		const leftB = entityB.getX() - halfWB;
-		const rightB = entityB.getX() + halfWB;
-		const topB = entityB.getY() - halfHB;
-		const bottomB = entityB.getY() + halfHB;
-
-		return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
-	}
-
 	private handleEnemySpawning() {
 		const now = Date.now();
 
@@ -163,7 +177,7 @@ export default class Jeu {
 			this.game.getNbEnnemy() < this.maxEnemies &&
 			now >= this.nextSpawnTime
 		) {
-			let nbASpawn = randomInt(this.maxEnnemiesSpawning);
+			let nbASpawn = 1; //randomInt(this.maxEnnemiesSpawning);
 			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 

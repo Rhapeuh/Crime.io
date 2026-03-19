@@ -79,18 +79,30 @@ export default class Entities {
 		this.co.y = y;
 	}
 
-	encaisserDegat() {
-		if (this.vie) this.vie -= 1;
-	}
-
-	estEnVie(): boolean {
-		return (this.vie ?? 0) > 0;
-	}
-
 	getWidth() {
 		return this.width;
 	}
 	getHeight() {
 		return this.height;
+	}
+
+	public getVies(): number {
+		return this.vie!;
+	}
+	setVies(vies: number) {
+		this.vie = vies;
+	}
+
+	enleverVie() {
+		if (this.vie) this.vie -= 1;
+	}
+
+	estEnVie(): boolean {
+		if(this.vie) return this.vie > 0
+		return false;
+	}
+
+	ajouterVies() {
+		if(this.vie) this.vie ++ 
 	}
 }
