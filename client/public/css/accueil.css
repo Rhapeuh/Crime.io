@@ -160,7 +160,7 @@ h1 {
     height: 31vh; 
 	width: 114px;
 	margin: 18px;
-	border-radius: 15px;
+	border-radius: 12px;
     white-space: nowrap; 
 	cursor: pointer;
 	transition: 0.1s width 0.05s linear;
