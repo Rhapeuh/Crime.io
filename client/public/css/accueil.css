@@ -174,7 +174,7 @@ h1 {
 	justify-content: center ;
 	align-items: center;
 	
-	font-size: 3vh;
+	font-size: 3.25vh;
     font-weight: bold;
     text-transform: uppercase;
 	transform: rotate(-180deg);
@@ -218,7 +218,7 @@ h1 {
 
 .colonne.gauche > div.btn-cliquer > a {
 	transition: 0.1s font-size 0.1s;
-	font-size: 4vh;
+	font-size: 4.25vh;
 	border-top-right-radius: 0px;
 	border-bottom-right-radius: 0px;
 }
