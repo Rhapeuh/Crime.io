@@ -199,6 +199,8 @@ export default class JeuView extends View {
 		if (g.bullets) this.renderBullets(g.bullets);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
+		if (g.bulletsHit) this.renderBulletsHit(g.bulletsHit);
+
 		this.renderHud(g.joueurs);
 	}
 
@@ -245,6 +247,18 @@ export default class JeuView extends View {
 				coord.y - b.height / 2,
 				b.width,
 				b.height
+			);
+		}
+	}
+	private renderBulletsHit(listBulletsHit: Bullet[]) {
+		for (const bh of listBulletsHit) {
+			const coord = this.realCordonee(bh.co);
+			this.context.drawImage(
+				Assets.persoTemp2,
+				coord.x - bh.width / 2,
+				coord.y - bh.height / 2,
+				bh.width,
+				bh.height
 			);
 		}
 	}

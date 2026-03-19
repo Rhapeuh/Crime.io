@@ -92,12 +92,14 @@ export default class Jeu {
 	}
 
 	protected updateBullets() {
+		this.game.removeAllHit();
 		this.game.bullets.forEach(b => {
 			b.update();
-
+			
 			for (const e of this.game.ennemies.values()) {
 				if (this.checkCollision(b, e)) {
 					e.encaisserDegat();
+					this.game.addBulletHit(b);
 					this.game.removeBullet(b);
 
 					return;
