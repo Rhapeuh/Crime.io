@@ -188,7 +188,7 @@ h1 {
 	left: 150px;
     background-color: var(--electric-citrus1);
     height: 100%;
-	width: 0px;
+	width: 0;
 	transition: 0.1s width 0.1s linear;
 	overflow-y: auto;
 	align-items: center;
@@ -206,7 +206,7 @@ h1 {
 	.fond {
 		transition: 0.1s width 0.1s ease;
 
-		width: 630px;
+		width: 50vw;
 	}
 
 
