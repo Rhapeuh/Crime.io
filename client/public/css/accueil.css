@@ -59,7 +59,7 @@ a {
 .titre {
 	color: var(--electric-purple2);
 
-	font-family: titreFont;
+	font-family: titreFont !important;
 	display: flex;
 	grid-column: 3;
     justify-self: end;
@@ -218,11 +218,4 @@ h1 {
 .colonne.gauche > div > a{
 	transition: 0.1s font-size 0.1s;
 	font-family: gaucheFont;
-	font-weight: bolder;
-}
-
-
-h2{
-	color: var(--electric-purple2);
-	text-align: center;
 }
