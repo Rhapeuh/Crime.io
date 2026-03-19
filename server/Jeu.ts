@@ -101,6 +101,7 @@ export default class Jeu {
 		for(const e of this.game.ennemies){
 			if(this.checkCollision(j, e)){
 				j.enleverVie();
+				this.game.removeEnnemy(e);
 			}
 		}
 	}
