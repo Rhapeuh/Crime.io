@@ -10,8 +10,8 @@ export default class Jeu {
 	protected WORLD_WIDTH = 1920;
 	protected WORLD_HEIGHT = 1080;
 	private max_speed: number = 10;
-	private maxEnemies = 1;
-	private maxEnnemiesSpawning = 1;
+	private maxEnemies = 20;
+	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
 	private maxSpawnDelay = 300;
@@ -36,7 +36,7 @@ export default class Jeu {
 		}
 	}
 
-	// gestion globale 
+	// gestion globale
 
 	private verifCoordonee(e: Entities) {
 		const halfW = e.getWidth() / 2;
@@ -97,16 +97,16 @@ export default class Jeu {
 		j.setVY(vy);
 	}
 
-	private joueurToucher(j: Joueur){
-		for(const e of this.game.ennemies){
-			if(this.checkCollision(j, e)){
+	private joueurToucher(j: Joueur) {
+		for (const e of this.game.ennemies) {
+			if (this.checkCollision(j, e)) {
 				j.enleverVie();
 				this.game.removeEnnemy(e);
 			}
 		}
 	}
 
-	// gestion des balle 
+	// gestion des balle
 
 	protected addBullet(j: Joueur, targetX: number, targetY: number) {
 		const dx = targetX - j.getX();
@@ -148,10 +148,9 @@ export default class Jeu {
 	}
 
 	private updateEnnemy() {
-		const j = this.game.joueurs[0];
-
 		for (const e of this.game.ennemies) {
 			if (!e.estEnVie()) this.game.removeEnnemy(e);
+			const j = this.joueurPlusProche(e);
 			this.mooveEnnemy(e, j);
 		}
 	}
@@ -178,7 +177,7 @@ export default class Jeu {
 			this.game.getNbEnnemy() < this.maxEnemies &&
 			now >= this.nextSpawnTime
 		) {
-			let nbASpawn = 1; //randomInt(this.maxEnnemiesSpawning);
+			let nbASpawn = randomInt(this.maxEnnemiesSpawning);
 			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
@@ -190,5 +189,29 @@ export default class Jeu {
 				this.minSpawnDelay;
 			this.nextSpawnTime = now + randomDelay;
 		}
+	}
+
+	private joueurPlusProche(e: Ennemy): Joueur {
+		let j = this.game.joueurs[0];
+		if (this.game.getNbJoueurs() === 1) return j;
+
+		let dist = this.calculeDistance(e, j);
+
+		for (const newJ of this.game.joueurs) {
+			const newDist = this.calculeDistance(e, newJ);
+			if(newDist < dist){
+				j = newJ;
+				dist = newDist;
+			}
+		}
+
+		return j;
+	}
+
+	private calculeDistance(e: Ennemy, j: Joueur) {
+		const distX = Math.abs(e.getX() - j.getX());
+		const distY = Math.abs(e.getY() - j.getY());
+
+		return Math.hypot(distX, distY);
 	}
 }
