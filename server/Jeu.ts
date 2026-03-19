@@ -11,7 +11,6 @@ export default class Jeu {
 	protected WORLD_HEIGHT = 1080;
 	private max_speed: number = 10;
 	private friction = 0.9;
-	private acceleration = 1.5;
 	private maxEnemies = 5;
 	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
@@ -89,8 +88,8 @@ export default class Jeu {
 	}
 
 	private appliquerPhysique(j: Joueur) {
-		let newVX = j.getVX() + j.getInputX() * this.acceleration;
-		let newVY = j.getVY() + j.getInputY() * this.acceleration;
+		let newVX = j.getVX() + j.getInputX();
+		let newVY = j.getVY() + j.getInputY();
 
 		newVX *= this.friction;
 		newVY *= this.friction;
