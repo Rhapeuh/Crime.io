@@ -10,7 +10,9 @@ export default class Jeu {
 	protected WORLD_WIDTH = 1920;
 	protected WORLD_HEIGHT = 1080;
 	private max_speed: number = 10;
-	private maxEnemies = 20;
+	private friction = 0.9;
+	private acceleration = 1.5;
+	private maxEnemies = 5;
 	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
@@ -56,15 +58,20 @@ export default class Jeu {
 	}
 
 	private checkCollision(entityA: Entities, entityB: Entities): boolean {
-		const leftA = entityA.getX();
-		const rightA = entityA.getX() + entityA.getWidth();
-		const topA = entityA.getY();
-		const bottomA = entityA.getY() + entityA.getHeight();
+		const halfWA = entityA.getWidth() / 2;
+		const halfHA = entityA.getHeight() / 2;
+		const halfWB = entityB.getWidth() / 2;
+		const halfHB = entityB.getHeight() / 2;
 
-		const leftB = entityB.getX();
-		const rightB = entityB.getX() + entityB.getWidth();
-		const topB = entityB.getY();
-		const bottomB = entityB.getY() + entityB.getHeight();
+		const leftA = entityA.getX() - halfWA;
+		const rightA = entityA.getX() + halfWA;
+		const topA = entityA.getY() - halfHA;
+		const bottomA = entityA.getY() + halfHA;
+
+		const leftB = entityB.getX() - halfWB;
+		const rightB = entityB.getX() + halfWB;
+		const topB = entityB.getY() - halfHB;
+		const bottomB = entityB.getY() + halfHB;
 
 		return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
 	}
@@ -73,28 +80,38 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			// if(!j.estEnVie) this.joueurMort(j);
 			this.joueurToucher(j);
-			this.updateSpeed(j);
-			j.setX(j.getX() + j.getVX() * j.getSpeed());
-			j.setY(j.getY() + j.getVY() * j.getSpeed());
+			this.appliquerPhysique(j);
+			j.setX(j.getX() + j.getVX());
+			j.setY(j.getY() + j.getVY());
 			this.verifCoordonee(j);
 		}
 	}
 
-	private updateSpeed(j: Joueur) {
-		if (this.seDeplace(j) && j.getSpeed() < this.max_speed)
-			j.setSpeed(j.getSpeed() + 0.2);
-		if (!this.seDeplace(j)) j.setSpeed(1);
+	private appliquerPhysique(j: Joueur) {
+		let newVX = j.getVX() + j.getInputX() * this.acceleration;
+		let newVY = j.getVY() + j.getInputY() * this.acceleration;
+
+		newVX *= this.friction;
+		newVY *= this.friction;
+
+		const vitesseActuelle = Math.hypot(newVX, newVY);
+		if (vitesseActuelle > this.max_speed) {
+			const angle = Math.atan2(newVY, newVX);
+			newVX = Math.cos(angle) * this.max_speed;
+			newVY = Math.sin(angle) * this.max_speed;
+		}
+
+		if (Math.abs(newVX) < 0.1) newVX = 0;
+		if (Math.abs(newVY) < 0.1) newVY = 0;
+
+		j.setVX(newVX);
+		j.setVY(newVY);
 	}
 
-	private seDeplace(j: Joueur) {
-		return j.getVX() != 0 || j.getVY() != 0;
-	}
-
-	protected updateInput(j: Joueur, vx: number, vy: number) {
-		j.setVX(vx);
-		j.setVY(vy);
+	protected updateInput(j: Joueur, inputX: number, inputY: number) {
+		j.setInputX(inputX);
+		j.setInputY(inputY);
 	}
 
 	private joueurToucher(j: Joueur) {
@@ -199,7 +216,7 @@ export default class Jeu {
 
 		for (const newJ of this.game.joueurs) {
 			const newDist = this.calculeDistance(e, newJ);
-			if(newDist < dist){
+			if (newDist < dist) {
 				j = newJ;
 				dist = newDist;
 			}
