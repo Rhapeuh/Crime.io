@@ -212,7 +212,8 @@ export default class JeuView extends View {
 			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
 				currentClient.vie!
 			);
-			this.hudElement.querySelector('.info-score')!.innerHTML = 'score';
+			this.hudElement.querySelector('.info-score')!.innerHTML =
+				'' + currentClient.score;
 		}
 	}
 

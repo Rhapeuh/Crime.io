@@ -38,4 +38,8 @@ export default class Bullet extends Entities {
 			return false;
 		}
 	}
+
+	getJoueur() {
+		return this.joueur;
+	}
 }
