@@ -16,8 +16,24 @@ export default class JeuMulti extends Jeu {
 		}, 1000 / 60);
 	}
 
+	destroy() {
+		super.destroy();
+
+		this.io.removeAllListeners('updateInput');
+		this.io.removeAllListeners('playerParry');
+		this.io.removeAllListeners('shooting');
+	}
+
 	ajouterJoueur(socket: Socket, pseudo: string) {
-		const newJoueur = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
+		const newJoueur = new Joueur(
+			pseudo,
+			this.randomCoordonee(),
+			1,
+			3,
+			50,
+			50,
+			socket.id
+		);
 		this.listJoueurs.set(socket.id, newJoueur);
 		this.game.addJoueur(newJoueur);
 

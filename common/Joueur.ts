@@ -6,6 +6,7 @@ export default class Joueur extends Entities {
 	inputX: number = 0;
 	inputY: number = 0;
 	score: number = 0;
+	clientID: string;
 
 	constructor(
 		pseudo: string,
@@ -13,9 +14,11 @@ export default class Joueur extends Entities {
 		speed: number,
 		vies: number,
 		width: number,
-		height: number
+		height: number,
+		clientID: string
 	) {
 		super(co, 0, 0, speed, width, height, pseudo, vies);
+		this.clientID = clientID;
 		this.invincibilite = false;
 	}
 
@@ -47,5 +50,9 @@ export default class Joueur extends Entities {
 
 	public addScore(points: number) {
 		this.score = this.score + points;
+	}
+
+	public getClientID() {
+		return this.clientID;
 	}
 }
