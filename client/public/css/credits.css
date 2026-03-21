@@ -1,0 +1,91 @@
+.credit-open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.credits-content {
+    padding: 3rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.credits-subtitle {
+    font-size: 1.2rem;
+    color: var(--white1);
+    opacity: 0.9;
+    margin-bottom: 3rem;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.team-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2.5rem;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--black4);
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    width: 160px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.team-member:hover {
+    border-color: currentColor;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    background-color: var(--black2);
+}
+
+.member-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid currentColor;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    font-family: titreFont, sans-serif;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    background-color: var(--black1);
+    text-shadow: 0 0 10px currentColor;
+    box-shadow: 0 0 15px currentColor;
+    transition: transform 0.3s ease;
+}
+
+.member-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.member-firstname {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--white1);
+    margin-bottom: 0.3rem;
+}
+
+.member-lastname {
+    font-size: 1rem;
+    color: var(--white1);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}

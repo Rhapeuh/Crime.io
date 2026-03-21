@@ -210,7 +210,8 @@ h1 {
 	}
 
 
-	.score_open{
+	.score_open,
+	.credit-open {
 		transition: 0.1s width 0.1s ease;
 		width: 92%;
 	}
