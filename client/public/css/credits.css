@@ -42,9 +42,12 @@
     transition: all 0.3s ease;
     width: 160px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
-.team-member:hover {
+.team-member:hover,
+.team-member.active {
+    transform: translateY(-10px);
     border-color: currentColor;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
     background-color: var(--black2);
@@ -88,4 +91,8 @@
     opacity: 0.6;
     text-transform: uppercase;
     letter-spacing: 2px;
+}
+
+.member-details.hidden {
+    display: none;
 }
