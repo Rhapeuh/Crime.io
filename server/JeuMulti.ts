@@ -85,10 +85,9 @@ export default class JeuMulti extends Jeu {
 	}
 
 	protected async joueurMort(j: Joueur) {
-		super.joueurMort(j);
+		await super.joueurMort(j);
 		if (this.game.getNbJoueurs() === 1 && this.gameLoop)
 			clearInterval(this.gameLoop);
 		this.io.in(j.getClientID()).emit('mortDuJoueur');
-		this.game.removeJoueur(j);
 	}
 }

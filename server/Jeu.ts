@@ -80,7 +80,10 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) this.joueurMort(j);
+			if (!j.estEnVie()) {
+				this.game.removeJoueur(j);
+				this.joueurMort(j);
+			}
 			this.joueurToucher(j);
 			this.appliquerPhysique(j);
 			j.setX(j.getX() + j.getVX());
@@ -131,7 +134,7 @@ export default class Jeu {
 			score: j.getScore(),
 			date: new Date().toLocaleDateString(),
 		};
-		this.sauvegardeScoreAsync(data);
+		await this.sauvegardeScoreAsync(data);
 	}
 
 	// gestion des balle
@@ -255,10 +258,16 @@ export default class Jeu {
 		} = {
 			topScore: [],
 		};
-		const cheminAbsolu = 'server/data/score.json';
-		const contenu = await readFile(cheminAbsolu, 'utf8');
-		if (contenu.trim() !== '') {
-			data = JSON.parse(contenu);
+		const cheminAbsolu = 'data/score.json';
+		try {
+			const contenu = await readFile(cheminAbsolu, 'utf8');
+			if (contenu.trim() !== '') {
+				data = JSON.parse(contenu);
+			}
+		} catch (err) {
+			console.log(
+				"Le fichier n'existe pas encore ou est illisible, on va le créer."
+			);
 		}
 
 		if (!data.topScore) {
@@ -267,7 +276,7 @@ export default class Jeu {
 
 		data.topScore.push(newData);
 		data.topScore.sort((a, b) => b.score - a.score);
-		data.topScore.slice(0, 10);
+		data.topScore = data.topScore.slice(0, 10);
 		await writeFile(cheminAbsolu, JSON.stringify(data), 'utf8');
 	}
 }
