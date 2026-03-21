@@ -5,6 +5,8 @@ export default class Joueur extends Entities {
 	invincibilite: boolean;
 	inputX: number = 0;
 	inputY: number = 0;
+	score: number = 0;
+	clientID: string;
 
 	constructor(
 		pseudo: string,
@@ -12,9 +14,11 @@ export default class Joueur extends Entities {
 		speed: number,
 		vies: number,
 		width: number,
-		height: number
+		height: number,
+		clientID: string
 	) {
 		super(co, 0, 0, speed, width, height, pseudo, vies);
+		this.clientID = clientID;
 		this.invincibilite = false;
 	}
 
@@ -28,19 +32,27 @@ export default class Joueur extends Entities {
 		return this.invincibilite;
 	}
 
-	public getInputX(): number{
-		return this.inputX
+	public getInputX(): number {
+		return this.inputX;
 	}
 
-	public setInputX(input: number){
-		this.inputX = input
+	public setInputX(input: number) {
+		this.inputX = input;
 	}
 
-	public getInputY(): number{
-		return this.inputY
+	public getInputY(): number {
+		return this.inputY;
 	}
 
-	public setInputY(input: number){
-		this.inputY = input
+	public setInputY(input: number) {
+		this.inputY = input;
+	}
+
+	public addScore(points: number) {
+		this.score = this.score + points;
+	}
+
+	public getClientID() {
+		return this.clientID;
 	}
 }

@@ -8,7 +8,15 @@ export default class JeuSolo extends Jeu {
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(pseudo, this.randomCoordonee(), 1, 3, 50, 50);
+		this.j = new Joueur(
+			pseudo,
+			this.randomCoordonee(),
+			1,
+			3,
+			50,
+			50,
+			socket.id
+		);
 		this.game.addJoueur(this.j);
 		this.socket = socket;
 
@@ -17,13 +25,16 @@ export default class JeuSolo extends Jeu {
 			this.updateInput(this.j, input.vx, input.vy);
 		});
 
-		socket.on('shooting', (donnee: {active: boolean, pourcentX: number, pourcentY: number}) => {
-			if (donnee.active) {
-				const realX = this.WORLD_WIDTH * donnee.pourcentX
-				const realY = this.WORLD_HEIGHT * donnee.pourcentY
-				this.addBullet(this.j, realX, realY);
+		socket.on(
+			'shooting',
+			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+				if (donnee.active) {
+					const realX = this.WORLD_WIDTH * donnee.pourcentX;
+					const realY = this.WORLD_HEIGHT * donnee.pourcentY;
+					this.addBullet(this.j, realX, realY);
+				}
 			}
-		});
+		);
 
 		socket.on('playerParry', () => {
 			// CoolDown à prévoir

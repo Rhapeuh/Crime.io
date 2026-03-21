@@ -205,20 +205,21 @@ export default class JeuView extends View {
 	}
 
 	private renderHud(listJoueurs: Joueur[]) {
-		const currentClient = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		const currentClient = listJoueurs.find(j => j.clientID === this.socket.id);
 		if (currentClient) {
 			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
 				currentClient.pseudo!;
 			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
 				currentClient.vie!
 			);
-			this.hudElement.querySelector('.info-score')!.innerHTML = 'score';
+			this.hudElement.querySelector('.info-score')!.innerHTML =
+				'' + currentClient.score;
 		}
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			const currentClient = j.pseudo === this.monPseudo;
+			const currentClient = j.clientID === this.socket.id;
 			const coord = this.realCordonee(j.co);
 			currentClient
 				? this.context.drawImage(

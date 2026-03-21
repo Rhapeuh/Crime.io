@@ -148,7 +148,7 @@ export default class Jeu {
 					e.enleverVie();
 					this.game.addBulletHit(b);
 					this.game.removeBullet(b);
-
+					b.getJoueur().addScore(10);
 					return;
 				}
 			}
