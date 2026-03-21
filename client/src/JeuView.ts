@@ -9,7 +9,6 @@ import type { Coordonee } from '../../common/types';
 import type Ennemy from '../../common/Ennemy';
 
 export default class JeuView extends View {
-	monPseudo: string;
 	context: CanvasRenderingContext2D;
 	canvas: HTMLCanvasElement;
 	hudElement: HTMLDivElement;
@@ -18,25 +17,18 @@ export default class JeuView extends View {
 	socket;
 	coordoneeMouseToGo: Coordonee | null = null;
 
-	constructor(
-		element: HTMLElement,
-		socket: Socket,
-		pseudo: string,
-		canvas: HTMLCanvasElement
-	) {
+	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
-		this.monPseudo = pseudo;
 		this.socket = socket;
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
 		this.handleMouseDown = this.handleMouseDown.bind(this);
-		this.handleMouseUp = this.handleMouseUp.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 
-		this.canvas = canvas;
+		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
 
 		this.canvas.width = 1920;
@@ -59,12 +51,12 @@ export default class JeuView extends View {
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
 		this.canvas.addEventListener('mousedown', this.handleMouseDown);
-		this.canvas.addEventListener('mouseup', this.handleMouseUp);
 		this.canvas.addEventListener('mousemove', this.handleMouseMove);
+		this.socket.on('mortDuJoueur', this.mortJoueur);
 	}
 
-	private handleMouseUp(e: MouseEvent) {
-		this.handleShooting(e);
+	private mortJoueur() {
+		console.log('vous etes mort');
 	}
 
 	private handleMouseDown(e: MouseEvent) {
@@ -100,7 +92,7 @@ export default class JeuView extends View {
 	private checkMouseMovement(listJoueurs: Joueur[]) {
 		if (!this.coordoneeMouseToGo) return;
 
-		const me = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		const me = listJoueurs.find(j => j.clientID === this.socket.id);
 		if (!me) return;
 
 		const dx = this.coordoneeMouseToGo.x - me.co.x;
@@ -156,7 +148,6 @@ export default class JeuView extends View {
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
-		this.canvas.removeEventListener('mouseup', this.handleMouseUp);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
 	}
 

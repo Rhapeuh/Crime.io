@@ -79,6 +79,7 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
+			if(!j.estEnVie()) this.joueurMort(j);
 			this.joueurToucher(j);
 			this.appliquerPhysique(j);
 			j.setX(j.getX() + j.getVX());
@@ -120,6 +121,10 @@ export default class Jeu {
 				this.game.removeEnnemy(e);
 			}
 		}
+	}
+
+	protected joueurMort(j: Joueur){
+		console.log(`le joueur mort est ${j.getPseudo()}`)
 	}
 
 	// gestion des balle

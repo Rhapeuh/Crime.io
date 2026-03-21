@@ -83,4 +83,11 @@ export default class JeuMulti extends Jeu {
 	getNbJoueurs() {
 		return this.game.getNbJoueurs();
 	}
+
+	protected joueurMort(j: Joueur) {
+		if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			clearInterval(this.gameLoop);
+		this.io.in(j.getClientID()).emit('mortDuJoueur');
+		this.game.removeJoueur(j);
+	}
 }

@@ -47,8 +47,6 @@ export default class JeuSolo extends Jeu {
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
-
-		//super.genererBot();
 	}
 
 	destroy() {
@@ -63,5 +61,10 @@ export default class JeuSolo extends Jeu {
 		super.update();
 
 		this.socket.emit('renderSolo', this.game);
+	}
+
+	protected joueurMort(_j: Joueur) {
+		if(this.gameLoop) clearInterval(this.gameLoop);
+		this.socket.emit('mortDuJoueur');
 	}
 }

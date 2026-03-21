@@ -3,7 +3,7 @@ import JeuView from './JeuView';
 
 export default class JeuSoloView extends JeuView {
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
-		super(element, socket, pseudo, element.querySelector('.gameCanvasSolo')!);
+		super(element, socket);
 		socket.emit('rejoindreSolo', pseudo);
 		this.socket.on('renderSolo', this.handleRender);
 	}
@@ -13,9 +13,5 @@ export default class JeuSoloView extends JeuView {
 
 		this.socket.off('renderSolo', this.handleRender);
 		this.socket.emit('quitterSolo');
-	}
-
-	private killPlayer(e: KeyboardEvent) : boolean{
-		return e.key === 'k';
 	}
 }
