@@ -63,8 +63,9 @@ export default class JeuSolo extends Jeu {
 		this.socket.emit('renderSolo', this.game);
 	}
 
-	protected joueurMort(_j: Joueur) {
-		if(this.gameLoop) clearInterval(this.gameLoop);
+	protected async joueurMort(j: Joueur) {
+		super.joueurMort(j);
+		if (this.gameLoop) clearInterval(this.gameLoop);
 		this.socket.emit('mortDuJoueur');
 	}
 }

@@ -52,6 +52,10 @@ export default class Joueur extends Entities {
 		this.score = this.score + points;
 	}
 
+	public getScore(): number {
+		return this.score;
+	}
+
 	public getClientID() {
 		return this.clientID;
 	}

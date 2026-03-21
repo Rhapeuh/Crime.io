@@ -5,6 +5,7 @@ import Ennemy from '../common/Ennemy.ts';
 import type Entities from '../common/Entities';
 import type { Coordonee } from '../common/types';
 import { randomInt } from 'crypto';
+import { writeFile, readFile } from 'fs/promises';
 
 export default class Jeu {
 	protected WORLD_WIDTH = 1920;
@@ -79,7 +80,7 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if(!j.estEnVie()) this.joueurMort(j);
+			if (!j.estEnVie()) this.joueurMort(j);
 			this.joueurToucher(j);
 			this.appliquerPhysique(j);
 			j.setX(j.getX() + j.getVX());
@@ -123,8 +124,14 @@ export default class Jeu {
 		}
 	}
 
-	protected joueurMort(j: Joueur){
-		console.log(`le joueur mort est ${j.getPseudo()}`)
+	protected async joueurMort(j: Joueur) {
+		console.log(`le joueur mort est ${j.getPseudo()}`);
+		const data = {
+			pseudo: j.getPseudo(),
+			score: j.getScore(),
+			date: new Date().toLocaleDateString(),
+		};
+		this.sauvegardeScoreAsync(data);
 	}
 
 	// gestion des balle
@@ -234,5 +241,33 @@ export default class Jeu {
 		const distY = Math.abs(e.getY() - j.getY());
 
 		return Math.hypot(distX, distY);
+	}
+
+	// gestion de la sauvegarde des donnée
+
+	private async sauvegardeScoreAsync(newData: {
+		pseudo: string;
+		score: number;
+		date: string;
+	}) {
+		let data: {
+			topScore: Array<{ pseudo: string; score: number; date: string }>;
+		} = {
+			topScore: [],
+		};
+		const cheminAbsolu = 'server/data/score.json';
+		const contenu = await readFile(cheminAbsolu, 'utf8');
+		if (contenu.trim() !== '') {
+			data = JSON.parse(contenu);
+		}
+
+		if (!data.topScore) {
+			data.topScore = [];
+		}
+
+		data.topScore.push(newData);
+		data.topScore.sort((a, b) => b.score - a.score);
+		data.topScore.slice(0, 10);
+		await writeFile(cheminAbsolu, JSON.stringify(data), 'utf8');
 	}
 }
