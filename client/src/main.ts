@@ -1,5 +1,4 @@
 import AcceuilView from './AcceuilView';
-import CreditView from './CreditView';
 import Router from './Router';
 import JeuSoloView from './JeuSoloView';
 import { io } from 'socket.io-client';
@@ -16,25 +15,47 @@ socket.on(
 );
 
 const routes = [
-	{ path: '/', getView: () => new AcceuilView(document.querySelector('.viewContent > .accueil')!, socket) },
-	{ path: '/credit', getView: () => new CreditView(document.querySelector('.viewContent > .credit')!) },
-	{ path: '/jeuSolo', getView: () => new JeuSoloView(document.querySelector('.viewContent > .jeuSolo')!, socket, pseudoInput.value) },
-	{ path: '/jeuMulti', getView: () => new JeuMultiView(document.querySelector('.viewContent > .jeuMulti')!, socket, pseudoInput.value) },
+	{
+		path: '/',
+		getView: () =>
+			new AcceuilView(
+				document.querySelector('.viewContent > .accueil')!,
+				socket
+			),
+	},
+	{
+		path: '/jeuSolo',
+		getView: () =>
+			new JeuSoloView(
+				document.querySelector('.viewContent > .jeuSolo')!,
+				socket,
+				pseudoInput.value
+			),
+	},
+	{
+		path: '/jeuMulti',
+		getView: () =>
+			new JeuMultiView(
+				document.querySelector('.viewContent > .jeuMulti')!,
+				socket,
+				pseudoInput.value
+			),
+	},
 	//{ path: '/retour', getView: () => new RetourView(document.querySelector('.viewContent > .retour')!) },
 ];
 
 Router.routes = routes;
 
 async function lancerJeu() {
-    try {
-        await Assets.loadAll();
+	try {
+		await Assets.loadAll();
 
-        Router.navigate(window.location.pathname, true);
-        
-        window.onpopstate = () => Router.navigate(document.location.pathname, true);
-    } catch (erreur) {
-        console.error("Erreur lors du chargement des images :", erreur);
-    }
+		Router.navigate(window.location.pathname, true);
+
+		window.onpopstate = () => Router.navigate(document.location.pathname, true);
+	} catch (erreur) {
+		console.error('Erreur lors du chargement des images :', erreur);
+	}
 }
 
 lancerJeu();
