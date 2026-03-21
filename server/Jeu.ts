@@ -1,7 +1,6 @@
 import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
-import Ennemy from '../common/Ennemy.ts';
 import type { Coordonee } from '../common/types.ts';
 import { randomInt } from 'crypto';
 import { writeFile, readFile } from 'fs/promises';
@@ -10,6 +9,8 @@ import {
 	checkCollision,
 	trouverJoueurPlusProche,
 } from '../common/utils.ts';
+import BasicEnnemy, { DifficulteEnnemi } from '../common/BasicEnnemy.ts';
+import type Ennemy from '../common/Ennemy';
 
 export default class Jeu {
 	protected WORLD_WIDTH = 1920;
@@ -19,6 +20,7 @@ export default class Jeu {
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
 	private maxSpawnDelay = 300;
+	private pourcentSpawn = { moyen: 0.5, difficile: 0.85 };
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
 
@@ -110,7 +112,7 @@ export default class Jeu {
 					e.enleverVie();
 					this.game.addBulletHit(b);
 					this.game.removeBullet(b);
-					b.getJoueur().addScore(10);
+					if(!e.estEnVie()) b.getJoueur().addScore(e.getScoreValue());
 					return;
 				}
 			}
@@ -147,8 +149,18 @@ export default class Jeu {
 			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
-			for (let i = 0; i < nbASpawn; i++)
-				this.addEnnemy(new Ennemy(this.randomCoordonee()));
+			for (let i = 0; i < nbASpawn; i++) {
+				const rand = Math.random();
+				let difficulte = DifficulteEnnemi.FACILE;
+
+				if (rand > this.pourcentSpawn.difficile) {
+					difficulte = DifficulteEnnemi.DIFFICILE;
+				} else if (rand > this.pourcentSpawn.moyen) {
+					difficulte = DifficulteEnnemi.MOYEN;
+				}
+
+				this.addEnnemy(new BasicEnnemy(this.randomCoordonee(), difficulte));
+			}
 
 			const randomDelay =
 				Math.random() * (this.maxSpawnDelay - this.minSpawnDelay) +
