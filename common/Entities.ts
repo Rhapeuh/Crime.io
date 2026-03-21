@@ -1,7 +1,6 @@
 import type { Coordonee } from './types';
 
 export default class Entities {
-	pseudo?: string;
 	co: Coordonee;
 	vx: number;
 	vy: number;
@@ -17,10 +16,8 @@ export default class Entities {
 		speed: number,
 		width: number,
 		height: number,
-		pseudo?: string,
-		vie?: number
+		vie?: number,
 	) {
-		this.pseudo = pseudo;
 		this.co = co;
 		this.vx = vx;
 		this.vy = vy;
@@ -28,14 +25,6 @@ export default class Entities {
 		this.width = width;
 		this.height = height;
 		this.vie = vie;
-	}
-
-	getPseudo(): string {
-		return this.pseudo!;
-	}
-
-	setPseudo(nouveauPseudo: string): void {
-		this.pseudo = nouveauPseudo;
 	}
 
 	getVX(): number {
