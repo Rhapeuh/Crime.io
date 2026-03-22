@@ -25,9 +25,10 @@
 }
 
 .team-grid {
+    padding-inline: 10px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
+    gap: 10px;
     margin-bottom: 30px;
 }
 
