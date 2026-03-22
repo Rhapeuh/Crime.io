@@ -1,24 +1,23 @@
 import type { Coordonee } from '../common/types.ts';
 import Entities from './Entities.ts';
-import type Joueur from './Joueur';
 
 export default class Bullet extends Entities {
 	createdAt: Coordonee;
 	active: boolean;
 	bulletRange: number;
-	joueur: Joueur;
+	entitie: Entities;
 
 	constructor(
 		co: Coordonee,
 		angle: number,
 		speed: number,
-		joueur: Joueur,
+		joueur: Entities,
 		bulletRange: number = 1000
 	) {
-		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed, 20, 10);
+		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed, 20, 10, 'bullet');
 		this.createdAt = co;
 		this.active = true;
-		this.joueur = joueur;
+		this.entitie = joueur;
 		this.bulletRange = bulletRange;
 	}
 
@@ -39,7 +38,7 @@ export default class Bullet extends Entities {
 		}
 	}
 
-	getJoueur() {
-		return this.joueur;
+	getEntitie() {
+		return this.entitie;
 	}
 }

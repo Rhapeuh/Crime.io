@@ -3,11 +3,12 @@ import Entities from './Entities.ts';
 import { verifCoordonee } from './utils.ts';
 
 export default class Joueur extends Entities {
+	pseudo: string;
 	private invincibilite: boolean;
 	private inputX: number = 0;
 	private inputY: number = 0;
-	private score: number = 0;
-	private clientID: string;
+	score: number = 0;
+	clientID: string;
 	private friction: number = 0.9;
 	private max_speed: number = 10;
 
@@ -20,9 +21,18 @@ export default class Joueur extends Entities {
 		height: number,
 		clientID: string
 	) {
-		super(co, 0, 0, speed, width, height, pseudo, vies);
+		super(co, 0, 0, speed, width, height, 'persoTemp', vies);
+		this.pseudo = pseudo;
 		this.clientID = clientID;
 		this.invincibilite = false;
+	}
+
+	getPseudo(): string {
+		return this.pseudo!;
+	}
+
+	setPseudo(nouveauPseudo: string): void {
+		this.pseudo = nouveauPseudo;
 	}
 
 	public mettreInvincible() {

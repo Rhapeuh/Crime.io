@@ -4,15 +4,17 @@ import Ennemy from './Ennemy.ts';
 
 export default class Game {
 	joueurs: Array<Joueur>;
-	bullets: Array<Bullet>;
+	bulletsJoueur: Array<Bullet>;
 	bulletsHit: Array<Bullet>;
+	bulletsEnnemy: Array<Bullet>;
 	ennemies: Array<Ennemy>;
 
 	constructor() {
 		this.joueurs = new Array<Joueur>();
-		this.bullets = new Array<Bullet>();
 		this.ennemies = new Array<Ennemy>();
+		this.bulletsJoueur = new Array<Bullet>();
 		this.bulletsHit = new Array<Bullet>();
+		this.bulletsEnnemy = new Array<Bullet>();
 	}
 
 	addJoueur(joueur: Joueur) {
@@ -25,11 +27,11 @@ export default class Game {
 		return this.joueurs.length;
 	}
 
-	addBullet(bullet: Bullet) {
-		this.bullets.push(bullet);
+	addBulletJoueur(bullet: Bullet) {
+		this.bulletsJoueur.push(bullet);
 	}
-	removeBullet(bullet: Bullet) {
-		this.bullets = this.bullets.filter(b => b !== bullet);
+	removeBulletJoueur(bullet: Bullet) {
+		this.bulletsJoueur = this.bulletsJoueur.filter(b => b !== bullet);
 	}
 	
 
@@ -53,10 +55,18 @@ export default class Game {
 		return this.ennemies.length;
 	}
 
+	addEnnemyBullet(bullet: Bullet) {
+		this.bulletsEnnemy.push(bullet);
+	}
+	removeBulletEnnemy(bullet: Bullet) {
+		this.bulletsEnnemy = this.bulletsEnnemy.filter(b => b !== bullet);
+	}
+
 	public clearAll() {
 		this.joueurs = [];
 		this.ennemies = [];
-		this.bullets = [];
+		this.bulletsJoueur = [];
 		this.bulletsHit = [];
+		this.bulletsEnnemy = [];
 	}
 }

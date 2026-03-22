@@ -3,23 +3,52 @@ import type Joueur from './Joueur';
 import type { Coordonee } from './types.ts';
 import { verifCoordonee } from './utils.ts';
 
+export const DifficulteEnnemi = {
+    FACILE: 'FACILE',
+    MOYEN: 'MOYEN',
+    DIFFICILE: 'DIFFICILE'
+}
+
+const STATS_ENNEMIS = {
+	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 40 },
+	[DifficulteEnnemi.MOYEN]: { speed: 3, hp: 2, score: 25, taille: 50 },
+	[DifficulteEnnemi.DIFFICILE]: { speed: 5, hp: 3, score: 50, taille: 60 },
+};
+
 export default class Ennemy extends Entities {
-	constructor(co: Coordonee) {
-		super(co, 0, 0, 3, 50, 50, undefined, 1);
+	private scoreValue: number;
+
+	constructor(
+		co: Coordonee,
+		difficulte = DifficulteEnnemi.FACILE,
+		spriteId: string = 'ennemiTemp',
+	) {
+		const stats = STATS_ENNEMIS[difficulte];
+		super(co, 0, 0, stats.speed, stats.taille, stats.taille, spriteId, stats.hp);
+		this.scoreValue = stats.score;
 	}
 
-	public update(j: Joueur, worldWidth: number, worldHeight: number) {
-			if (this.getX() > j.getX()) {
-				this.setX(this.getX() + this.speed * -1);
-			} else if (this.getX() < j.getX()) {
-				this.setX(this.getX() + this.speed * 1);
-			}
-	
-			if (this.getY() > j.getY()) {
-				this.setY(this.getY() + this.speed * -1);
-			} else if (this.getY() < j.getY()) {
-				this.setY(this.getY() + this.speed * 1);
-			}
-			verifCoordonee(this, worldWidth, worldHeight);
+	public getScoreValue(): number {
+		return this.scoreValue;
+	}
+
+	public update(
+		j: Joueur,
+		worldWidth: number,
+		worldHeight: number,
+		distMin: number = 0
+	) {
+		if (this.getX() > j.getX() + distMin) {
+			this.setX(this.getX() + this.speed * -1);
+		} else if (this.getX() < j.getX() - distMin) {
+			this.setX(this.getX() + this.speed * 1);
 		}
+
+		if (this.getY() > j.getY() + distMin) {
+			this.setY(this.getY() + this.speed * -1);
+		} else if (this.getY() < j.getY() - distMin) {
+			this.setY(this.getY() + this.speed * 1);
+		}
+		verifCoordonee(this, worldWidth, worldHeight);
+	}
 }
