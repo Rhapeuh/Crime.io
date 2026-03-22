@@ -3,6 +3,7 @@ import View from './View';
 import type { scores } from '../../common/types';
 import Score from './Score';
 import type { Socket } from 'socket.io-client';
+import Credit from './Credit';
 
 export default class AcceuilView extends View {
 	private menuGauche: HTMLElement;
@@ -52,6 +53,7 @@ export default class AcceuilView extends View {
 		});
 	}
 
+
 	private ouvrirTiroir() {
 		this.menuGauche.classList.add('ouvert');
 		this.dernierElement?.classList.add('btn-cliquer');
@@ -75,6 +77,15 @@ export default class AcceuilView extends View {
 			} catch (error) {
 				this.fondElement.innerHTML =
 					'<p>Erreur lors du chargement des scores.</p>';
+			}
+		}if (this.dernierElement?.className.includes('credits')) {
+			this.fondElement.innerHTML = '<p>Chargement des credits...</p>';
+
+			try {
+				this.fondElement.innerHTML = Credit.genererCredit();
+			} catch (error) {
+				this.fondElement.innerHTML =
+					'<p>Erreur lors du chargement des credits.</p>';
 			}
 		}
 	}

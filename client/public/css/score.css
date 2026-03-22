@@ -7,9 +7,9 @@
 	margin: 20px;
 	height: 100%;
 	width: 92%;
-	border: 4px var(--black1) solid;
+	border: 4px var(--darkblue2) solid;
 	border-radius: 18px;
-	background-color: var(--black3);
+	background-color: var(--darkblue2);
 
 	table{
 		width: 92%;
@@ -53,13 +53,13 @@
 
 h2{
 	font-family: titreFont;
-	color: var(--electric-citrus1);
+	color: var(--electric-citrus2);
 	text-align: center;
 	font-weight: 900;
 }
 
 .scores-header {
-	background-color: var(--electric-purple1);
+	background-color: var(--darkblue1);
 	width: 100%;
 	padding-top: 5px;
 	padding-bottom: 5px;
