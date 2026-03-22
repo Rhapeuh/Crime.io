@@ -3,7 +3,7 @@ import View from './View';
 import type { scores } from '../../common/types';
 import Score from './Score';
 import type { Socket } from 'socket.io-client';
-import Credit from './Credit';
+import { genererCredits, initEvents } from './Credits';
 
 export default class AcceuilView extends View {
 	private menuGauche: HTMLElement;
@@ -81,8 +81,10 @@ export default class AcceuilView extends View {
 		} else if (
 			this.dernierElement?.className.toLowerCase().includes('credit')
 		) {
-			this.fondElement.innerHTML = await Credit.genererCredit();
-
+			// credit button
+			this.fondElement.innerHTML = await genererCredits();
+			initEvents();
+			// credits steam
 		}
 	}
 
