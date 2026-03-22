@@ -34,6 +34,7 @@ export function initEvents() {
 			if (valNote) valNote.innerText = dataset.note || '';
 
 			detailsSection.style.borderTopColor = (member as HTMLElement).style.color;
+			detailsSection.style.color = (member as HTMLElement).style.color;
 
 			detailsSection.classList.remove('hidden');
 		});
