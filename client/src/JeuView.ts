@@ -57,11 +57,21 @@ export default class JeuView extends View {
 		this.canvas.addEventListener('mousemove', this.handleMouseMove);
 		this.socket.on('mortDuJoueur', this.mortJoueur);
 
+		this.rejouerListener()
+
+		
+	}
+
+	private rejouerListener(){
 		const rejouerButton = document.querySelectorAll(".rejouerButton");
 		rejouerButton?.forEach((temp) => temp.addEventListener("click", (event) => {
 			event.preventDefault;
 			// console.log('prevent')
-			Router.navigate('/jeuSolo')
+			if (document.querySelector('.jeuSolo')?.contains(temp)){
+				Router.navigate('/jeuSolo')
+			}else{
+				Router.navigate('/jeuMulti')
+			}
 			document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "blur"));
 			document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton"));
 		}));
