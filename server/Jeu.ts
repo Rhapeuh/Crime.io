@@ -9,8 +9,7 @@ import {
 	checkCollision,
 	trouverJoueurPlusProche,
 } from '../common/utils.ts';
-import BasicEnnemy, { DifficulteEnnemi } from '../common/BasicEnnemy.ts';
-import Ennemy from '../common/Ennemy.ts';
+import Ennemy, { DifficulteEnnemi } from '../common/Ennemy.ts';
 import ShooterEnnemy from '../common/ShooterEnnemy.ts';
 import type Entities from '../common/Entities';
 
@@ -175,16 +174,17 @@ export default class Jeu {
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
 			for (let i = 0; i < nbASpawn; i++) {
-				// const rand = Math.random();
-				// let difficulte = DifficulteEnnemi.FACILE;
+				const randDifficulté = Math.random();
+				const randEnnemy = Math.random();
+				let difficulte = DifficulteEnnemi.FACILE;
 
-				// if (rand > this.pourcentSpawn.difficile) {
-				// 	difficulte = DifficulteEnnemi.DIFFICILE;
-				// } else if (rand > this.pourcentSpawn.moyen) {
-				// 	difficulte = DifficulteEnnemi.MOYEN;
-				// }
-
-				this.addEnnemy(new ShooterEnnemy(this.randomCoordonee()));
+				if (randDifficulté > this.pourcentSpawn.difficile) {
+					difficulte = DifficulteEnnemi.DIFFICILE;
+				} else if (randDifficulté > this.pourcentSpawn.moyen) {
+					difficulte = DifficulteEnnemi.MOYEN;
+				}
+				if(randEnnemy < 0.5) this.addEnnemy(new Ennemy(this.randomCoordonee(), difficulte));
+				else this.addEnnemy(new ShooterEnnemy(this.randomCoordonee(), difficulte));
 			}
 
 			const randomDelay =

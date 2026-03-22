@@ -3,19 +3,29 @@ import type Joueur from './Joueur';
 import type { Coordonee } from './types.ts';
 import { verifCoordonee } from './utils.ts';
 
+export const DifficulteEnnemi = {
+    FACILE: 'FACILE',
+    MOYEN: 'MOYEN',
+    DIFFICILE: 'DIFFICILE'
+}
+
+const STATS_ENNEMIS = {
+	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 40 },
+	[DifficulteEnnemi.MOYEN]: { speed: 3, hp: 2, score: 25, taille: 50 },
+	[DifficulteEnnemi.DIFFICILE]: { speed: 5, hp: 3, score: 50, taille: 60 },
+};
+
 export default class Ennemy extends Entities {
 	private scoreValue: number;
 
 	constructor(
 		co: Coordonee,
-		speed: number,
-		hp: number,
-		taille: number,
-		score: number,
-		spriteId: string
+		difficulte = DifficulteEnnemi.FACILE,
+		spriteId: string = 'ennemiTemp',
 	) {
-		super(co, 0, 0, speed, taille, taille, spriteId, hp);
-		this.scoreValue = score;
+		const stats = STATS_ENNEMIS[difficulte];
+		super(co, 0, 0, stats.speed, stats.taille, stats.taille, spriteId, stats.hp);
+		this.scoreValue = stats.score;
 	}
 
 	public getScoreValue(): number {
