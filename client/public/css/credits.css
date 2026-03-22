@@ -157,16 +157,16 @@
     height: 58.8%;
     border: none;
     border-top: solid var(--darkblue4);
-    
+
     /* On la positionne en haut à gauche */
     top: 0;
     left: 0;
 
 
     /* On réduit l'élément à 25% (480 / 1920 = 0.25) */
-    transform: scale(0.973);
+    transform: scale(0.974);
     transform-origin: 0 0;
-    top: 150px;
+    margin-top: 12.64%
 }
 
 .credit_open {
