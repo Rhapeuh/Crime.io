@@ -37,6 +37,8 @@ export default class JeuView extends View {
 
 		this.hudElement = this.element.querySelector('.hud')!;
 
+		
+
 		this.initEvents();
 
 		Router.setMenuElement(element);
@@ -54,10 +56,20 @@ export default class JeuView extends View {
 		this.canvas.addEventListener('mousedown', this.handleMouseDown);
 		this.canvas.addEventListener('mousemove', this.handleMouseMove);
 		this.socket.on('mortDuJoueur', this.mortJoueur);
+
+		const rejouerButton = document.querySelector(".rejouerButton");
+		rejouerButton?.addEventListener("click", (event) => {
+			event.preventDefault;
+			// console.log('prevent')
+			
+		});
 	}
 
 	private mortJoueur() {
 		console.log('vous etes mort');
+
+		document.querySelector(".blur")!.setAttribute("class", "rejouer blur");
+		document.querySelector(".rejouerButton")!.setAttribute("class", "rejouerButton displayButton");
 	}
 
 	private handleMouseDown(e: MouseEvent) {

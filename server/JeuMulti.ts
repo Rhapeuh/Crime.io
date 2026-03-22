@@ -54,7 +54,7 @@ export default class JeuMulti extends Jeu {
 					if (j) {
 						const realX = this.WORLD_WIDTH * donnee.pourcentX;
 						const realY = this.WORLD_HEIGHT * donnee.pourcentY;
-						this.addBullet(j, realX, realY);
+						this.addBullet(j, {x: realX, y: realY});
 					}
 				}
 			}

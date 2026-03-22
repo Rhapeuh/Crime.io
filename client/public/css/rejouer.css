@@ -1,3 +1,19 @@
-.rejouer > a{
-	display: inline;
+.rejouer{
+	filter: blur(3px);
+}
+
+.blur{
+	height: 100%;
+	width: 100%;
+}
+
+.rejouerButton{
+	display: none;
+	margin-inline: 50vw;
+  	margin-bottom: 50vh;
+	transform: translateX(20px) !important;
+}
+
+.rejouerButton.displayButton{
+	display: flex;
 }
