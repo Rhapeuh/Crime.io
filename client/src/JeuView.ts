@@ -57,21 +57,21 @@ export default class JeuView extends View {
 		this.canvas.addEventListener('mousemove', this.handleMouseMove);
 		this.socket.on('mortDuJoueur', this.mortJoueur);
 
-		const rejouerButton = document.querySelector(".rejouerButton");
-		rejouerButton?.addEventListener("click", (event) => {
+		const rejouerButton = document.querySelectorAll(".rejouerButton");
+		rejouerButton?.forEach((temp) => temp.addEventListener("click", (event) => {
 			event.preventDefault;
 			// console.log('prevent')
 			Router.navigate('/jeuSolo')
-			document.querySelector(".blur")!.setAttribute("class", "blur");
-			document.querySelector(".rejouerButton")!.setAttribute("class", "rejouerButton");
-		});
+			document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "blur"));
+			document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton"));
+		}));
 	}
 
 	private mortJoueur() {
 		console.log('vous etes mort');
 
-		document.querySelector(".blur")!.setAttribute("class", "rejouer blur");
-		document.querySelector(".rejouerButton")!.setAttribute("class", "rejouerButton displayButton");
+		document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "rejouer blur"));
+		document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton displayButton"));
 	}
 
 	private handleMouseDown(e: MouseEvent) {
