@@ -1,0 +1,442 @@
+body.DefaultTheme {
+	--gradient-right: rgba(109, 38, 44, 0.301);
+	--gradient-left: rgba(50, 255, 193, 0.103);
+	--gradient-background: rgba(34, 35, 48, 0.93);
+	--gradient-background-right: rgba(109, 38, 44, 0);
+	--gradient-background-left: rgba(50, 255, 193, 0.103);
+	--color-showcase-header: rgba(43, 45, 68, 0.93);
+	--gradient-showcase-header-left: rgba(115, 173, 184, 0.247);
+	--btn-background: rgba(43, 52, 68);
+	--btn-background-hover: rgb(53, 62, 78);
+	--btn-outline: rgb(93, 102, 118);
+}
+
+body.CosmicTheme {
+	--gradient-right: rgba(248, 70, 180, 0.301);
+	--gradient-left: rgba(9, 243, 99, 0.247);
+	--gradient-background: rgba(46, 13, 36, 0.93);
+	--gradient-background-right: rgba(70, 227, 248, 0);
+	--gradient-background-left: rgba(239, 243, 9, 0.13);
+	--color-showcase-header: rgba(57, 24, 61, 0.93);
+	--gradient-showcase-header-left: rgba(20, 60, 68, 0.93);
+	--btn-background: rgb(90, 40, 92);
+	--btn-background-hover: rgb(100, 50, 102);
+	--btn-outline: rgba(140, 90, 142);
+}
+
+body.profile_page.has_profile_background {
+	background-color: #000000;
+}
+
+.profile_animated_background {
+	position: absolute;
+
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+	overflow: hidden;
+}
+.profile_animated_background > video {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 1920px;
+}
+
+.profile_header_bg {
+	position: relative;
+	max-width: 1018px;
+	min-height: 224px;
+	padding-bottom: 0px;
+	margin: 0 auto;
+
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+
+.profile_header_bg_texture {
+	max-width: 976px;
+	min-height: 224px;
+	margin: 0 auto;
+	background:
+		radial-gradient(
+			farthest-side at bottom right,
+			var(--gradient-right),
+			transparent 500px
+		),
+		radial-gradient(
+			farthest-corner at bottom left,
+			var(--gradient-left),
+			transparent 600px
+		);
+	background-color: var(--gradient-background);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.profile_header {
+	position: relative;
+	max-width: 976px;
+	padding: 24px 12px 0 24px;
+	margin: 0 auto;
+}
+
+.profile_header_content {
+	position: relative;
+	padding-top: 10px;
+	color: #c4c4c4;
+	font-size: 13px;
+	display: grid;
+	grid-template-columns: auto 1fr 288px;
+}
+
+.profile_header_centered_col {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 0 18px 0 36px;
+}
+
+.playerAvatar.profile_header_size {
+	position: relative;
+	width: 166px;
+	height: 166px;
+}
+
+.playerAvatar.profile_header_size .playerAvatarAutoSizeInner img {
+	/* override the gradient behind the image (it won't show anyway) */
+	background: none;
+	filter: none;
+
+	/* fix space appearing beneath image */
+	display: block;
+
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.playerAvatar.profile_header_size
+	.playerAvatarAutoSizeInner
+	.profile_avatar_frame
+	> img,
+.playerAvatar.profile_header_size
+	.playerAvatarAutoSizeInner
+	.profile_avatar_frame
+	> picture
+	> img {
+	transform: scale(1.22);
+}
+
+.profile_header .persona_name {
+	line-height: 40px;
+	font-size: 24px;
+	color: #ffffff;
+
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+
+	font-family: 'Motiva Sans', Sans-serif;
+	font-weight: 200; /* thin */
+}
+
+.profile_header .profile_header_centered_persona {
+	white-space: nowrap;
+	padding-bottom: 18px;
+}
+
+.profile_header_badgeinfo .persona_level {
+	line-height: 40px;
+	margin-bottom: 13px;
+}
+
+.profile_header_badge {
+	border-radius: 3px;
+	background-color: rgba(0, 0, 0, 0.3);
+	height: 70px;
+	margin-bottom: 13px;
+}
+
+.favorite_badge {
+	position: relative;
+	padding: 8px 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.favorite_badge_icon {
+	display: flex;
+}
+
+.favorite_badge_icon img {
+	width: 54px;
+	height: 54px;
+}
+
+.favorite_badge_description .name {
+	color: #ffffff;
+}
+
+.profile_content {
+	position: relative;
+	background:
+		radial-gradient(
+			farthest-side at top right,
+			var(--gradient-right),
+			transparent 500px
+		),
+		radial-gradient(
+			farthest-corner at top left,
+			var(--gradient-left),
+			transparent 600px
+		),
+		radial-gradient(
+			farthest-corner at bottom right,
+			var(--gradient-background-right),
+			transparent 500px
+		),
+		radial-gradient(
+			farthest-corner at bottom left,
+			var(--gradient-background-left),
+			transparent 600px
+		);
+	background-color: var(--gradient-background);
+	background-repeat: no-repeat;
+	padding: 12px 12px 64px 12px;
+	margin: 0 auto;
+
+	font-size: 13px;
+
+	min-height: calc(100vh - 511px);
+}
+
+.profile_customization {
+	position: relative;
+	background-position: top left;
+	background-repeat: no-repeat;
+	background-color: rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(20px);
+	border-radius: 3px;
+	padding: 0px 0px 0px 0px;
+	margin-bottom: 12px;
+	font-size: 13px;
+	overflow: hidden;
+}
+
+.profile_customization_block {
+	position: relative;
+	border-radius: 5px;
+	padding: 20px 10px 11px 10px;
+	margin-bottom: 0px;
+	font-size: 13px;
+	overflow: hidden;
+}
+
+.profile_customization_header {
+	font-family: 'Motiva Sans', Sans-serif;
+	font-weight: 200; /* thin */
+
+	background: var(--color-showcase-header);
+	background: linear-gradient(
+		90deg,
+		var(--gradient-showcase-header-left) 0%,
+		var(--color-showcase-header) 90%
+	);
+	padding: 5px 10px 5px 10px;
+	color: #ffffff;
+	font-size: 16px;
+	line-height: 30px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.showcase_content_bg {
+	background-color: #101214;
+	background-color: rgba(0, 0, 0, 0.3);
+	padding: 8px;
+	border-radius: 5px;
+
+	margin-bottom: 9px;
+
+	overflow: hidden;
+}
+
+.showcase_stats_row .showcase_stat {
+	margin-left: 42px;
+	display: inline-block;
+}
+
+.showcase_stat {
+	font-size: 34px;
+}
+
+.showcase_stats_row .showcase_stat:first-child,
+html.responsive .showcase_stats_row .showcase_stat:first-child {
+	margin-left: 0;
+}
+
+.showcase_stat .value {
+	font-size: 1em;
+	font-family: 'Motiva Sans', Sans-serif;
+	font-weight: 200; /* thin */
+
+	color: #ffffff;
+}
+.showcase_stat .label {
+	font-size: 0.5em;
+	color: #9b9b9b;
+}
+.favoritegame_showcase_game {
+	position: relative;
+	height: 69px;
+	padding-left: 200px;
+
+	margin-bottom: 22px;
+}
+
+.favoritegame_showcase_game.showcase_slot {
+	float: none;
+}
+
+.favoritegame_showcase_game .favorite_game_cap {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.favorite_game_playtime {
+	color: #9b9b9b;
+	font-size: 17px;
+}
+
+.game_info_achievements_only_ctn {
+	line-height: 32px;
+	position: relative;
+}
+
+.achievement_progress_bar_ctn {
+	height: 8px;
+	padding: 1px;
+	width: 145px;
+
+	display: inline-block;
+
+	background-color: rgba(0, 0, 0, 0.3);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.achievement_progress_bar_ctn .progress_bar {
+	background-color: #364359;
+	height: 8px;
+	border-radius: 4px;
+	background: linear-gradient(
+		180deg,
+		rgba(255, 255, 255, 0.3) 0%,
+		var(--color-showcase-header) 80%
+	);
+}
+
+.achievement_icons {
+	white-space: nowrap;
+	overflow: hidden;
+}
+.game_info_achievement {
+	vertical-align: top;
+	display: inline-block;
+	margin-left: 4px;
+}
+.game_info_achievements_only_ctn .game_info_achievements_summary_area {
+	float: left;
+	width: 361px;
+	white-space: nowrap;
+}
+
+.game_info_achievement:first-child {
+	margin-left: 0;
+}
+
+.game_info_achievement,
+.game_info_achievement img {
+	width: 32px;
+	height: 32px;
+}
+
+.game_info_achievement.plus_more,
+.showcase_achievement.plus_more {
+	height: 30px;
+	width: 30px;
+	border: 1px solid #212121;
+	background-color: #222223;
+
+	line-height: 30px;
+	color: #ffffff;
+	text-align: center;
+
+	box-shadow: 1px 1px 1px #353535;
+
+	cursor: pointer;
+}
+
+.playerAvatar .profile_avatar_frame {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.friendPlayerLevel.lvl_10 {
+	border-color: #c02942;
+}
+
+.friendPlayerLevel {
+	display: inline-block;
+	font-size: 16px;
+	border-radius: 16px;
+	border: solid white 2px;
+	height: 28px;
+	width: 28px;
+	line-height: 28px;
+	text-align: center;
+	cursor: default;
+}
+
+body {
+	background: #1b2838;
+	text-align: left;
+	color: #8f98a0;
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+}
+
+body.flat_page {
+	position: relative;
+}
+
+body,
+textarea {
+	font-family: Arial, Helvetica, Verdana, sans-serif;
+}
+
+a,
+.whiteLink {
+	color: #ebebeb;
+}
+
+.showcase_item_detail_title {
+	font-family: 'Motiva Sans', Sans-serif;
+	font-weight: 200;
+	font-size: 24px;
+	padding-top: 10px;
+	color: #ffffff;
+	line-height: 29px;
+	max-height: 58px;
+	overflow: hidden;
+}
