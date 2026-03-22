@@ -144,10 +144,48 @@
 .steamPage{
     display: none;
 	border: none;
-	height: 75%;
+	height: 60%;
     width: 100%;
+    resize: both;
 }
 
 .steamPage.active{
-    display: flex;
+    display: block;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    width: 900px;  /* Résolution Desktop standard */
+    height: 58.8%;
+    border: none;
+    
+    /* On la positionne en haut à gauche */
+    top: 0;
+    left: 0;
+
+    /* On réduit l'élément à 25% (480 / 1920 = 0.25) */
+    transform: scale(0.625);
+    transform-origin: 0 0;
 }
+
+.credit_open {
+    margin: 20px;
+	height: 100%;
+	width: 92%;
+	border: 4px var(--darkblue2) solid;
+	border-radius: 18px;
+	background-color: var(--darkblue2);
+}
+
+.creditContent{
+    height: calc(100% - 76px);
+
+}
+
+.credit-header{
+	background-color: var(--darkblue1);
+	width: 100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top-left-radius: 14px;
+	border-top-right-radius: 14px;
+}
+
