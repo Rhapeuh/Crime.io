@@ -11,7 +11,7 @@
 	display: none;
 	margin-inline: 50vw;
   	margin-bottom: 50vh;
-	transform: translateX(20px) !important;
+	transform: translateX(-3em) !important;
 }
 
 .rejouerButton.displayButton{

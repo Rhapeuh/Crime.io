@@ -61,7 +61,9 @@ export default class JeuView extends View {
 		rejouerButton?.addEventListener("click", (event) => {
 			event.preventDefault;
 			// console.log('prevent')
-			
+			Router.navigate('/jeuSolo')
+			document.querySelector(".blur")!.setAttribute("class", "blur");
+			document.querySelector(".rejouerButton")!.setAttribute("class", "rejouerButton");
 		});
 	}
 
