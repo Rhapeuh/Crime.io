@@ -188,7 +188,8 @@ export default class JeuView extends View {
 
 	private render(g: Game) {
 		this.context.clearRect(0, 0, 1920, 1080);
-		if (g.bullets) this.renderBullets(g.bullets);
+		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
+		if (g.bulletsEnnemy) this.renderBulletsEnnemy(g.bulletsEnnemy);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
 		if (g.bulletsHit) this.renderBulletsHit(g.bulletsHit);
@@ -211,24 +212,30 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			this.dessinerEntite(j)
+			this.dessinerEntite(j);
 		}
 	}
 
-	private renderBullets(listBullets: Bullet[]) {
+	private renderBulletsJoueur(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			this.dessinerEntite(b)
+			this.dessinerEntite(b);
 		}
 	}
+	private renderBulletsEnnemy(listBullets: Bullet[]) {
+		for (const b of listBullets) {
+			this.dessinerEntite(b);
+		}
+	}
+
 	private renderBulletsHit(listBulletsHit: Bullet[]) {
 		for (const bh of listBulletsHit) {
-			this.dessinerEntite(bh)
+			this.dessinerEntite(bh);
 		}
 	}
 
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
-			this.dessinerEntite(e)
+			this.dessinerEntite(e);
 		}
 	}
 

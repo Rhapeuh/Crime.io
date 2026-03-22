@@ -5,7 +5,8 @@ export default class Assets {
         const imagesToLoad = [
             { id: 'persoTemp', src: '/images/persoTemp.jpg' },
             { id: 'bullet', src: '/images/bullet.jpg' },
-            { id: 'ennemiTemp', src: '/images/ennemyTemp.jpg' }
+            { id: 'ennemiTemp', src: '/images/ennemyTemp.jpg' },
+            { id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg'}
         ];
 
         const promises = imagesToLoad.map(item => {

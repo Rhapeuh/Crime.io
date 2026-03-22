@@ -20,7 +20,7 @@ export function verifCoordonee(
 }
 
 
-export function trouverJoueurPlusProche(entite: Ennemy, listeJoueurs: Joueur[]): Joueur | null {
+export function trouverJoueurPlusProche(entite: Ennemy, listeJoueurs: Joueur[]): { joueur: Joueur, distance: number } | null {
     if (listeJoueurs.length === 0) return null; // Sécurité au cas où il n'y a pas de joueurs
     
     let joueurProche = listeJoueurs[0];
@@ -33,7 +33,7 @@ export function trouverJoueurPlusProche(entite: Ennemy, listeJoueurs: Joueur[]):
             distMin = newDist;
         }
     }
-    return joueurProche;
+    return { joueur: joueurProche, distance: distMin };
 }
 
 export function calculeDistance(obj1: { getX(): number, getY(): number }, obj2: { getX(): number, getY(): number }) {

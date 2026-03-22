@@ -31,7 +31,7 @@ export default class JeuSolo extends Jeu {
 				if (donnee.active) {
 					const realX = this.WORLD_WIDTH * donnee.pourcentX;
 					const realY = this.WORLD_HEIGHT * donnee.pourcentY;
-					this.addBullet(this.j, realX, realY);
+					this.addBullet(this.j, {x: realX, y: realY});
 				}
 			}
 		);

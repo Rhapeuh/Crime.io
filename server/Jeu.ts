@@ -10,7 +10,9 @@ import {
 	trouverJoueurPlusProche,
 } from '../common/utils.ts';
 import BasicEnnemy, { DifficulteEnnemi } from '../common/BasicEnnemy.ts';
-import type Ennemy from '../common/Ennemy';
+import Ennemy from '../common/Ennemy.ts';
+import ShooterEnnemy from '../common/ShooterEnnemy.ts';
+import type Entities from '../common/Entities';
 
 export default class Jeu {
 	protected WORLD_WIDTH = 1920;
@@ -29,13 +31,14 @@ export default class Jeu {
 			clearInterval(this.gameLoop);
 		}
 		this.game.clearAll();
-		this.game.bullets = [];
 	}
 
 	protected update() {
 		this.handleEnemySpawning();
 		this.updateJoueur();
-		this.updateBullets();
+		this.game.removeAllHit();
+		this.updateJoueurBullets();
+		this.updateEnnemyBullets();
 
 		if (this.game.joueurs.length !== 0) {
 			this.updateEnnemy();
@@ -90,36 +93,47 @@ export default class Jeu {
 
 	// gestion des balle
 
-	protected addBullet(j: Joueur, targetX: number, targetY: number) {
-		const angle = calculerAngle(j.getCoordonee(), { x: targetX, y: targetY });
+	protected addBullet(e: Entities, coFinal: Coordonee) {
+		const angle = calculerAngle(e.getCoordonee(), coFinal);
 
 		const nouvelleBalle = new Bullet(
-			{ x: j.getX(), y: j.getY() },
+			e.getCoordonee(),
 			angle,
 			15,
-			j
+			e
 		);
-		this.game.addBullet(nouvelleBalle);
+		if(e instanceof Joueur) this.game.addBulletJoueur(nouvelleBalle);
+		else if (e instanceof ShooterEnnemy) this.game.addEnnemyBullet(nouvelleBalle);
 	}
 
-	private updateBullets() {
-		this.game.removeAllHit();
-		this.game.bullets.forEach(b => {
-			b.update();
+	private updateJoueurBullets(){
+		this.game.bulletsJoueur.forEach(b => {
+			if(this.updateBullet(b, this.game.ennemies)) this.game.removeBulletJoueur(b)
+			if (b.shouldBeDeleted()) this.game.removeBulletJoueur(b);
+		})
+	}
 
-			for (const e of this.game.ennemies.values()) {
-				if (checkCollision(b, e)) {
-					e.enleverVie();
-					this.game.addBulletHit(b);
-					b.setSpriteId('persoTemp');
-					this.game.removeBullet(b);
-					if(!e.estEnVie()) b.getJoueur().addScore(e.getScoreValue());
-					return;
-				}
+	private updateEnnemyBullets(){
+		this.game.bulletsEnnemy.forEach(b => {
+			if(this.updateBullet(b, this.game.joueurs)) this.game.removeBulletEnnemy(b);
+			if (b.shouldBeDeleted()) this.game.removeBulletEnnemy(b);
+		})
+	}
+
+	private updateBullet(b: Bullet, entities: Array<Entities>): boolean {
+		b.update();
+		for (const e of entities.values()) {
+			if (checkCollision(b, e)) {
+				e.enleverVie();
+				this.game.addBulletHit(b);
+				b.setSpriteId('persoTemp');
+				const j = b.getEntitie();
+				if (j instanceof Joueur && e instanceof Ennemy && !e.estEnVie())
+					j.addScore(e.getScoreValue());
+				return true;
 			}
-
-			if (b.shouldBeDeleted()) this.game.removeBullet(b);
-		});
+		}
+		return false;
 	}
 
 	// gestion des ennemis
@@ -129,13 +143,23 @@ export default class Jeu {
 	}
 
 	private updateEnnemy() {
+		const now = Date.now();
 		for (const e of this.game.ennemies) {
 			if (!e.estEnVie()) {
 				this.game.removeEnnemy(e);
 				continue;
 			}
-			const j = trouverJoueurPlusProche(e, this.game.joueurs);
-			if (j) e.update(j, this.WORLD_WIDTH, this.WORLD_HEIGHT);
+			const result = trouverJoueurPlusProche(e, this.game.joueurs);
+			if (result) {
+				const j = result.joueur;
+				const dist = result.distance;
+				e.update(j, this.WORLD_WIDTH, this.WORLD_HEIGHT);
+				if (e instanceof ShooterEnnemy && dist <= 300) {
+					if (e.shoot(now)) {
+						this.addBullet(e, j.getCoordonee());
+					}
+				}
+			}
 		}
 	}
 
@@ -151,16 +175,16 @@ export default class Jeu {
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
 			for (let i = 0; i < nbASpawn; i++) {
-				const rand = Math.random();
-				let difficulte = DifficulteEnnemi.FACILE;
+				// const rand = Math.random();
+				// let difficulte = DifficulteEnnemi.FACILE;
 
-				if (rand > this.pourcentSpawn.difficile) {
-					difficulte = DifficulteEnnemi.DIFFICILE;
-				} else if (rand > this.pourcentSpawn.moyen) {
-					difficulte = DifficulteEnnemi.MOYEN;
-				}
+				// if (rand > this.pourcentSpawn.difficile) {
+				// 	difficulte = DifficulteEnnemi.DIFFICILE;
+				// } else if (rand > this.pourcentSpawn.moyen) {
+				// 	difficulte = DifficulteEnnemi.MOYEN;
+				// }
 
-				this.addEnnemy(new BasicEnnemy(this.randomCoordonee(), difficulte));
+				this.addEnnemy(new ShooterEnnemy(this.randomCoordonee()));
 			}
 
 			const randomDelay =
