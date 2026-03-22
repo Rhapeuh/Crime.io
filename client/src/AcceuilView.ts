@@ -3,7 +3,6 @@ import View from './View';
 import type { scores } from '../../common/types';
 import Score from './Score';
 import type { Socket } from 'socket.io-client';
-
 import { genererCredits, initEvents } from './Credits';
 
 export default class AcceuilView extends View {
@@ -55,7 +54,6 @@ export default class AcceuilView extends View {
 		});
 	}
 
-
 	private ouvrirTiroir() {
 		this.menuGauche.classList.add('ouvert');
 		this.dernierElement?.classList.add('btn-cliquer');
@@ -83,7 +81,7 @@ export default class AcceuilView extends View {
 		} else if (
 			this.dernierElement?.className.toLowerCase().includes('credit')
 		) {
-			this.fondElement.innerHTML = genererCredits();
+			this.fondElement.innerHTML = await genererCredits();
 			initEvents();
 		}
 	}
