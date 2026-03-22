@@ -162,7 +162,7 @@
     left: 0;
 
     /* On réduit l'élément à 25% (480 / 1920 = 0.25) */
-    transform: scale(0.625);
+    transform: scale(0.973);
     transform-origin: 0 0;
 }
 
