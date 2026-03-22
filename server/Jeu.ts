@@ -1,159 +1,165 @@
 import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
-import Ennemy from '../common/Ennemy.ts';
-import { BasicEnnemy } from '../common/BasicEnnemy.ts';
-import type Entities from '../common/Entities';
-import type { Coordonee } from '../common/types';
+import type { Coordonee } from '../common/types.ts';
 import { randomInt } from 'crypto';
+import { writeFile, readFile } from 'fs/promises';
+import {
+	calculerAngle,
+	checkCollision,
+	trouverJoueurPlusProche,
+} from '../common/utils.ts';
+import Ennemy, { DifficulteEnnemi } from '../common/Ennemy.ts';
+import ShooterEnnemy from '../common/ShooterEnnemy.ts';
+import type Entities from '../common/Entities';
 
 export default class Jeu {
 	protected WORLD_WIDTH = 1920;
 	protected WORLD_HEIGHT = 1080;
-	private max_speed: number = 10;
-	private maxEnemies = 10;
-	private maxEnnemiesSpawning = 4;
+	private maxEnemies = 5;
+	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
-	private maxSpawnDelay = 3000;
+	private maxSpawnDelay = 300;
+	private pourcentSpawn = { moyen: 0.5, difficile: 0.85 };
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
 
-	public destroy() {
+	protected destroy() {
 		if (this.gameLoop) {
 			clearInterval(this.gameLoop);
 		}
 		this.game.clearAll();
-		this.game.bullets = [];
 	}
 
 	protected update() {
 		this.handleEnemySpawning();
-		for (const j of this.game.joueurs.values()) {
-			this.updateJoueur(j);
-		}
-		this.updateBullets();
+		this.updateJoueur();
+		this.game.removeAllHit();
+		this.updateJoueurBullets();
+		this.updateEnnemyBullets();
 
 		if (this.game.joueurs.length !== 0) {
-			for (const e of this.game.ennemies.values()) {
-				this.updateEnnemy(e);
-			}
+			this.updateEnnemy();
 		}
 	}
 
-	private updateJoueur(j: Joueur) {
-		this.updateSpeed(j);
-		j.setX(j.getX() + j.getVX() * j.getSpeed());
-		j.setY(j.getY() + j.getVY() * j.getSpeed());
-		this.verifCoordonee(j);
-	}
-
-	private updateSpeed(j: Joueur) {
-		if (this.seDeplace(j) && j.getSpeed() < this.max_speed)
-			j.setSpeed(j.getSpeed() + 0.2);
-		if (!this.seDeplace(j)) j.setSpeed(1);
-	}
-
-	private seDeplace(j: Joueur) {
-		return j.getVX() != 0 || j.getVY() != 0;
-	}
-
-	private verifCoordonee(e: Entities) {
-		const halfW = e.getWidth() / 2;
-		const halfH = e.getHeight() / 2;
-
-		if (e.getX() - halfW < 0) e.setX(halfW);
-
-		if (e.getX() + halfW > this.WORLD_WIDTH) e.setX(this.WORLD_WIDTH - halfW);
-
-		if (e.getY() - halfH < 0) e.setY(halfH);
-
-		if (e.getY() + halfH > this.WORLD_HEIGHT) e.setY(this.WORLD_HEIGHT - halfH);
-	}
-
-	protected updateInput(j: Joueur, vx: number, vy: number) {
-		j.setVX(vx);
-		j.setVY(vy);
-	}
-
-	protected addBullet(j: Joueur, targetX: number, targetY: number) {
-		const dx = targetX - j.getX();
-		const dy = targetY - j.getY();
-		const angle = Math.atan2(dy, dx);
-
-		const nouvelleBalle = new Bullet(
-			{ x: j.getX(), y: j.getY() },
-			angle,
-			15,
-			j
-		);
-		this.game.addBullet(nouvelleBalle);
-		
-	}
-
-	protected updateBullets() {
-		this.game.removeAllHit();
-		this.game.bullets.forEach(b => {
-			b.update();
-			
-			for (const e of this.game.ennemies.values()) {
-				if (this.checkCollision(b, e)) {
-					e.encaisserDegat();
-					this.game.addBulletHit(b);
-					this.game.removeBullet(b);
-
-					return;
-				}
-			}
-
-			if (b.shouldBeDeleted()) this.game.removeBullet(b);
-		});
-	}
-
-	protected addEnnemy(e: Ennemy) {
-		this.game.addEnnemy(e);
-	}
-
-	protected updateEnnemy(e: Ennemy) {
-		const j = this.game.joueurs[0];
-
-		if (!e.estEnVie()) this.game.removeEnnemy(e);
-
-		if (e.getX() > j.getX()) {
-			e.setX(e.getX() + e.speed * -1);
-		} else if (e.getX() < j.getX()) {
-			e.setX(e.getX() + e.speed * 1);
-		}
-
-		if (e.getY() > j.getY()) {
-			e.setY(e.getY() + e.speed * -1);
-		} else if (e.getY() < j.getY()) {
-			e.setY(e.getY() + e.speed * 1);
-		}
-		this.verifCoordonee(e);
-	}
+	// gestion globale
 
 	protected randomCoordonee(): Coordonee {
 		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
 	}
 
-	private checkCollision(entityA: Entities, entityB: Entities): boolean {
-		const halfWA = entityA.getWidth() / 2;
-		const halfHA = entityA.getHeight() / 2;
-		const halfWB = entityB.getWidth() / 2;
-		const halfHB = entityB.getHeight() / 2;
+	// Gestion du joueur
 
-		const leftA = entityA.getX() - halfWA;
-		const rightA = entityA.getX() + halfWA;
-		const topA = entityA.getY() - halfHA;
-		const bottomA = entityA.getY() + halfHA;
+	private updateJoueur() {
+		for (const j of this.game.joueurs.values()) {
+			if (!j.estEnVie()) {
+				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+					clearInterval(this.gameLoop);
+				this.joueurMort(j);
+				this.game.removeJoueur(j);
+				continue;
+			}
+			this.joueurToucher(j);
+			j.update(this.WORLD_WIDTH, this.WORLD_HEIGHT);
+		}
+	}
 
-		const leftB = entityB.getX() - halfWB;
-		const rightB = entityB.getX() + halfWB;
-		const topB = entityB.getY() - halfHB;
-		const bottomB = entityB.getY() + halfHB;
+	protected updateInput(j: Joueur, inputX: number, inputY: number) {
+		j.setInputX(inputX);
+		j.setInputY(inputY);
+	}
 
-		return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
+	private joueurToucher(j: Joueur) {
+		for (const e of this.game.ennemies) {
+			if (checkCollision(j, e)) {
+				j.enleverVie();
+				this.game.removeEnnemy(e);
+			}
+		}
+	}
+
+	protected async joueurMort(j: Joueur) {
+		console.log(`le joueur mort est ${j.getPseudo()}`);
+		const data = {
+			pseudo: j.getPseudo(),
+			score: j.getScore(),
+			date: new Date().toLocaleDateString(),
+		};
+		await this.sauvegardeScoreAsync(data);
+	}
+
+	// gestion des balle
+
+	protected addBullet(e: Entities, coFinal: Coordonee) {
+		const angle = calculerAngle(e.getCoordonee(), coFinal);
+
+		const nouvelleBalle = new Bullet(
+			e.getCoordonee(),
+			angle,
+			15,
+			e
+		);
+		if(e instanceof Joueur) this.game.addBulletJoueur(nouvelleBalle);
+		else if (e instanceof ShooterEnnemy) this.game.addEnnemyBullet(nouvelleBalle);
+	}
+
+	private updateJoueurBullets(){
+		this.game.bulletsJoueur.forEach(b => {
+			if(this.updateBullet(b, this.game.ennemies)) this.game.removeBulletJoueur(b)
+			if (b.shouldBeDeleted()) this.game.removeBulletJoueur(b);
+		})
+	}
+
+	private updateEnnemyBullets(){
+		this.game.bulletsEnnemy.forEach(b => {
+			if(this.updateBullet(b, this.game.joueurs)) this.game.removeBulletEnnemy(b);
+			if (b.shouldBeDeleted()) this.game.removeBulletEnnemy(b);
+		})
+	}
+
+	private updateBullet(b: Bullet, entities: Array<Entities>): boolean {
+		b.update();
+		for (const e of entities.values()) {
+			if (checkCollision(b, e)) {
+				e.enleverVie();
+				this.game.addBulletHit(b);
+				b.setSpriteId('persoTemp');
+				const j = b.getEntitie();
+				if (j instanceof Joueur && e instanceof Ennemy && !e.estEnVie())
+					j.addScore(e.getScoreValue());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// gestion des ennemis
+
+	private addEnnemy(e: Ennemy) {
+		this.game.addEnnemy(e);
+	}
+
+	private updateEnnemy() {
+		const now = Date.now();
+		for (const e of this.game.ennemies) {
+			if (!e.estEnVie()) {
+				this.game.removeEnnemy(e);
+				continue;
+			}
+			const result = trouverJoueurPlusProche(e, this.game.joueurs);
+			if (result) {
+				const j = result.joueur;
+				const dist = result.distance;
+				e.update(j, this.WORLD_WIDTH, this.WORLD_HEIGHT);
+				if (e instanceof ShooterEnnemy && dist <= 300) {
+					if (e.shoot(now)) {
+						this.addBullet(e, j.getCoordonee());
+					}
+				}
+			}
+		}
 	}
 
 	private handleEnemySpawning() {
@@ -167,13 +173,58 @@ export default class Jeu {
 			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
-			for (let i = 0; i < nbASpawn; i++)
-				this.addEnnemy(new Ennemy(this.randomCoordonee()));
+			for (let i = 0; i < nbASpawn; i++) {
+				const randDifficulté = Math.random();
+				const randEnnemy = Math.random();
+				let difficulte = DifficulteEnnemi.FACILE;
+
+				if (randDifficulté > this.pourcentSpawn.difficile) {
+					difficulte = DifficulteEnnemi.DIFFICILE;
+				} else if (randDifficulté > this.pourcentSpawn.moyen) {
+					difficulte = DifficulteEnnemi.MOYEN;
+				}
+				if(randEnnemy < 0.5) this.addEnnemy(new Ennemy(this.randomCoordonee(), difficulte));
+				else this.addEnnemy(new ShooterEnnemy(this.randomCoordonee(), difficulte));
+			}
 
 			const randomDelay =
 				Math.random() * (this.maxSpawnDelay - this.minSpawnDelay) +
 				this.minSpawnDelay;
 			this.nextSpawnTime = now + randomDelay;
 		}
+	}
+
+	// gestion de la sauvegarde des donnée
+
+	private async sauvegardeScoreAsync(newData: {
+		pseudo: string;
+		score: number;
+		date: string;
+	}) {
+		let data: {
+			topScore: Array<{ pseudo: string; score: number; date: string }>;
+		} = {
+			topScore: [],
+		};
+		const cheminAbsolu = 'data/score.json';
+		try {
+			const contenu = await readFile(cheminAbsolu, 'utf8');
+			if (contenu.trim() !== '') {
+				data = JSON.parse(contenu);
+			}
+		} catch (err) {
+			console.log(
+				"Le fichier n'existe pas encore ou est illisible, on va le créer."
+			);
+		}
+
+		if (!data.topScore) {
+			data.topScore = [];
+		}
+
+		data.topScore.push(newData);
+		data.topScore.sort((a, b) => b.score - a.score);
+		data.topScore = data.topScore.slice(0, 10);
+		await writeFile(cheminAbsolu, JSON.stringify(data), 'utf8');
 	}
 }

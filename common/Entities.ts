@@ -1,7 +1,6 @@
 import type { Coordonee } from './types';
 
 export default class Entities {
-	pseudo?: string;
 	co: Coordonee;
 	vx: number;
 	vy: number;
@@ -9,6 +8,7 @@ export default class Entities {
 	width: number;
 	height: number;
 	vie?: number;
+	spriteId: string;
 
 	constructor(
 		co: Coordonee,
@@ -17,10 +17,9 @@ export default class Entities {
 		speed: number,
 		width: number,
 		height: number,
-		pseudo?: string,
+		spriteId: string,
 		vie?: number
 	) {
-		this.pseudo = pseudo;
 		this.co = co;
 		this.vx = vx;
 		this.vy = vy;
@@ -28,14 +27,7 @@ export default class Entities {
 		this.width = width;
 		this.height = height;
 		this.vie = vie;
-	}
-
-	getPseudo(): string {
-		return this.pseudo!;
-	}
-
-	setPseudo(nouveauPseudo: string): void {
-		this.pseudo = nouveauPseudo;
+		this.spriteId = spriteId;
 	}
 
 	getVX(): number {
@@ -79,18 +71,38 @@ export default class Entities {
 		this.co.y = y;
 	}
 
-	encaisserDegat() {
-		if (this.vie) this.vie -= 1;
-	}
-
-	estEnVie(): boolean {
-		return (this.vie ?? 0) > 0;
-	}
-
 	getWidth() {
 		return this.width;
 	}
 	getHeight() {
 		return this.height;
+	}
+
+	public getVies(): number {
+		return this.vie!;
+	}
+	setVies(vies: number) {
+		this.vie = vies;
+	}
+
+	enleverVie() {
+		if (this.vie) this.vie -= 1;
+	}
+
+	estEnVie(): boolean {
+		if (this.vie) return this.vie > 0;
+		return false;
+	}
+
+	ajouterVies() {
+		if (this.vie) this.vie++;
+	}
+
+	getSpriteId(): string {
+		return this.spriteId;
+	}
+
+	setSpriteId(spriteId: string) {
+		this.spriteId = spriteId;
 	}
 }

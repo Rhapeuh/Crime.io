@@ -7,9 +7,9 @@ import Assets from './asset';
 import type Bullet from '../../common/Bullet';
 import type { Coordonee } from '../../common/types';
 import type Ennemy from '../../common/Ennemy';
+import type Entities from '../../common/Entities';
 
 export default class JeuView extends View {
-	monPseudo: string;
 	context: CanvasRenderingContext2D;
 	canvas: HTMLCanvasElement;
 	hudElement: HTMLDivElement;
@@ -18,25 +18,18 @@ export default class JeuView extends View {
 	socket;
 	coordoneeMouseToGo: Coordonee | null = null;
 
-	constructor(
-		element: HTMLElement,
-		socket: Socket,
-		pseudo: string,
-		canvas: HTMLCanvasElement
-	) {
+	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
-		this.monPseudo = pseudo;
 		this.socket = socket;
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.handleRender = this.handleRender.bind(this);
 		this.handleMouseDown = this.handleMouseDown.bind(this);
-		this.handleMouseUp = this.handleMouseUp.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 
-		this.canvas = canvas;
+		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
 
 		this.canvas.width = 1920;
@@ -59,12 +52,12 @@ export default class JeuView extends View {
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
 		this.canvas.addEventListener('mousedown', this.handleMouseDown);
-		this.canvas.addEventListener('mouseup', this.handleMouseUp);
 		this.canvas.addEventListener('mousemove', this.handleMouseMove);
+		this.socket.on('mortDuJoueur', this.mortJoueur);
 	}
 
-	private handleMouseUp(e: MouseEvent) {
-		this.handleShooting(e);
+	private mortJoueur() {
+		console.log('vous etes mort');
 	}
 
 	private handleMouseDown(e: MouseEvent) {
@@ -100,7 +93,7 @@ export default class JeuView extends View {
 	private checkMouseMovement(listJoueurs: Joueur[]) {
 		if (!this.coordoneeMouseToGo) return;
 
-		const me = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		const me = listJoueurs.find(j => j.clientID === this.socket.id);
 		if (!me) return;
 
 		const dx = this.coordoneeMouseToGo.x - me.co.x;
@@ -156,7 +149,6 @@ export default class JeuView extends View {
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
-		this.canvas.removeEventListener('mouseup', this.handleMouseUp);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
@@ -196,7 +188,8 @@ export default class JeuView extends View {
 
 	private render(g: Game) {
 		this.context.clearRect(0, 0, 1920, 1080);
-		if (g.bullets) this.renderBullets(g.bullets);
+		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
+		if (g.bulletsEnnemy) this.renderBulletsEnnemy(g.bulletsEnnemy);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
 		if (g.bulletsHit) this.renderBulletsHit(g.bulletsHit);
@@ -205,75 +198,58 @@ export default class JeuView extends View {
 	}
 
 	private renderHud(listJoueurs: Joueur[]) {
-		const currentClient = listJoueurs.find(j => j.pseudo === this.monPseudo);
+		const currentClient = listJoueurs.find(j => j.clientID === this.socket.id);
 		if (currentClient) {
 			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
 				currentClient.pseudo!;
 			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
 				currentClient.vie!
 			);
-			this.hudElement.querySelector('.info-score')!.innerHTML = 'score';
+			this.hudElement.querySelector('.info-score')!.innerHTML =
+				'' + currentClient.score;
 		}
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			const currentClient = j.pseudo === this.monPseudo;
-			const coord = this.realCordonee(j.co);
-			currentClient
-				? this.context.drawImage(
-						Assets.persoTemp1,
-						coord.x - j.width / 2,
-						coord.y - j.height / 2,
-						j.width,
-						j.height
-					)
-				: this.context.drawImage(
-						Assets.persoTemp2,
-						coord.x - j.width / 2,
-						coord.y - j.height / 2,
-						j.width,
-						j.height
-					);
+			this.dessinerEntite(j);
 		}
 	}
 
-	private renderBullets(listBullets: Bullet[]) {
+	private renderBulletsJoueur(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			const coord = this.realCordonee(b.co);
-			this.context.drawImage(
-				Assets.ennemyTemp,
-				coord.x - b.width / 2,
-				coord.y - b.height / 2,
-				b.width,
-				b.height
-			);
+			this.dessinerEntite(b);
 		}
 	}
+	private renderBulletsEnnemy(listBullets: Bullet[]) {
+		for (const b of listBullets) {
+			this.dessinerEntite(b);
+		}
+	}
+
 	private renderBulletsHit(listBulletsHit: Bullet[]) {
 		for (const bh of listBulletsHit) {
-			const coord = this.realCordonee(bh.co);
-			this.context.drawImage(
-				Assets.persoTemp2,
-				coord.x - bh.width / 2,
-				coord.y - bh.height / 2,
-				bh.width,
-				bh.height
-			);
+			this.dessinerEntite(bh);
 		}
 	}
 
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
-			const coord = this.realCordonee(e.co);
+			this.dessinerEntite(e);
+		}
+	}
+
+	private dessinerEntite(e: Entities) {
+		const coord = this.realCordonee(e.co);
+		const img = Assets.getImage(e.spriteId);
+		if (img)
 			this.context.drawImage(
-				Assets.ennemyTemp,
+				img,
 				coord.x - e.width / 2,
 				coord.y - e.height / 2,
 				e.width,
 				e.height
 			);
-		}
 	}
 
 	private realCordonee(c: Coordonee): Coordonee {

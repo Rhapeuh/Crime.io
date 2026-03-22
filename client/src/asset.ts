@@ -1,24 +1,31 @@
 export default class Assets {
-    static persoTemp1 = new Image();
-    static persoTemp2 = new Image();
-    static ennemyTemp = new Image();
+    private static images: Map<string, HTMLImageElement> = new Map();
 
     static async loadAll() {
         const imagesToLoad = [
-            { img: this.persoTemp1, src: '/images/persoTemp1.jpg' },
-            { img: this.persoTemp2, src: '/images/persoTemp2.jpg' },
-            { img: this.ennemyTemp, src: '/images/ennemyTemp.jpg' }
+            { id: 'persoTemp', src: '/images/persoTemp.jpg' },
+            { id: 'bullet', src: '/images/bullet.jpg' },
+            { id: 'ennemiTemp', src: '/images/ennemyTemp.jpg' },
+            { id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg'}
         ];
 
         const promises = imagesToLoad.map(item => {
             return new Promise<void>((resolve, reject) => {
-                item.img.onload = () => resolve(); // Succès
-                item.img.onerror = () => reject(new Error(`Échec du chargement : ${item.src}`)); // Erreur
-                item.img.src = item.src;           // Lance le chargement
+                const img = new Image()
+                img.onload = () => {
+                    this.images.set(item.id, img);
+                    resolve(); // Succès
+                }
+                img.onerror = () => reject(new Error(`Échec du chargement : ${item.src}`)); // Erreur
+                img.src = item.src;           // Lance le chargement
             });
         });
 
         // Attend que toutes les images soient chargées
         await Promise.all(promises); 
+    }
+
+    static getImage(spriteId: string): HTMLImageElement | undefined {
+        return this.images.get(spriteId);
     }
 }
