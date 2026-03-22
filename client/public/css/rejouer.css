@@ -7,13 +7,28 @@
 	width: 100%;
 }
 
+.displayRetour{
+	left: auto;
+  	margin-bottom: 45vh;
+	transform: translateX(-3em) !important;
+	width: 5em;
+  	text-align: center;
+}
+
 .rejouerButton{
 	display: none;
-	margin-inline: 50vw;
   	margin-bottom: 50vh;
 	transform: translateX(-3em) !important;
+	width: 5em;
+  	text-align: center;
 }
 
 .rejouerButton.displayButton{
 	display: flex;
 }
+
+.buttonContainer{
+	margin-inline: 50vw;
+
+}
+

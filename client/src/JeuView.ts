@@ -58,7 +58,7 @@ export default class JeuView extends View {
 		this.socket.on('mortDuJoueur', this.mortJoueur);
 
 		this.rejouerListener()
-
+		this.retourListener()
 		
 	}
 
@@ -74,6 +74,23 @@ export default class JeuView extends View {
 			}
 			document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "blur"));
 			document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton"));
+			document.querySelectorAll(".retour")!.forEach((temp) => temp.setAttribute("class", "retour"));
+
+		}));
+	}
+
+	private retourListener(){
+		const retourButton = document.querySelectorAll(".retour");
+		retourButton?.forEach((temp) => temp.addEventListener("click", (event) => {
+			event.preventDefault;
+			// console.log('prevent')
+			
+			Router.navigate('/')
+			
+			document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "blur"));
+			document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton"));
+			document.querySelectorAll(".retour")!.forEach((temp) => temp.setAttribute("class", "retour"));
+
 		}));
 	}
 
@@ -82,6 +99,8 @@ export default class JeuView extends View {
 
 		document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "rejouer blur"));
 		document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton displayButton"));
+		document.querySelectorAll(".retour")!.forEach((temp) => temp.setAttribute("class", "retour displayRetour"));
+
 	}
 
 	private handleMouseDown(e: MouseEvent) {
