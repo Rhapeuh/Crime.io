@@ -145,9 +145,6 @@
 .steamPage{
     display: none;
 	border: none;
-	height: 60%;
-    width: 100%;
-    resize: both;
 }
 
 .steamPage.active{
@@ -155,7 +152,7 @@
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
     width: 102.7%;  /* Résolution Desktop standard */
-    height: 58.8%;
+    height: 100em;
     border: none;
     border-top: solid var(--darkblue4);
 
@@ -167,7 +164,8 @@
     /* On réduit l'élément à 25% (480 / 1920 = 0.25) */
     transform: scale(0.974);
     transform-origin: 0 0;
-    margin-top: 12.64%
+    margin-top: auto; 
+    margin-bottom: 10px;
 }
 
 .credit_open {
@@ -181,7 +179,8 @@
 
 .creditContent{
     height: calc(100% - 76px);
-
+    display: flex;
+    flex-direction: column;
 }
 
 .credit-header{
