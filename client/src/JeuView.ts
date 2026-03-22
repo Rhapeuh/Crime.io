@@ -7,6 +7,7 @@ import Assets from './asset';
 import type Bullet from '../../common/Bullet';
 import type { Coordonee } from '../../common/types';
 import type Ennemy from '../../common/Ennemy';
+import type Entities from '../../common/Entities';
 
 export default class JeuView extends View {
 	context: CanvasRenderingContext2D;
@@ -210,62 +211,38 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			const currentClient = j.clientID === this.socket.id;
-			const coord = this.realCordonee(j.co);
-			currentClient
-				? this.context.drawImage(
-						Assets.persoTemp1,
-						coord.x - j.width / 2,
-						coord.y - j.height / 2,
-						j.width,
-						j.height
-					)
-				: this.context.drawImage(
-						Assets.persoTemp2,
-						coord.x - j.width / 2,
-						coord.y - j.height / 2,
-						j.width,
-						j.height
-					);
+			this.dessinerEntite(j)
 		}
 	}
 
 	private renderBullets(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			const coord = this.realCordonee(b.co);
-			this.context.drawImage(
-				Assets.ennemyTemp,
-				coord.x - b.width / 2,
-				coord.y - b.height / 2,
-				b.width,
-				b.height
-			);
+			this.dessinerEntite(b)
 		}
 	}
 	private renderBulletsHit(listBulletsHit: Bullet[]) {
 		for (const bh of listBulletsHit) {
-			const coord = this.realCordonee(bh.co);
-			this.context.drawImage(
-				Assets.persoTemp2,
-				coord.x - bh.width / 2,
-				coord.y - bh.height / 2,
-				bh.width,
-				bh.height
-			);
+			this.dessinerEntite(bh)
 		}
 	}
 
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
-			const coord = this.realCordonee(e.co);
+			this.dessinerEntite(e)
+		}
+	}
+
+	private dessinerEntite(e: Entities) {
+		const coord = this.realCordonee(e.co);
+		const img = Assets.getImage(e.spriteId);
+		if (img)
 			this.context.drawImage(
-				Assets.ennemyTemp,
+				img,
 				coord.x - e.width / 2,
 				coord.y - e.height / 2,
 				e.width,
 				e.height
 			);
-		}
 	}
 
 	private realCordonee(c: Coordonee): Coordonee {

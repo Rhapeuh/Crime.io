@@ -7,8 +7,8 @@ export default class Joueur extends Entities {
 	private invincibilite: boolean;
 	private inputX: number = 0;
 	private inputY: number = 0;
-	private score: number = 0;
-	private clientID: string;
+	score: number = 0;
+	clientID: string;
 	private friction: number = 0.9;
 	private max_speed: number = 10;
 
@@ -21,7 +21,7 @@ export default class Joueur extends Entities {
 		height: number,
 		clientID: string
 	) {
-		super(co, 0, 0, speed, width, height, vies);
+		super(co, 0, 0, speed, width, height, 'persoTemp', vies);
 		this.pseudo = pseudo;
 		this.clientID = clientID;
 		this.invincibilite = false;

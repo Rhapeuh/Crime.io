@@ -8,6 +8,7 @@ export default class Entities {
 	width: number;
 	height: number;
 	vie?: number;
+	spriteId: string;
 
 	constructor(
 		co: Coordonee,
@@ -16,7 +17,8 @@ export default class Entities {
 		speed: number,
 		width: number,
 		height: number,
-		vie?: number,
+		spriteId: string,
+		vie?: number
 	) {
 		this.co = co;
 		this.vx = vx;
@@ -25,6 +27,7 @@ export default class Entities {
 		this.width = width;
 		this.height = height;
 		this.vie = vie;
+		this.spriteId = spriteId;
 	}
 
 	getVX(): number {
@@ -87,11 +90,19 @@ export default class Entities {
 	}
 
 	estEnVie(): boolean {
-		if(this.vie) return this.vie > 0
+		if (this.vie) return this.vie > 0;
 		return false;
 	}
 
 	ajouterVies() {
-		if(this.vie) this.vie ++ 
+		if (this.vie) this.vie++;
+	}
+
+	getSpriteId(): string {
+		return this.spriteId;
+	}
+
+	setSpriteId(spriteId: string) {
+		this.spriteId = spriteId;
 	}
 }

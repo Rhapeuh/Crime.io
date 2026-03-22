@@ -19,6 +19,6 @@ export default class BasicEnnemy extends Ennemy {
 		difficulte = DifficulteEnnemi.FACILE
 	) {
 		const stats = STATS_ENNEMIS[difficulte];
-		super(co, stats.speed, stats.hp, stats.taille, stats.score);
+		super(co, stats.speed, stats.hp, stats.taille, stats.score, 'ennemiTemp');
 	}
 }

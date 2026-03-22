@@ -111,6 +111,7 @@ export default class Jeu {
 				if (checkCollision(b, e)) {
 					e.enleverVie();
 					this.game.addBulletHit(b);
+					b.setSpriteId('persoTemp');
 					this.game.removeBullet(b);
 					if(!e.estEnVie()) b.getJoueur().addScore(e.getScoreValue());
 					return;
