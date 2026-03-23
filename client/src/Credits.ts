@@ -17,26 +17,18 @@ export function initEvents() {
 			members.forEach(m => m.classList.remove('active'));
 			member.classList.add('active');
 
-			const dataset = (member as HTMLElement).dataset;
+			const iframes = document.querySelectorAll('.steamPage');
+			iframes.forEach((frame) => frame.setAttribute('class', 'steamPage'));
 
-			const valPrenom = document.getElementById('det-prenom');
-			const valNom = document.getElementById('det-nom');
-			const valGroupe = document.getElementById('det-groupe');
-			const valSurnom = document.getElementById('det-surnom');
-			const valJeu = document.getElementById('det-jeu');
-			const valNote = document.getElementById('det-note');
-
-			if (valPrenom) valPrenom.innerText = dataset.prenom || '';
-			if (valNom) valNom.innerText = dataset.nom || '';
-			if (valGroupe) valGroupe.innerText = dataset.groupe || '';
-			if (valSurnom) valSurnom.innerText = dataset.surnom || '';
-			if (valJeu) valJeu.innerText = dataset.jeu || '';
-			if (valNote) valNote.innerText = dataset.note || '';
-
-			detailsSection.style.borderTopColor = (member as HTMLElement).style.color;
-			detailsSection.style.color = (member as HTMLElement).style.color;
-
-			detailsSection.classList.remove('hidden');
+			if (member == document.querySelector('[data-prenom="Ylann"]')) {
+				document.querySelector('.steamPage[src="/pageSteam/Rhapeuh.html"]')?.setAttribute('class', 'steamPage active');				
+			}
+			if (member == document.querySelector('[data-prenom="Adam"]')) {
+				document.querySelector('.steamPage[src="/pageSteam/YuNeria.html"]')?.setAttribute('class', 'steamPage active');			
+			}
+			if (member == document.querySelector('[data-prenom="Ethan"]')) {
+				document.querySelector('.steamPage[src="/pageSteam/Fleinz.html"]')?.setAttribute('class', 'steamPage active');		
+			}
 		});
 	});
 }
