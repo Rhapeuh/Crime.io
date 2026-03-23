@@ -11,6 +11,7 @@ export default class Joueur extends Entities {
 	clientID: string;
 	private friction: number = 0.9;
 	private max_speed: number = 10;
+	nbEnnemiTuer: number = 0;
 
 	constructor(
 		pseudo: string,
@@ -63,6 +64,7 @@ export default class Joueur extends Entities {
 
 	public addScore(points: number) {
 		this.score = this.score + points;
+		this.nbEnnemiTuer++;
 	}
 
 	public getScore(): number {

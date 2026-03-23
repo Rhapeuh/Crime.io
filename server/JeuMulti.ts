@@ -86,6 +86,6 @@ export default class JeuMulti extends Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		await super.joueurMort(j);
-		this.io.in(j.getClientID()).emit('mortDuJoueur');
+		this.io.in(j.getClientID()).emit('mortDuJoueur', j);
 	}
 }

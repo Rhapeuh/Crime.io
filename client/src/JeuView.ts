@@ -31,6 +31,7 @@ export default class JeuView extends View {
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
+		this.mortJoueur = this.mortJoueur.bind(this);
 
 		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
@@ -41,8 +42,6 @@ export default class JeuView extends View {
 		this.hudElement = this.element.querySelector('.hud')!;
 
 		this.initEvents();
-
-		Router.setMenuElement(element);
 	}
 
 	handleRender(g: Game) {
@@ -67,7 +66,7 @@ export default class JeuView extends View {
 		rejouerButton?.forEach(temp =>
 			temp.addEventListener('click', event => {
 				event.preventDefault;
-				// console.log('prevent')
+				document.querySelectorAll('.joueurMort')?.forEach(elt => elt.classList.remove('active'));
 				if (document.querySelector('.jeuSolo')?.contains(temp)) {
 					Router.navigate('/jeuSolo');
 				} else {
@@ -108,20 +107,28 @@ export default class JeuView extends View {
 		);
 	}
 
-	private mortJoueur() {
+	private mortJoueur(j: Joueur) {
+		this.chrono.stop();
 		console.log('vous etes mort');
-
+		this.setStat(j);
+		document
+			.querySelectorAll('.joueurMort')
+			?.forEach(elt => elt.classList.add('active'));
 		document
 			.querySelectorAll('.blur')!
-			.forEach(temp => temp.setAttribute('class', 'rejouer blur'));
+			.forEach(temp => temp.classList.add('rejouer', 'blur'));
 		document
 			.querySelectorAll('.rejouerButton')!
-			.forEach(temp =>
-				temp.setAttribute('class', 'rejouerButton displayButton')
-			);
+			.forEach(temp => temp.classList.add('rejouerButton', 'displayButton'));
 		document
 			.querySelectorAll('.retour')!
-			.forEach(temp => temp.setAttribute('class', 'retour displayRetour'));
+			.forEach(temp => temp.classList.add('retour', 'displayRetour'));
+	}
+
+	private setStat(j: Joueur) {
+		document.querySelectorAll('.timeFinal').forEach(elt => elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`);
+		document.querySelectorAll('.nbTuer').forEach(elt => elt.innerHTML = `Nombre d'ennemis tuer : ${j.nbEnnemiTuer}`);
+		document.querySelectorAll('.scoreFinal').forEach(elt => elt.innerHTML = `Score final : ${j.score}`);
 	}
 
 	private handleMouseDown(e: MouseEvent) {

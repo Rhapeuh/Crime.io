@@ -41,7 +41,6 @@ const routes = [
 				pseudoInput.value
 			),
 	},
-	//{ path: '/retour', getView: () => new RetourView(document.querySelector('.viewContent > .retour')!) },
 ];
 
 Router.routes = routes;
