@@ -186,3 +186,9 @@
 	border-top-right-radius: 14px;
 }
 
+
+.realSteam *{
+    color: var(--darkblue1);
+    font-weight: 900;
+    text-decoration: none;
+}
