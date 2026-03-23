@@ -2,17 +2,36 @@
     font-family: titreFont;
     font-weight: 100;
     margin: 0;
+    color: var(--electric-citrus1);
+    background-color: var(--darkblue1);
+        
+    margin: 10px;
+	height: 93%;
+	width: 92%;
+	border: 4px var(--darkblue2) solid;
+	border-radius: 18px;
 }
 
 .credit_open h2{
     text-align: end;
     padding-right: 5px;
-    color: var(--electric-citrus2);
+}
+
+.credit_open li{
+    list-style-type: none;
 }
 
 .credit_header{
     display: flex;
     justify-content: space-between;
+    height: 50%;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 50%;
 }
 
 img{
@@ -190,12 +209,7 @@ img{
 }
 
 .credit_open {
-    margin: 10px;
-	height: 93%;
-	width: 92%;
-	border: 4px var(--darkblue2) solid;
-	border-radius: 18px;
-	background-color: var(--darkblue2);
+
 }
 
 .creditContent{
