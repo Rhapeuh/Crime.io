@@ -5,7 +5,15 @@ import Router from './Router';
 export default class JeuMultiView extends JeuView {
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element, socket);
-		if (pseudo === '') Router.navigate('/');
+		if (pseudo === '') {
+			this.element.classList.remove('active');
+
+			setTimeout(() => {
+				Router.navigate('/');
+			}, 0);
+
+			return;
+		}
 		socket.emit('rejoindreMulti', pseudo);
 		this.socket.on('renderMulti', this.handleRender);
 	}

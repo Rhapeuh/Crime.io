@@ -33,12 +33,12 @@ export default class JeuView extends View {
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
 		this.mortJoueur = this.mortJoueur.bind(this);
+		this.handleResize = this.handleResize.bind(this);
 
 		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
 
-		this.canvas.width = 1920;
-		this.canvas.height = 1080;
+		this.handleResize();
 
 		this.hudElement = this.element.querySelector('.hud')!;
 
@@ -51,6 +51,7 @@ export default class JeuView extends View {
 	}
 
 	private initEvents() {
+		window.addEventListener('resize', this.handleResize);
 		window.addEventListener('contextmenu', e => e.preventDefault());
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
@@ -144,6 +145,11 @@ export default class JeuView extends View {
 			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
 	}
 
+	private handleResize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+
 	private handleMouseDown(e: MouseEvent) {
 		this.handleShooting(e);
 		this.handleDirectionMouse(e);
@@ -232,6 +238,7 @@ export default class JeuView extends View {
 
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
+		window.removeEventListener('resize', this.handleResize);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
 	}
@@ -277,7 +284,7 @@ export default class JeuView extends View {
 			this.camera.y = me.co.y - this.canvas.height / 2;
 		}
 
-		this.context.clearRect(0, 0, 1920, 1080);
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
 		if (g.bulletsEnnemy) this.renderBulletsEnnemy(g.bulletsEnnemy);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
@@ -347,29 +354,9 @@ export default class JeuView extends View {
 	}
 
 	private realClickCoordonee(e: MouseEvent): Coordonee {
-		const rect = this.canvas.getBoundingClientRect();
-
-		// Calculer le ratio auquel le canva a été redimenssioné
-		const scale = Math.min(
-			rect.width / this.canvas.width,
-			rect.height / this.canvas.height
-		);
-
-		// Dimensions rééles du client grâce au ratio
-		const visualWidth = this.canvas.width * scale;
-		const visualHeight = this.canvas.height * scale;
-
-		// Canva centré dcp on fait l'offset du vide sur le côté puis /2 pour le centre
-		const offsetX = (rect.width - visualWidth) / 2;
-		const offsetY = (rect.height - visualHeight) / 2;
-
-		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
-		const canvasX = (e.clientX - rect.left - offsetX) / scale;
-		const canvasY = (e.clientY - rect.top - offsetY) / scale;
-
 		return {
-			x: canvasX + this.camera.x,
-			y: canvasY + this.camera.y,
+			x: e.clientX + this.camera.x,
+			y: e.clientY + this.camera.y,
 		};
 	}
 }
