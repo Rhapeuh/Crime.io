@@ -49,20 +49,20 @@ export function calculerAngle(depart: { x: number, y: number }, cible: { x: numb
 }
 
 export function checkCollision(entityA: Entities, entityB: Entities): boolean {
-        const halfWA = entityA.getWidth() / 2;
-        const halfHA = entityA.getHeight() / 2;
-        const halfWB = entityB.getWidth() / 2;
-        const halfHB = entityB.getHeight() / 2;
+	const halfWA = entityA.getWidth() / 2;
+	const halfHA = entityA.getHeight() / 2;
+	const halfWB = entityB.getWidth() / 2;
+	const halfHB = entityB.getHeight() / 2;
 
-        const leftA = entityA.getX() - halfWA;
-        const rightA = entityA.getX() + halfWA;
-        const topA = entityA.getY() - halfHA;
-        const bottomA = entityA.getY() + halfHA;
+	const leftA = entityA.getX() - halfWA;
+	const rightA = entityA.getX() + halfWA;
+	const topA = entityA.getY() - halfHA;
+	const bottomA = entityA.getY() + halfHA;
 
-        const leftB = entityB.getX() - halfWB;
-        const rightB = entityB.getX() + halfWB;
-        const topB = entityB.getY() - halfHB;
-        const bottomB = entityB.getY() + halfHB;
+	const leftB = entityB.getX() - halfWB;
+	const rightB = entityB.getX() + halfWB;
+	const topB = entityB.getY() - halfHB;
+	const bottomB = entityB.getY() + halfHB;
 
-        return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
-    }
+	return leftA < rightB && rightA > leftB && topA < bottomB && bottomA > topB;
+}

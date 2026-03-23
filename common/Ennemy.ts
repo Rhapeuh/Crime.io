@@ -38,16 +38,17 @@ export default class Ennemy extends Entities {
 		worldHeight: number,
 		distMin: number = 0
 	) {
-		if (this.getX() > j.getX() + distMin) {
-			this.setX(this.getX() + this.speed * -1);
-		} else if (this.getX() < j.getX() - distMin) {
-			this.setX(this.getX() + this.speed * 1);
-		}
+		const dx = j.getX() - this.getX();
+		const dy = j.getY() - this.getY();
 
-		if (this.getY() > j.getY() + distMin) {
-			this.setY(this.getY() + this.speed * -1);
-		} else if (this.getY() < j.getY() - distMin) {
-			this.setY(this.getY() + this.speed * 1);
+		const distance = Math.hypot(dx, dy);
+
+		if (distance > distMin) {
+			const vx = (dx / distance) * this.speed;
+			const vy = (dy / distance) * this.speed;
+
+			this.setX(this.getX() + vx);
+			this.setY(this.getY() + vy);
 		}
 		verifCoordonee(this, worldWidth, worldHeight);
 	}
