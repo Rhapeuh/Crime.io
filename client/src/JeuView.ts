@@ -1,14 +1,15 @@
 import type { Socket } from 'socket.io-client';
-import View from './View';
-import Router from './Router';
-import type Game from '../../common/Game';
-import type Joueur from '../../common/Joueur';
-import Assets from './asset';
-import type Bullet from '../../common/Bullet';
-import type { Coordonee } from '../../common/types';
-import type Ennemy from '../../common/Ennemy';
-import type Entities from '../../common/Entities';
-import Chrono from './Chrono';
+import View from './View.ts';
+import Router from './Router.ts';
+import type Game from '../../common/Game.ts';
+import type Joueur from '../../common/Joueur.ts';
+import Assets from './asset.ts';
+import type Bullet from '../../common/Bullet.ts';
+import type { Coordonee } from '../../common/types.ts';
+import type Ennemy from '../../common/Ennemy.ts';
+import type Entities from '../../common/Entities.ts';
+import type Bonus from '../../common/Bonus.ts';
+import Chrono from './Chrono.ts';
 
 export default class JeuView extends View {
 	context: CanvasRenderingContext2D;
@@ -291,8 +292,15 @@ export default class JeuView extends View {
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
 		if (g.bulletsHit) this.renderBulletsHit(g.bulletsHit);
+		if (g.bonus) this.renderBonus(g.bonus);
 
 		this.renderHud(g.joueurs);
+	}
+
+	private renderBonus(bonus: Bonus[]) {
+		for (const b of bonus) {
+			this.dessinerEntite(b);
+		}
 	}
 
 	private renderHud(listJoueurs: Joueur[]) {

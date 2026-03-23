@@ -9,6 +9,8 @@ export default class Entities {
 	height: number;
 	vie?: number;
 	spriteId: string;
+	bulletWidth: number;
+	bulletHeight: number;
 
 	constructor(
 		co: Coordonee,
@@ -18,7 +20,9 @@ export default class Entities {
 		width: number,
 		height: number,
 		spriteId: string,
-		vie?: number
+		vie?: number,
+		bulletWitdh: number = 10,
+		bulletHeight: number = 5
 	) {
 		this.co = co;
 		this.vx = vx;
@@ -28,6 +32,8 @@ export default class Entities {
 		this.height = height;
 		this.vie = vie;
 		this.spriteId = spriteId;
+		this.bulletWidth = bulletWitdh;
+		this.bulletHeight = bulletHeight;
 	}
 
 	getVX(): number {
@@ -94,8 +100,8 @@ export default class Entities {
 		return false;
 	}
 
-	ajouterVies() {
-		if (this.vie) this.vie++;
+	ajouterVies(vies: number) {
+		if (this.vie) this.vie = this.vie + vies;
 	}
 
 	getSpriteId(): string {
@@ -104,5 +110,19 @@ export default class Entities {
 
 	setSpriteId(spriteId: string) {
 		this.spriteId = spriteId;
+	}
+
+	getBulletWidth() {
+		return this.bulletWidth;
+	}
+	setBulletWidth(width: number) {
+		this.bulletWidth = width;
+	}
+
+	getBulletHeight() {
+		return this.bulletHeight;
+	}
+	setBulletHeight(height: number) {
+		this.bulletHeight = height;
 	}
 }
