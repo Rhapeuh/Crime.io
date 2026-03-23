@@ -1,6 +1,7 @@
 import type Ennemy from './Ennemy.ts';
 import Entities from './Entities.ts';
 import type Joueur from './Joueur.ts';
+import type { Coordonee } from './types';
 
 export function verifCoordonee(
 	e: Entities,
@@ -42,7 +43,7 @@ export function calculeDistance(obj1: { getX(): number, getY(): number }, obj2: 
     return Math.hypot(distX, distY);
 }
 
-export function calculerAngle(depart: { x: number, y: number }, cible: { x: number, y: number }): number {
+export function calculerAngle(depart: Coordonee, cible: Coordonee): number {
     const dx = cible.x - depart.x;
     const dy = cible.y - depart.y;
     return Math.atan2(dy, dx);

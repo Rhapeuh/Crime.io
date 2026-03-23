@@ -44,11 +44,11 @@ export default class Ennemy extends Entities {
 		const distance = Math.hypot(dx, dy);
 
 		if (distance > distMin) {
-			const vx = (dx / distance) * this.speed;
-			const vy = (dy / distance) * this.speed;
+			this.vx = (dx / distance) * this.speed;
+			this.vy = (dy / distance) * this.speed;
 
-			this.setX(this.getX() + vx);
-			this.setY(this.getY() + vy);
+			this.setX(this.getX() + this.vx);
+			this.setY(this.getY() + this.vy);
 		}
 		verifCoordonee(this, worldWidth, worldHeight);
 	}

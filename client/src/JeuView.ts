@@ -10,6 +10,7 @@ import type Ennemy from '../../common/Ennemy.ts';
 import type Entities from '../../common/Entities.ts';
 import type Bonus from '../../common/Bonus.ts';
 import Chrono from './Chrono.ts';
+import { calculerAngle } from '../../common/utils';
 
 export default class JeuView extends View {
 	context: CanvasRenderingContext2D;
@@ -21,6 +22,7 @@ export default class JeuView extends View {
 	coordoneeMouseToGo: Coordonee | null = null;
 	chrono: Chrono = new Chrono();
 	camera: Coordonee = { x: 0, y: 0 };
+	currentMousePos: Coordonee = { x: 0, y: 0 };
 	worldWidth: number = 5000;
 	worldHeight: number = 5000;
 	private keys: { [key: string]: boolean } = {
@@ -167,6 +169,7 @@ export default class JeuView extends View {
 	}
 
 	private handleMouseMove(e: MouseEvent) {
+		this.currentMousePos = this.realClickCoordonee(e);
 		if ((e.buttons & 2) !== 0) {
 			this.handleDirectionMouse(e);
 		}
@@ -295,7 +298,7 @@ export default class JeuView extends View {
 
 	private renderBonus(bonus: Bonus[]) {
 		for (const b of bonus) {
-			this.dessinerEntite(b);
+			this.dessinerEntite(b, 0);
 		}
 	}
 
@@ -316,34 +319,34 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			this.dessinerEntite(j);
+			this.dessinerEntite(j, calculerAngle(j.co, this.currentMousePos));
 		}
 	}
 
 	private renderBulletsJoueur(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			this.dessinerEntite(b);
+			this.dessinerEntite(b, Math.atan2(b.vy, b.vx));
 		}
 	}
 	private renderBulletsEnnemy(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			this.dessinerEntite(b);
+			this.dessinerEntite(b, Math.atan2(b.vy, b.vx));
 		}
 	}
 
 	private renderBulletsHit(listBulletsHit: Bullet[]) {
-		for (const bh of listBulletsHit) {
-			this.dessinerEntite(bh);
+		for (const b of listBulletsHit) {
+			this.dessinerEntite(b, Math.atan2(b.vy, b.vx));
 		}
 	}
 
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
-			this.dessinerEntite(e);
+			this.dessinerEntite(e, Math.atan2(e.vy, e.vx));
 		}
 	}
 
-	private dessinerEntite(e: Entities) {
+	private dessinerEntite(e: Entities, angle: number) {
 		const screenX = e.co.x - this.camera.x;
 		const screenY = e.co.y - this.camera.y;
 
@@ -351,7 +354,7 @@ export default class JeuView extends View {
 
 		this.context.translate(screenX, screenY);
 
-		this.context.rotate(Math.atan2(e.vy, e.vx));
+		this.context.rotate(angle);
 
 		const img = Assets.getImage(e.spriteId);
 		if (img)
@@ -362,7 +365,7 @@ export default class JeuView extends View {
 				e.width,
 				e.height
 			);
-		
+
 		this.context.restore();
 	}
 

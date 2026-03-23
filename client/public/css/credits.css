@@ -217,12 +217,8 @@ img{
     /* On réduit l'élément à 25% (480 / 1920 = 0.25) */
     transform: scale(0.974);
     transform-origin: 0 0;
- 
 }
 
-.credit_open {
-
-}
 
 .creditContent{
     height: calc(100% - 3.88em);
