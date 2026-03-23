@@ -3,7 +3,7 @@ import View from './View';
 import type { scores } from '../../common/types';
 import Score from './Score';
 import type { Socket } from 'socket.io-client';
-import { genererCredits, initEvents } from './Credits';
+import { genererCredits } from './Credits';
 
 export default class AcceuilView extends View {
 	private menuGauche: HTMLElement;
@@ -83,8 +83,6 @@ export default class AcceuilView extends View {
 		) {
 			// credit button
 			this.fondElement.innerHTML = await genererCredits();
-			initEvents();
-			// credits steam
 		}
 	}
 
