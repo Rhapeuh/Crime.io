@@ -37,6 +37,7 @@ export default class JeuSolo extends Jeu {
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
+		this.handleBonusSpawning();
 	}
 
 	destroy() {

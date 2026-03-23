@@ -77,6 +77,13 @@ export default class Joueur extends Entities {
 		return this.clientID;
 	}
 
+	public getMaxSpeed(): number {
+		return this.max_speed;
+	}
+	public setMaxSpeed(maxSpeed: number) {
+		this.max_speed = maxSpeed;
+	}
+
 	public update(worldWidth: number, worldHeight: number) {
 		this.appliquerPhysique();
 		this.setX(this.getX() + this.getVX());

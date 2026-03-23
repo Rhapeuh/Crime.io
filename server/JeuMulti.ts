@@ -14,6 +14,7 @@ export default class JeuMulti extends Jeu {
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
+		this.handleBonusSpawning();
 	}
 
 	destroy() {
