@@ -29,7 +29,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 4em;
+    margin-top: 10px;
 }
 
 .team-member {
@@ -172,7 +173,7 @@
 }
 
 .creditContent{
-    height: calc(100% - 76px);
+    height: calc(100% - 3.88em);
     display: flex;
     flex-direction: column;
 }
