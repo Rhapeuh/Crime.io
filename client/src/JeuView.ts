@@ -20,6 +20,8 @@ export default class JeuView extends View {
 	coordoneeMouseToGo: Coordonee | null = null;
 	chrono: Chrono = new Chrono();
 	camera: Coordonee = { x: 0, y: 0 };
+	worldWidth: number = 5000;
+	worldHeight: number = 5000;
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
@@ -146,9 +148,9 @@ export default class JeuView extends View {
 	}
 
 	private handleResize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-    }
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+	}
 
 	private handleMouseDown(e: MouseEvent) {
 		this.handleShooting(e);
@@ -243,10 +245,6 @@ export default class JeuView extends View {
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
-	clearCanvas() {
-		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	}
-
 	private selectDirection(e: KeyboardEvent) {
 		if (e.key === 'd' || e.key === 'ArrowRight') this.vx = 1;
 		if (e.key === 'q' || e.key === 'ArrowLeft') this.vx = -1;
@@ -285,6 +283,9 @@ export default class JeuView extends View {
 		}
 
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+		this.renderWorldBorders();
+
 		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
 		if (g.bulletsEnnemy) this.renderBulletsEnnemy(g.bulletsEnnemy);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
@@ -358,5 +359,26 @@ export default class JeuView extends View {
 			x: e.clientX + this.camera.x,
 			y: e.clientY + this.camera.y,
 		};
+	}
+
+	private renderWorldBorders() {
+		const startX = 0 - this.camera.x;
+		const startY = 0 - this.camera.y;
+
+		this.context.save();
+
+		this.context.strokeStyle = 'red';
+		this.context.lineWidth = 10;
+
+		const demiEpaisseur = this.context.lineWidth / 2;
+
+		this.context.strokeRect(
+			startX - demiEpaisseur,
+			startY - demiEpaisseur,
+			this.worldWidth + this.context.lineWidth,
+			this.worldHeight + this.context.lineWidth
+		);
+
+		this.context.restore();
 	}
 }
