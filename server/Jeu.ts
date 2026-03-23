@@ -2,7 +2,6 @@ import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
 import type { Coordonee } from '../common/types.ts';
-import { randomInt } from 'crypto';
 import { writeFile, readFile } from 'fs/promises';
 import {
 	calculerAngle,
@@ -50,7 +49,7 @@ export default class Jeu {
 	// gestion globale
 
 	protected randomCoordonee(): Coordonee {
-		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
+		return { x: this.getRandomInt(0, this.WORLD_WIDTH), y: this.getRandomInt(0, this.WORLD_HEIGHT) };
 	}
 
 	// Gestion du joueur
@@ -179,7 +178,7 @@ export default class Jeu {
 			this.game.getNbEnnemy() < this.maxEnemies &&
 			now >= this.nextSpawnTime
 		) {
-			let nbASpawn = randomInt(this.maxEnnemiesSpawning);
+			let nbASpawn = this.getRandomInt(1, this.maxEnnemiesSpawning);
 			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
@@ -260,5 +259,9 @@ export default class Jeu {
 		data.topScore.sort((a, b) => b.score - a.score);
 		data.topScore = data.topScore.slice(0, 10);
 		await writeFile(cheminAbsolu, JSON.stringify(data), 'utf8');
+	}
+
+	private getRandomInt(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 }

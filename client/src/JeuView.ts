@@ -347,15 +347,23 @@ export default class JeuView extends View {
 		const screenX = e.co.x - this.camera.x;
 		const screenY = e.co.y - this.camera.y;
 
+		this.context.save();
+
+		this.context.translate(screenX, screenY);
+
+		this.context.rotate(Math.atan2(e.vy, e.vx));
+
 		const img = Assets.getImage(e.spriteId);
 		if (img)
 			this.context.drawImage(
 				img,
-				screenX - e.width / 2,
-				screenY - e.height / 2,
+				-e.width / 2,
+				-e.height / 2,
 				e.width,
 				e.height
 			);
+		
+		this.context.restore();
 	}
 
 	private realClickCoordonee(e: MouseEvent): Coordonee {

@@ -13,8 +13,8 @@ export default class Bullet extends Entities {
 		speed: number,
 		entite: Entities,
 		bulletRange: number = 500,
-		bulletWidth: number = 10,
-		bulletHeight: number = 5
+		bulletWidth: number,
+		bulletHeight: number
 	) {
 		super(
 			co,
@@ -23,7 +23,7 @@ export default class Bullet extends Entities {
 			speed,
 			bulletWidth,
 			bulletHeight,
-			'bullet'
+			'bullet',
 		);
 		this.createdAt = co;
 		this.active = true;
