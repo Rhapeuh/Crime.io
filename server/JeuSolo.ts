@@ -13,8 +13,8 @@ export default class JeuSolo extends Jeu {
 			this.randomCoordonee(),
 			1,
 			3,
-			50,
-			50,
+			20,
+			20,
 			socket.id
 		);
 		this.game.addJoueur(this.j);

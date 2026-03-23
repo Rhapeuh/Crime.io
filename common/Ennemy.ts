@@ -10,9 +10,9 @@ export const DifficulteEnnemi = {
 }
 
 const STATS_ENNEMIS = {
-	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 40 },
-	[DifficulteEnnemi.MOYEN]: { speed: 3, hp: 2, score: 25, taille: 50 },
-	[DifficulteEnnemi.DIFFICILE]: { speed: 5, hp: 3, score: 50, taille: 60 },
+	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 15 },
+	[DifficulteEnnemi.MOYEN]: { speed: 3, hp: 2, score: 25, taille: 20 },
+	[DifficulteEnnemi.DIFFICILE]: { speed: 5, hp: 3, score: 50, taille: 25 },
 };
 
 export default class Ennemy extends Entities {

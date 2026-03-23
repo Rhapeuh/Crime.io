@@ -30,8 +30,8 @@ export default class JeuMulti extends Jeu {
 			this.randomCoordonee(),
 			1,
 			3,
-			50,
-			50,
+			20,
+			20,
 			socket.id
 		);
 		this.listJoueurs.set(socket.id, newJoueur);
