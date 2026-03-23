@@ -1,11 +1,11 @@
 .credit_open{
     font-family: titreFont;
     font-weight: 100;
-    margin: 0;
+    padding: 5px;
     color: var(--electric-citrus1);
     background-color: var(--darkblue1);
         
-    margin: 10px;
+    margin: 5px;
 	height: 93%;
 	width: 92%;
 	border: 4px var(--darkblue2) solid;
@@ -32,13 +32,25 @@
     flex-direction: column;
     justify-content: space-around;
     height: 50%;
+    margin-bottom: 2px;
 }
 
 img{
     text-align: center;
     padding: auto;
+    aspect-ratio: 1em 1em;
+    max-height: 200px;
+    border: 2px solid var(--electric-citrus2);
+    border-radius: 8px;
 }
 
+.sep{
+    height: 0;
+    width: 100%;
+    border: 1px solid var(--electric-citrus1);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 
 .credit-open {
