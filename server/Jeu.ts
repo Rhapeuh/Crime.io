@@ -14,9 +14,9 @@ import ShooterEnnemy from '../common/ShooterEnnemy.ts';
 import type Entities from '../common/Entities';
 
 export default class Jeu {
-	protected WORLD_WIDTH = 1920;
-	protected WORLD_HEIGHT = 1080;
-	private maxEnemies = 5;
+	protected WORLD_WIDTH = 5000;
+	protected WORLD_HEIGHT = 5000;
+	private maxEnemies = 20;
 	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
@@ -54,13 +54,13 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.WORLD_WIDTH, this.WORLD_HEIGHT);
 		}

@@ -27,22 +27,12 @@ export default class JeuSolo extends Jeu {
 
 		socket.on(
 			'shooting',
-			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+			(donnee: { active: boolean; x: number; y: number }) => {
 				if (donnee.active) {
-					const realX = this.WORLD_WIDTH * donnee.pourcentX;
-					const realY = this.WORLD_HEIGHT * donnee.pourcentY;
-					this.addBullet(this.j, {x: realX, y: realY});
+					this.addBullet(this.j, { x: donnee.x, y: donnee.y });
 				}
 			}
 		);
-
-		socket.on('playerParry', () => {
-			// CoolDown à prévoir
-			this.j.mettreInvincible();
-			setTimeout(() => {
-				this.j.enleverInvincible();
-			}, 500);
-		});
 
 		this.gameLoop = setInterval(() => {
 			this.update();
@@ -53,7 +43,6 @@ export default class JeuSolo extends Jeu {
 		super.destroy();
 
 		this.socket.removeAllListeners('updateInput');
-		this.socket.removeAllListeners('playerParry');
 		this.socket.removeAllListeners('shooting');
 	}
 

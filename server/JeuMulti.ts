@@ -48,14 +48,10 @@ export default class JeuMulti extends Jeu {
 
 		socket.on(
 			'shooting',
-			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+			(donnee: { active: boolean; x: number; y: number }) => {
 				if (donnee.active) {
 					const j = this.listJoueurs.get(socket.id);
-					if (j) {
-						const realX = this.WORLD_WIDTH * donnee.pourcentX;
-						const realY = this.WORLD_HEIGHT * donnee.pourcentY;
-						this.addBullet(j, {x: realX, y: realY});
-					}
+					if (j) this.addBullet(j, { x: donnee.x, y: donnee.y });
 				}
 			}
 		);

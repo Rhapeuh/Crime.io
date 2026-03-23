@@ -19,6 +19,7 @@ export default class JeuView extends View {
 	socket;
 	coordoneeMouseToGo: Coordonee | null = null;
 	chrono: Chrono = new Chrono();
+	camera: Coordonee = { x: 0, y: 0 };
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
@@ -66,7 +67,9 @@ export default class JeuView extends View {
 		rejouerButton?.forEach(temp =>
 			temp.addEventListener('click', event => {
 				event.preventDefault;
-				document.querySelectorAll('.joueurMort')?.forEach(elt => elt.classList.remove('active'));
+				document
+					.querySelectorAll('.joueurMort')
+					?.forEach(elt => elt.classList.remove('active'));
 				if (document.querySelector('.jeuSolo')?.contains(temp)) {
 					Router.navigate('/jeuSolo');
 				} else {
@@ -126,9 +129,19 @@ export default class JeuView extends View {
 	}
 
 	private setStat(j: Joueur) {
-		document.querySelectorAll('.timeFinal').forEach(elt => elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`);
-		document.querySelectorAll('.nbTuer').forEach(elt => elt.innerHTML = `Nombre d'ennemis tuer : ${j.nbEnnemiTuer}`);
-		document.querySelectorAll('.scoreFinal').forEach(elt => elt.innerHTML = `Score final : ${j.score}`);
+		document
+			.querySelectorAll('.timeFinal')
+			.forEach(
+				elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`)
+			);
+		document
+			.querySelectorAll('.nbTuer')
+			.forEach(
+				elt => (elt.innerHTML = `Nombre d'ennemis tuer : ${j.nbEnnemiTuer}`)
+			);
+		document
+			.querySelectorAll('.scoreFinal')
+			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
 	}
 
 	private handleMouseDown(e: MouseEvent) {
@@ -155,8 +168,8 @@ export default class JeuView extends View {
 		if (e.button === 0) {
 			this.socket.emit('shooting', {
 				active: e.type === 'mousedown',
-				pourcentX: x / this.canvas.width,
-				pourcentY: y / this.canvas.height,
+				x: x,
+				y: y,
 			});
 		}
 	}
@@ -258,6 +271,12 @@ export default class JeuView extends View {
 	}
 
 	private render(g: Game) {
+		const me = g.joueurs.find(j => j.clientID === this.socket.id);
+		if (me) {
+			this.camera.x = me.co.x - this.canvas.width / 2;
+			this.camera.y = me.co.y - this.canvas.height / 2;
+		}
+
 		this.context.clearRect(0, 0, 1920, 1080);
 		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
 		if (g.bulletsEnnemy) this.renderBulletsEnnemy(g.bulletsEnnemy);
@@ -313,26 +332,18 @@ export default class JeuView extends View {
 	}
 
 	private dessinerEntite(e: Entities) {
-		const coord = this.realCordonee(e.co);
+		const screenX = e.co.x - this.camera.x;
+		const screenY = e.co.y - this.camera.y;
+
 		const img = Assets.getImage(e.spriteId);
 		if (img)
 			this.context.drawImage(
 				img,
-				coord.x - e.width / 2,
-				coord.y - e.height / 2,
+				screenX - e.width / 2,
+				screenY - e.height / 2,
 				e.width,
 				e.height
 			);
-	}
-
-	private realCordonee(c: Coordonee): Coordonee {
-		const ratioX = c.x / 1920;
-		const ratioY = c.y / 1080;
-
-		const realX = ratioX * this.canvas.width;
-		const realY = ratioY * this.canvas.height;
-
-		return { x: realX, y: realY };
 	}
 
 	private realClickCoordonee(e: MouseEvent): Coordonee {
@@ -355,6 +366,10 @@ export default class JeuView extends View {
 		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
 		const canvasX = (e.clientX - rect.left - offsetX) / scale;
 		const canvasY = (e.clientY - rect.top - offsetY) / scale;
-		return { x: canvasX, y: canvasY };
+
+		return {
+			x: canvasX + this.camera.x,
+			y: canvasY + this.camera.y,
+		};
 	}
 }
