@@ -57,13 +57,13 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.WORLD_WIDTH, this.WORLD_HEIGHT);
 		}
@@ -100,7 +100,7 @@ export default class Jeu {
 		const angle = calculerAngle(e.getCoordonee(), coFinal);
 
 		const nouvelleBalle = new Bullet(
-			e.getCoordonee(),
+			{ x: e.getX(), y: e.getY() },
 			angle,
 			15,
 			e,

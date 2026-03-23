@@ -23,6 +23,16 @@ export default class JeuView extends View {
 	camera: Coordonee = { x: 0, y: 0 };
 	worldWidth: number = 5000;
 	worldHeight: number = 5000;
+	private keys: { [key: string]: boolean } = {
+		ArrowUp: false,
+		KeyW: false,
+		ArrowDown: false,
+		KeyS: false,
+		ArrowLeft: false,
+		KeyA: false,
+		ArrowRight: false,
+		KeyD: false,
+	};
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
@@ -97,7 +107,6 @@ export default class JeuView extends View {
 		retourButton?.forEach(temp =>
 			temp.addEventListener('click', event => {
 				event.preventDefault;
-				// console.log('prevent')
 
 				Router.navigate('/');
 
@@ -116,7 +125,6 @@ export default class JeuView extends View {
 
 	private mortJoueur(j: Joueur) {
 		this.chrono.stop();
-		console.log('vous etes mort');
 		this.setStat(j);
 		document
 			.querySelectorAll('.joueurMort')
@@ -219,21 +227,39 @@ export default class JeuView extends View {
 			this.vy = 0;
 			this.coordoneeMouseToGo = null;
 		}
-		this.selectDirection(e);
-		this.handleAbilities(e);
-		this.socket.emit('updateInput', {
-			vx: this.vx,
-			vy: this.vy,
-		});
+		if (this.keys[e.code]) return;
+
+		if (this.keys[e.code] !== undefined) {
+			this.keys[e.code] = true;
+			this.updateDirection();
+		}
 	}
 
 	private handleKeyUp(e: KeyboardEvent) {
-		this.arretDirection(e);
-		this.coordoneeMouseToGo = null;
-		this.socket.emit('updateInput', {
-			vx: this.vx,
-			vy: this.vy,
-		});
+		if (this.keys[e.code] !== undefined) {
+			this.keys[e.code] = false;
+			this.updateDirection();
+		}
+	}
+
+	private updateDirection() {
+		let vx = 0;
+		let vy = 0;
+
+		if (this.keys['ArrowUp'] || this.keys['KeyW']) vy -= 1;
+		if (this.keys['ArrowDown'] || this.keys['KeyS']) vy += 1;
+		if (this.keys['ArrowLeft'] || this.keys['KeyA']) vx -= 1;
+		if (this.keys['ArrowRight'] || this.keys['KeyD']) vx += 1;
+
+		if (this.vx !== vx || this.vy !== vy) {
+			this.vx = vx;
+			this.vy = vy;
+
+			this.socket.emit('updateInput', {
+				vx: this.vx,
+				vy: this.vy,
+			});
+		}
 	}
 
 	destroy() {
@@ -244,36 +270,6 @@ export default class JeuView extends View {
 		window.removeEventListener('resize', this.handleResize);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
-	}
-
-	private selectDirection(e: KeyboardEvent) {
-		if (e.key === 'd' || e.key === 'ArrowRight') this.vx = 1;
-		if (e.key === 'q' || e.key === 'ArrowLeft') this.vx = -1;
-		if (e.key === 'z' || e.key === 'ArrowUp') this.vy = -1;
-		if (e.key === 's' || e.key === 'ArrowDown') this.vy = 1;
-	}
-
-	private arretDirection(e: KeyboardEvent) {
-		if (
-			e.key === 'd' ||
-			e.key === 'q' ||
-			e.key === 'ArrowRight' ||
-			e.key === 'ArrowLeft'
-		)
-			this.vx = 0;
-		if (
-			e.key === 'z' ||
-			e.key === 's' ||
-			e.key === 'ArrowUp' ||
-			e.key === 'ArrowDown'
-		)
-			this.vy = 0;
-	}
-
-	private handleAbilities(e: KeyboardEvent) {
-		if (e.key === ' ') {
-			this.socket.emit('playerParry');
-		}
 	}
 
 	private render(g: Game) {
