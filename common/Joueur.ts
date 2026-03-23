@@ -12,6 +12,7 @@ export default class Joueur extends Entities {
 	private friction: number = 0.9;
 	private max_speed: number = 10;
 	nbEnnemiTuer: number = 0;
+	private startTime: number;
 
 	constructor(
 		pseudo: string,
@@ -26,6 +27,7 @@ export default class Joueur extends Entities {
 		this.pseudo = pseudo;
 		this.clientID = clientID;
 		this.invincibilite = false;
+		this.startTime = Date.now();
 	}
 
 	getPseudo(): string {
@@ -101,5 +103,11 @@ export default class Joueur extends Entities {
 
 		this.setVX(newVX);
 		this.setVY(newVY);
+	}
+
+	public recalculScore() {
+		const tempsEnVie = Date.now() - this.startTime;
+		const multiplicateur = tempsEnVie / 60000;
+		this.addScore(Math.trunc(this.getScore() * multiplicateur));
 	}
 }

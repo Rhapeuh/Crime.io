@@ -82,6 +82,7 @@ export default class Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		console.log(`le joueur mort est ${j.getPseudo()}`);
+		j.recalculScore();
 		const data = {
 			pseudo: j.getPseudo(),
 			score: j.getScore(),
