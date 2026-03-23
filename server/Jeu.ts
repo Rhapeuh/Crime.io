@@ -54,13 +54,13 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.WORLD_WIDTH, this.WORLD_HEIGHT);
 		}

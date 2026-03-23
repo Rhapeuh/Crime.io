@@ -89,3 +89,11 @@
     box-shadow: 0 0 15px var(--electric-pink);
     transform: scale(1.05);
 }
+
+.hud .timer{
+    position: absolute;
+    left: 50%;
+    font-size: 20px;
+    color: var(--white1);
+    font: 600;
+}
