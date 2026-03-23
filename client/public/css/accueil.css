@@ -19,7 +19,7 @@
 	display: grid;
 	width: 100vw;
 	height: 100vh;
-	background-color: var(--darkblue3);
+	background-color: var(--purpleblue3);
 	overflow: hidden;
 	grid-template-columns: 1fr 1fr 1fr;
 }
@@ -43,7 +43,7 @@ a {
 	font-family: baseFont;
 	font-weight: 900;
 	color : var(--white1);
-	background-color: var(--darkblue2);
+	background-color: var(--darkblue1);
 	border: 3px solid var(--white1);
 	border-radius: 6px;
 	font-size: 25px;

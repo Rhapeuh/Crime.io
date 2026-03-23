@@ -5,7 +5,7 @@ export default class Score {
 		let i = 1;
 		let res = `<div class="score_open">
                         <div class="scores-header">
-                            <h2>Les Meilleurs Scores</h2>
+                            <h2>Les Meilleurs Crimes</h2>
                         </div>
                         <table class="tableau-scores">
                             <thead>
