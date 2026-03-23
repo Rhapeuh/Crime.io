@@ -1,7 +1,33 @@
+.credit_open{
+    font-family: titreFont;
+    font-weight: 100;
+    margin: 0;
+}
+
+.credit_open h2{
+    text-align: end;
+    padding-right: 5px;
+    color: var(--electric-citrus2);
+}
+
+.credit_header{
+    display: flex;
+    justify-content: space-between;
+}
+
+img{
+    text-align: center;
+    padding: auto;
+}
+
+
+
 .credit-open {
     display: flex;
     flex-direction: column;
 }
+
+
 
 .credits-content {
     padding: 20px;
@@ -164,7 +190,7 @@
 }
 
 .credit_open {
-    margin: 20px;
+    margin: 10px;
 	height: 93%;
 	width: 92%;
 	border: 4px var(--darkblue2) solid;
@@ -193,3 +219,4 @@
     font-weight: 900;
     text-decoration: none;
 }
+
