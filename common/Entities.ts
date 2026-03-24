@@ -22,7 +22,7 @@ export default class Entities {
 		spriteId: string,
 		vie?: number,
 		bulletWitdh: number = 10,
-		bulletHeight: number = 5,
+		bulletHeight: number = 5
 	) {
 		this.co = co;
 		this.vx = vx;
@@ -33,7 +33,7 @@ export default class Entities {
 		this.vie = vie;
 		this.spriteId = spriteId;
 		this.bulletWidth = bulletWitdh;
-		this.bulletHeight = bulletHeight
+		this.bulletHeight = bulletHeight;
 	}
 
 	getVX(): number {

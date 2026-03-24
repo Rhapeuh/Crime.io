@@ -84,6 +84,10 @@ export default class Joueur extends Entities {
 		this.max_speed = maxSpeed;
 	}
 
+	public setFriction(friction: number) {
+		this.friction = friction;
+	}
+
 	public update(worldWidth: number, worldHeight: number) {
 		this.appliquerPhysique();
 		this.setX(this.getX() + this.getVX());

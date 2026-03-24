@@ -9,12 +9,13 @@ type BonusEffect =
 	| 'SPEED_ADD'
 	| 'SPEED_REMOVE'
 	| 'BULLET_WIDTH_ADD'
-	| 'BULLET_WIDTH_REMOVE';
+	| 'BULLET_WIDTH_REMOVE'
+	| 'GLISSADE';
 
 const bonusEffects = [
 	{ effect: 'VIES_ADD' as BonusEffect, value: 1, spriteId: 'bonusTemp' },
 	{ effect: 'VIES_REMOVE' as BonusEffect, value: 1, spriteId: 'bonusTemp' },
-	{ effect: 'SPEED_ADD' as BonusEffect, value: 20, spriteId: 'bonusTemp' },
+	{ effect: 'SPEED_ADD' as BonusEffect, value: 40, spriteId: 'bonusTemp' },
 	{ effect: 'SPEED_REMOVE' as BonusEffect, value: 7, spriteId: 'bonusTemp' },
 	{
 		effect: 'BULLET_WIDTH_ADD' as BonusEffect,
@@ -24,6 +25,11 @@ const bonusEffects = [
 	{
 		effect: 'BULLET_WIDTH_REMOVE' as BonusEffect,
 		value: 5,
+		spriteId: 'bonusTemp',
+	},
+	{
+		effect: 'GLISSADE' as BonusEffect,
+		value: 1,
 		spriteId: 'bonusTemp',
 	},
 ];
@@ -62,13 +68,12 @@ export default class Bonus extends Entities {
 						}, 15000);
 						break;
 					case 'BULLET_WIDTH_REMOVE':
-						j.setBulletWidth(j.getBulletWidth() - this.value);
-						j.setBulletHeight(j.getBulletHeight() - this.value);
+						j.setBulletWidth(this.value);
+						j.setBulletHeight(this.value);
 						setTimeout(() => {
 							j.setBulletWidth(10);
 							j.setBulletHeight(5);
 						}, 15000);
-
 						break;
 					case 'SPEED_ADD':
 						j.setMaxSpeed(j.getMaxSpeed() + this.value);
@@ -77,6 +82,14 @@ export default class Bonus extends Entities {
 					case 'SPEED_REMOVE':
 						j.setMaxSpeed(j.getMaxSpeed() - this.value);
 						setTimeout(() => j.setMaxSpeed(10), 15000);
+						break;
+					case 'GLISSADE':
+						j.setFriction(this.value);
+						j.setMaxSpeed(15);
+						setTimeout(() => {
+							j.setFriction(0.9);
+							j.setMaxSpeed(10);
+						}, 15000);
 						break;
 				}
 				return j;

@@ -23,7 +23,7 @@ export default class Bullet extends Entities {
 			speed,
 			bulletWidth,
 			bulletHeight,
-			'bullet',
+			'bullet'
 		);
 		this.createdAt = co;
 		this.active = true;

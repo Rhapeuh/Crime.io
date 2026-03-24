@@ -1,4 +1,4 @@
-import type { scores } from "../../common/types";
+import type { scores } from '../../common/types';
 
 export default class Score {
 	static genererTableauScores(listeScore: scores[]): string {

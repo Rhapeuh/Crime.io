@@ -52,7 +52,7 @@ export default class Router {
 				this.currentView.destroy();
 			}
 			this.currentView = route.getView();
-			this.currentView.show()
+			this.currentView.show();
 
 			// History API : ajout d'une entrée dans l'historique du navigateur
 			// pour pouvoir utiliser les boutons précédent/suivant
