@@ -22,7 +22,7 @@ export default class JeuView extends View {
 	coordoneeMouseToGo: Coordonee | null = null;
 	chrono: Chrono = new Chrono();
 	camera: Coordonee = { x: 0, y: 0 };
-	currentMousePos: Coordonee = { x: 0, y: 0 };
+	currentMousePos: MouseEvent | null = null;
 	worldWidth: number = 0;
 	worldHeight: number = 0;
 	private keys: { [key: string]: boolean } = {
@@ -165,17 +165,18 @@ export default class JeuView extends View {
 
 	private handleMouseDown(e: MouseEvent) {
 		this.handleShooting(e);
-		this.handleDirectionMouse(e);
+		this.handleDirectionMouse();
 	}
 
 	private handleMouseMove(e: MouseEvent) {
-		this.currentMousePos = this.realClickCoordonee(e);
+		this.currentMousePos = e;
 		if ((e.buttons & 2) !== 0) {
-			this.handleDirectionMouse(e);
+			this.handleDirectionMouse();
 		}
 	}
 
-	private handleDirectionMouse(e: MouseEvent) {
+	private handleDirectionMouse() {
+		const e = this.currentMousePos!;
 		// 2 = clique droit / '&' détermine si le bit 2 est allumé
 		if (e.button === 2 || (e.buttons & 2) !== 0) {
 			this.coordoneeMouseToGo = this.realClickCoordonee(e);
@@ -330,7 +331,14 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			this.dessinerEntite(j, calculerAngle(j.co, this.currentMousePos));
+			let angle;
+			if (j.clientID === this.socket.id && this.currentMousePos)
+				angle = calculerAngle(
+					j.co,
+					this.realClickCoordonee(this.currentMousePos)
+				);
+			else angle = 0;
+			this.dessinerEntite(j, angle);
 		}
 	}
 
