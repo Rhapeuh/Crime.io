@@ -47,7 +47,10 @@ export default class Jeu {
 	// gestion globale
 
 	protected randomCoordonee(): Coordonee {
-		return { x: this.getRandomInt(0, this.game.WORLD_WIDTH), y: this.getRandomInt(0, this.game.WORLD_HEIGHT) };
+		return {
+			x: this.getRandomInt(0, this.game.WORLD_WIDTH),
+			y: this.getRandomInt(0, this.game.WORLD_HEIGHT),
+		};
 	}
 
 	// Gestion du joueur
