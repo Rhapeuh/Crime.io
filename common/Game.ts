@@ -27,7 +27,7 @@ export default class Game {
 		if (this.joueurs.length === 1) {
 			this.WORLD_HEIGHT += 2000;
 			this.WORLD_WIDTH += 2000;
-		} else if(this.WORLD_HEIGHT < 5000 && this.WORLD_WIDTH < 5000){
+		} else if (this.WORLD_HEIGHT < 5000 && this.WORLD_WIDTH < 5000) {
 			this.WORLD_HEIGHT += 500;
 			this.WORLD_WIDTH += 500;
 		}

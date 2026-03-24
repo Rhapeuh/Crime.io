@@ -6,6 +6,7 @@ import type { Socket } from 'socket.io';
 import { randomInt } from 'crypto';
 import JeuMulti from './JeuMulti.ts';
 import { readFile } from 'fs/promises';
+import { DifficulteEnnemi } from '../common/Ennemy.ts';
 
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
@@ -24,6 +25,16 @@ let partieMulti: JeuMulti | null = null;
 
 io.on('connection', socket => {
 	socket.emit('premiereConnexion', genereNom());
+
+	socket.on('choixDifficulte', (difficulte: number) => {
+		socket.data.difficulte = difficulte;
+		if (partiesSoloEnCours.has(socket.id)) {
+			partiesSoloEnCours
+				.get(socket.id)
+				?.setDifficulty(difficulte as DifficulteEnnemi);
+		}
+	});
+
 	socket.on('rejoindreSolo', (pseudo: string) => {
 		startNewGame(pseudo, socket);
 	});
@@ -31,6 +42,9 @@ io.on('connection', socket => {
 	socket.on('rejoindreMulti', (pseudo: string) => {
 		if (partieMulti === null) {
 			partieMulti = new JeuMulti(io);
+			if (socket.data.difficulte !== undefined) {
+				partieMulti.setDifficulty(socket.data.difficulte as DifficulteEnnemi);
+			}
 		}
 
 		partieMulti.ajouterJoueur(socket, pseudo);
@@ -70,6 +84,9 @@ function startNewGame(pseudo: string, socket: Socket) {
 	}
 
 	const nouveauJeu = new JeuSolo(pseudo, socket);
+	if (socket.data.difficulte !== undefined) {
+		nouveauJeu.setDifficulty(socket.data.difficulte as DifficulteEnnemi);
+	}
 	partiesSoloEnCours.set(socket.id, nouveauJeu);
 }
 

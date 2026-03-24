@@ -1,0 +1,73 @@
+:root {
+    --diff-facile: #2ecc71;
+    --diff-moyen: #f39c12;
+    --diff-difficile: #e74c3c;
+}
+
+.difficulteContent {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.difficulteContent h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.difficulte-grid {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    justify-content: center;
+}
+
+.btn-difficulte {
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+    color: white;
+    text-transform: uppercase;
+}
+
+.btn-difficulte:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.btn-difficulte.selected {
+    border: 3px solid white;
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+.btn-difficulte[data-difficulte="0"] {
+    background-color: var(--diff-facile);
+    box-shadow: 0 0 15px var(--diff-facile);
+}
+.btn-difficulte[data-difficulte="0"]:hover {
+    box-shadow: 0 0 25px var(--diff-facile);
+}
+
+.btn-difficulte[data-difficulte="1"] {
+    background-color: var(--diff-moyen);
+    box-shadow: 0 0 15px var(--diff-moyen);
+}
+.btn-difficulte[data-difficulte="1"]:hover {
+    box-shadow: 0 0 25px var(--diff-moyen);
+}
+
+.btn-difficulte[data-difficulte="2"] {
+    background-color: var(--diff-difficile);
+    box-shadow: 0 0 15px var(--diff-difficile);
+}
+.btn-difficulte[data-difficulte="2"]:hover {
+    box-shadow: 0 0 25px var(--diff-difficile);
+}

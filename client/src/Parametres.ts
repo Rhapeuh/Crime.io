@@ -1,34 +1,14 @@
-export async function genererParams(): Promise<string> {
-	const response = await fetch('/parametres.html');
-	return await response.text();
+export default class Parametres {
+	static genererMenu(): string {
+		return `
+			<div class="difficulteContent">
+				<h2>Paramètres - Difficulté</h2>
+				<div class="difficulte-grid">
+					<button class="btn-difficulte" data-difficulte="0">Facile</button>
+					<button class="btn-difficulte" data-difficulte="1">Moyen</button>
+					<button class="btn-difficulte" data-difficulte="2">Difficile</button>
+				</div>
+			</div>
+		`;
+	}
 }
-
-// export function initEvents() {
-// 	const members = document.querySelectorAll('.team-member');
-// 	const detailsSection = document.querySelector(
-// 		'.member-details'
-// 	) as HTMLElement;
-
-// 	if (!detailsSection) return;
-
-// 	members.forEach(member => {
-// 		member.addEventListener('click', event => {
-// 			event.preventDefault();
-// 			members.forEach(m => m.classList.remove('active'));
-// 			member.classList.add('active');
-
-// 			const iframes = document.querySelectorAll('.steamPage');
-// 			iframes.forEach((frame) => frame.setAttribute('class', 'steamPage'));
-
-// 			if (member == document.querySelector('[data-prenom="Ylann"]')) {
-// 				document.querySelector('.steamPage[src="/pageSteam/Rhapeuh.html"]')?.setAttribute('class', 'steamPage active');				
-// 			}
-// 			if (member == document.querySelector('[data-prenom="Adam"]')) {
-// 				document.querySelector('.steamPage[src="/pageSteam/YuNeria.html"]')?.setAttribute('class', 'steamPage active');			
-// 			}
-// 			if (member == document.querySelector('[data-prenom="Ethan"]')) {
-// 				document.querySelector('.steamPage[src="/pageSteam/Fleinz.html"]')?.setAttribute('class', 'steamPage active');		
-// 			}
-// 		});
-// 	});
-// }

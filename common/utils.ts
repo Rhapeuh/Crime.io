@@ -20,33 +20,38 @@ export function verifCoordonee(
 	if (e.getY() + halfH > worldHeight) e.setY(worldHeight - halfH);
 }
 
+export function trouverJoueurPlusProche(
+	entite: Ennemy,
+	listeJoueurs: Joueur[]
+): { joueur: Joueur; distance: number } | null {
+	if (listeJoueurs.length === 0) return null; // Sécurité au cas où il n'y a pas de joueurs
 
-export function trouverJoueurPlusProche(entite: Ennemy, listeJoueurs: Joueur[]): { joueur: Joueur, distance: number } | null {
-    if (listeJoueurs.length === 0) return null; // Sécurité au cas où il n'y a pas de joueurs
-    
-    let joueurProche = listeJoueurs[0];
-    let distMin = calculeDistance(entite, joueurProche);
+	let joueurProche = listeJoueurs[0];
+	let distMin = calculeDistance(entite, joueurProche);
 
-    for (let i = 1; i < listeJoueurs.length; i++) {
-        const newDist = calculeDistance(entite, listeJoueurs[i]);
-        if (newDist < distMin) {
-            joueurProche = listeJoueurs[i];
-            distMin = newDist;
-        }
-    }
-    return { joueur: joueurProche, distance: distMin };
+	for (let i = 1; i < listeJoueurs.length; i++) {
+		const newDist = calculeDistance(entite, listeJoueurs[i]);
+		if (newDist < distMin) {
+			joueurProche = listeJoueurs[i];
+			distMin = newDist;
+		}
+	}
+	return { joueur: joueurProche, distance: distMin };
 }
 
-export function calculeDistance(obj1: { getX(): number, getY(): number }, obj2: { getX(): number, getY(): number }) {
-    const distX = Math.abs(obj1.getX() - obj2.getX());
-    const distY = Math.abs(obj1.getY() - obj2.getY());
-    return Math.hypot(distX, distY);
+export function calculeDistance(
+	obj1: { getX(): number; getY(): number },
+	obj2: { getX(): number; getY(): number }
+) {
+	const distX = Math.abs(obj1.getX() - obj2.getX());
+	const distY = Math.abs(obj1.getY() - obj2.getY());
+	return Math.hypot(distX, distY);
 }
 
 export function calculerAngle(depart: Coordonee, cible: Coordonee): number {
-    const dx = cible.x - depart.x;
-    const dy = cible.y - depart.y;
-    return Math.atan2(dy, dx);
+	const dx = cible.x - depart.x;
+	const dy = cible.y - depart.y;
+	return Math.atan2(dy, dx);
 }
 
 export function checkCollision(entityA: Entities, entityB: Entities): boolean {

@@ -25,6 +25,6 @@ export default class View {
 	}
 
 	destroy() {
-        this.hide();
-    }
+		this.hide();
+	}
 }
