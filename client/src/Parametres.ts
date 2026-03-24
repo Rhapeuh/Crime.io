@@ -1,5 +1,5 @@
 export default class Parametres {
-	static genererMenu(): string {
+	static genererChoixDifficulte(): string {
 		return `
 			<div class="difficulteContent">
 				<h2>Paramètres - Difficulté</h2>
@@ -7,6 +7,7 @@ export default class Parametres {
 					<button class="btn-difficulte" data-difficulte="0">Facile</button>
 					<button class="btn-difficulte" data-difficulte="1">Moyen</button>
 					<button class="btn-difficulte" data-difficulte="2">Difficile</button>
+					<button class="btn-difficulte" data-difficulte="3">IMPOSSIBLE</button>
 				</div>
 			</div>
 		`;

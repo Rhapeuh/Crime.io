@@ -6,6 +6,7 @@ const STATS_ENNEMIS = {
 	[DifficulteEnnemi.FACILE]: { fireRate: 1500 },
 	[DifficulteEnnemi.MOYEN]: { fireRate: 600 },
 	[DifficulteEnnemi.DIFFICILE]: { fireRate: 200 },
+	[DifficulteEnnemi.IMPOSSIBLE]: { fireRate: 100 },
 };
 
 export default class ShooterEnnemy extends Ennemy {

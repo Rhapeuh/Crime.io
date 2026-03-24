@@ -11,7 +11,7 @@ export default class AcceuilView extends View {
 	private dernierElement: HTMLElement | null = null;
 	private fondElement: HTMLElement;
 	private socket: Socket;
-	private currentDifficulte: number = 1; // Moyenne par défaut
+	private currentDifficulte: number = 1;
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
@@ -83,14 +83,11 @@ export default class AcceuilView extends View {
 		} else if (
 			this.dernierElement?.className.toLowerCase().includes('credit')
 		) {
-			// credit button
 			this.fondElement.innerHTML = await genererCredits();
 		} else if (
 			this.dernierElement?.className.toLowerCase().includes('paramètres')
 		) {
-			// param button
-			this.fondElement.innerHTML = Parametres.genererMenu();
-
+			this.fondElement.innerHTML = Parametres.genererChoixDifficulte();
 			this.fondElement.querySelectorAll('.btn-difficulte').forEach(btn => {
 				const btnDiff = parseInt(btn.getAttribute('data-difficulte') || '1');
 				if (btnDiff === this.currentDifficulte) {

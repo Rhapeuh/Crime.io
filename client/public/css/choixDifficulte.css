@@ -1,7 +1,7 @@
 :root {
-    --diff-facile: #2ecc71;
-    --diff-moyen: #f39c12;
-    --diff-difficile: #e74c3c;
+    --diff-facile: var(--electric-pink);
+    --diff-moyen: var(--electric-purple2);
+    --diff-difficile: var(--black1);
 }
 
 .difficulteContent {
@@ -38,36 +38,28 @@
 }
 
 .btn-difficulte:hover {
-    transform: scale(1.05);
     filter: brightness(1.2);
 }
 
 .btn-difficulte.selected {
-    border: 3px solid white;
     transform: scale(1.1);
     filter: brightness(1.2);
+    border: 3px solid rgb(0, 255, 34);
 }
 
 .btn-difficulte[data-difficulte="0"] {
     background-color: var(--diff-facile);
     box-shadow: 0 0 15px var(--diff-facile);
 }
-.btn-difficulte[data-difficulte="0"]:hover {
-    box-shadow: 0 0 25px var(--diff-facile);
-}
+
 
 .btn-difficulte[data-difficulte="1"] {
     background-color: var(--diff-moyen);
     box-shadow: 0 0 15px var(--diff-moyen);
 }
-.btn-difficulte[data-difficulte="1"]:hover {
-    box-shadow: 0 0 25px var(--diff-moyen);
-}
+
 
 .btn-difficulte[data-difficulte="2"] {
     background-color: var(--diff-difficile);
     box-shadow: 0 0 15px var(--diff-difficile);
-}
-.btn-difficulte[data-difficulte="2"]:hover {
-    box-shadow: 0 0 25px var(--diff-difficile);
 }

@@ -7,6 +7,7 @@ export const DifficulteEnnemi = {
 	FACILE: 0,
 	MOYEN: 1,
 	DIFFICILE: 2,
+	IMPOSSIBLE: 3,
 } as const;
 
 export type DifficulteEnnemi =
@@ -16,6 +17,7 @@ const STATS_ENNEMIS = {
 	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 15 },
 	[DifficulteEnnemi.MOYEN]: { speed: 4, hp: 2, score: 25, taille: 20 },
 	[DifficulteEnnemi.DIFFICILE]: { speed: 7, hp: 3, score: 50, taille: 25 },
+	[DifficulteEnnemi.IMPOSSIBLE]: { speed: 10, hp: 5, score: 100, taille: 25 },
 };
 
 export default class Ennemy extends Entities {
@@ -23,7 +25,7 @@ export default class Ennemy extends Entities {
 
 	constructor(
 		co: Coordonee,
-		difficulte: DifficulteEnnemi = DifficulteEnnemi.FACILE,
+		difficulte: DifficulteEnnemi = DifficulteEnnemi.MOYEN,
 		spriteId: string = 'ennemiTemp'
 	) {
 		const stats = STATS_ENNEMIS[difficulte];

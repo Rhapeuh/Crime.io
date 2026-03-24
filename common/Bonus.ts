@@ -15,7 +15,7 @@ type BonusEffect =
 const bonusEffects = [
 	{ effect: 'VIES_ADD' as BonusEffect, value: 1, spriteId: 'bonusTemp' },
 	{ effect: 'VIES_REMOVE' as BonusEffect, value: 1, spriteId: 'bonusTemp' },
-	{ effect: 'SPEED_ADD' as BonusEffect, value: 20, spriteId: 'bonusTemp' },
+	{ effect: 'SPEED_ADD' as BonusEffect, value: 40, spriteId: 'bonusTemp' },
 	{ effect: 'SPEED_REMOVE' as BonusEffect, value: 7, spriteId: 'bonusTemp' },
 	{
 		effect: 'BULLET_WIDTH_ADD' as BonusEffect,
@@ -85,7 +85,11 @@ export default class Bonus extends Entities {
 						break;
 					case 'GLISSADE':
 						j.setFriction(this.value);
-						setTimeout(() => j.setFriction(0.9), 15000);
+						j.setMaxSpeed(15);
+						setTimeout(() => {
+							j.setFriction(0.9);
+							j.setMaxSpeed(10);
+						}, 15000);
 						break;
 				}
 				return j;
