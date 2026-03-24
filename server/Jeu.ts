@@ -14,8 +14,6 @@ import type Entities from '../common/Entities';
 import Bonus from '../common/Bonus.ts';
 
 export default class Jeu {
-	protected WORLD_WIDTH = 5000;
-	protected WORLD_HEIGHT = 5000;
 	private maxEnemies = 20;
 	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
@@ -49,22 +47,22 @@ export default class Jeu {
 	// gestion globale
 
 	protected randomCoordonee(): Coordonee {
-		return { x: this.getRandomInt(0, this.WORLD_WIDTH), y: this.getRandomInt(0, this.WORLD_HEIGHT) };
+		return { x: this.getRandomInt(0, this.game.WORLD_WIDTH), y: this.getRandomInt(0, this.game.WORLD_HEIGHT) };
 	}
 
 	// Gestion du joueur
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
-			j.update(this.WORLD_WIDTH, this.WORLD_HEIGHT);
+			j.update(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 		}
 	}
 
@@ -161,7 +159,7 @@ export default class Jeu {
 			if (result) {
 				const j = result.joueur;
 				const dist = result.distance;
-				e.update(j, this.WORLD_WIDTH, this.WORLD_HEIGHT);
+				e.update(j, this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 				if (e instanceof ShooterEnnemy && dist <= 250) {
 					if (e.shoot(now)) {
 						this.addBullet(e, j.getCoordonee());

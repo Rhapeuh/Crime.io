@@ -10,6 +10,8 @@ export default class Game {
 	bulletsEnnemy: Array<Bullet>;
 	ennemies: Array<Ennemy>;
 	bonus: Array<Bonus>;
+	WORLD_WIDTH = 0;
+	WORLD_HEIGHT = 0;
 
 	constructor() {
 		this.joueurs = new Array<Joueur>();
@@ -22,6 +24,13 @@ export default class Game {
 
 	addJoueur(joueur: Joueur) {
 		this.joueurs.push(joueur);
+		if (this.joueurs.length === 1) {
+			this.WORLD_HEIGHT += 2000;
+			this.WORLD_WIDTH += 2000;
+		} else if(this.WORLD_HEIGHT < 5000 && this.WORLD_WIDTH < 5000){
+			this.WORLD_HEIGHT += 500;
+			this.WORLD_WIDTH += 500;
+		}
 	}
 	removeJoueur(joueur: Joueur) {
 		this.joueurs = this.joueurs.filter(j => j !== joueur);

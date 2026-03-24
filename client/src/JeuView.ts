@@ -23,8 +23,8 @@ export default class JeuView extends View {
 	chrono: Chrono = new Chrono();
 	camera: Coordonee = { x: 0, y: 0 };
 	currentMousePos: Coordonee = { x: 0, y: 0 };
-	worldWidth: number = 5000;
-	worldHeight: number = 5000;
+	worldWidth: number = 0;
+	worldHeight: number = 0;
 	private keys: { [key: string]: boolean } = {
 		ArrowUp: false,
 		KeyW: false,
@@ -276,6 +276,7 @@ export default class JeuView extends View {
 	}
 
 	private render(g: Game) {
+		this.updateTailleMap(g);
 		const me = g.joueurs.find(j => j.clientID === this.socket.id);
 		if (me) {
 			this.camera.x = me.co.x - this.canvas.width / 2;
@@ -294,6 +295,16 @@ export default class JeuView extends View {
 		if (g.bonus) this.renderBonus(g.bonus);
 
 		this.renderHud(g.joueurs);
+	}
+
+	private updateTailleMap(g: Game) {
+		if (
+			this.worldWidth !== g.WORLD_WIDTH ||
+			this.worldHeight !== g.WORLD_HEIGHT
+		) {
+			this.worldWidth = g.WORLD_WIDTH;
+			this.worldHeight = g.WORLD_HEIGHT;
+		}
 	}
 
 	private renderBonus(bonus: Bonus[]) {
