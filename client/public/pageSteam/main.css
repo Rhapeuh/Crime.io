@@ -440,3 +440,10 @@ a,
 	max-height: 58px;
 	overflow: hidden;
 }
+
+.realSteam > a{
+    color: #637292 !important;
+    font-weight: 900;
+    text-decoration: none;
+	font-size: 1.13em;
+}

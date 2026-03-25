@@ -1,7 +1,64 @@
+.credit_open{
+    font-family: titreFont;
+    font-weight: 100;
+    padding: 5px;
+    color: var(--electric-citrus1);
+    background-color: var(--darkblue1);
+        
+    margin: 5px;
+	height: 93%;
+	width: 92%;
+	border: 4px var(--darkblue2) solid;
+	border-radius: 18px;
+}
+
+.credit_open h2{
+    text-align: end;
+    padding-right: 5px;
+}
+
+.credit_open li{
+    list-style-type: none;
+}
+
+.credit_header{
+    display: flex;
+    justify-content: space-between;
+    height: 50%;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 50%;
+    margin-bottom: 2px;
+}
+
+img{
+    text-align: center;
+    padding: auto;
+    aspect-ratio: 1em 1em;
+    max-height: 200px;
+    border: 2px solid var(--electric-citrus2);
+    border-radius: 8px;
+}
+
+.sep{
+    height: 0;
+    width: 100%;
+    border: 1px solid var(--electric-citrus1);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
 .credit-open {
     display: flex;
     flex-direction: column;
 }
+
+
 
 .credits-content {
     padding: 20px;
@@ -29,7 +86,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 4em;
+    margin-top: 10px;
 }
 
 .team-member {
@@ -163,16 +221,11 @@
 }
 
 .credit_open {
-    margin: 20px;
-	height: 93%;
-	width: 92%;
-	border: 4px var(--darkblue2) solid;
-	border-radius: 18px;
-	background-color: var(--darkblue2);
+
 }
 
 .creditContent{
-    height: calc(100% - 76px);
+    height: calc(100% - 3.88em);
     display: flex;
     flex-direction: column;
 }
@@ -184,5 +237,12 @@
 	padding-bottom: 5px;
 	border-top-left-radius: 14px;
 	border-top-right-radius: 14px;
+}
+
+
+.realSteam *{
+    color: var(--darkblue1);
+    font-weight: 900;
+    text-decoration: none;
 }
 
