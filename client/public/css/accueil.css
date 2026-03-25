@@ -191,7 +191,7 @@ h1 {
 	width: 0;
 	transition: 0.1s width 0.1s linear;
 	align-items: center;
-	overflow: hidden !important;
+	overflow: scroll;
 }
 
 .accueil:has(.ouvert) {

@@ -5,7 +5,15 @@ import Router from './Router';
 export default class JeuSoloView extends JeuView {
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element, socket);
-		if (pseudo === '') Router.navigate('/');
+		if (pseudo === '') {
+			this.element.classList.remove('active');
+
+			setTimeout(() => {
+				Router.navigate('/');
+			}, 0);
+
+			return;
+		}
 		socket.emit('rejoindreSolo', pseudo);
 		this.socket.on('renderSolo', this.handleRender);
 	}

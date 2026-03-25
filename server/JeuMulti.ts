@@ -4,16 +4,18 @@ import Jeu from './Jeu.ts';
 import { Server as IOServer } from 'socket.io';
 
 export default class JeuMulti extends Jeu {
-	private listJoueurs: Map<string, Joueur> = new Map();
 	private io: IOServer;
+	private nameRoom: string;
 
-	constructor(io: IOServer) {
+	constructor(io: IOServer, nameRoom: string) {
 		super();
 		this.io = io;
+		this.nameRoom = nameRoom;
 
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
+		this.handleBonusSpawning();
 	}
 
 	destroy() {
@@ -27,20 +29,20 @@ export default class JeuMulti extends Jeu {
 	ajouterJoueur(socket: Socket, pseudo: string) {
 		const newJoueur = new Joueur(
 			pseudo,
-			this.randomCoordonee(),
+			{ x: 0, y: 0 },
 			1,
 			3,
-			50,
-			50,
+			20,
+			20,
 			socket.id
 		);
-		this.listJoueurs.set(socket.id, newJoueur);
 		this.game.addJoueur(newJoueur);
+		newJoueur.setCoordonee(this.randomCoordonee());
 
 		socket.emit('renderMulti', this.game);
 
 		socket.on('updateInput', (input: { vx: number; vy: number }) => {
-			const joueur = this.listJoueurs.get(socket.id);
+			const joueur = this.game.getJoueur(socket.id);
 			if (joueur) {
 				this.updateInput(joueur, input.vx, input.vy);
 			}
@@ -48,14 +50,10 @@ export default class JeuMulti extends Jeu {
 
 		socket.on(
 			'shooting',
-			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+			(donnee: { active: boolean; x: number; y: number }) => {
 				if (donnee.active) {
-					const j = this.listJoueurs.get(socket.id);
-					if (j) {
-						const realX = this.WORLD_WIDTH * donnee.pourcentX;
-						const realY = this.WORLD_HEIGHT * donnee.pourcentY;
-						this.addBullet(j, {x: realX, y: realY});
-					}
+					const j = this.game.getJoueur(socket.id);
+					if (j) this.addBullet(j, { x: donnee.x, y: donnee.y });
 				}
 			}
 		);
@@ -70,14 +68,14 @@ export default class JeuMulti extends Jeu {
 	}
 
 	retirerJoueur(socketId: string) {
-		this.game.removeJoueur(this.listJoueurs.get(socketId)!);
-		this.listJoueurs.delete(socketId);
+		const j = this.game.getJoueur(socketId);
+		if (j) this.game.removeJoueur(j);
 	}
 
 	update() {
 		super.update();
 
-		this.io.emit('renderMulti', this.game);
+		this.io.to(this.nameRoom).emit('renderMulti', this.game);
 	}
 
 	getNbJoueurs() {
@@ -86,6 +84,6 @@ export default class JeuMulti extends Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		await super.joueurMort(j);
-		this.io.in(j.getClientID()).emit('mortDuJoueur');
+		this.io.in(j.getClientID()).emit('mortDuJoueur', j);
 	}
 }

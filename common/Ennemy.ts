@@ -4,15 +4,20 @@ import type { Coordonee } from './types.ts';
 import { verifCoordonee } from './utils.ts';
 
 export const DifficulteEnnemi = {
-    FACILE: 'FACILE',
-    MOYEN: 'MOYEN',
-    DIFFICILE: 'DIFFICILE'
-}
+	FACILE: 0,
+	MOYEN: 1,
+	DIFFICILE: 2,
+	IMPOSSIBLE: 3,
+} as const;
+
+export type DifficulteEnnemi =
+	(typeof DifficulteEnnemi)[keyof typeof DifficulteEnnemi];
 
 const STATS_ENNEMIS = {
-	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 40 },
-	[DifficulteEnnemi.MOYEN]: { speed: 3, hp: 2, score: 25, taille: 50 },
-	[DifficulteEnnemi.DIFFICILE]: { speed: 5, hp: 3, score: 50, taille: 60 },
+	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 15 },
+	[DifficulteEnnemi.MOYEN]: { speed: 4, hp: 2, score: 25, taille: 20 },
+	[DifficulteEnnemi.DIFFICILE]: { speed: 7, hp: 3, score: 50, taille: 25 },
+	[DifficulteEnnemi.IMPOSSIBLE]: { speed: 10, hp: 5, score: 100, taille: 25 },
 };
 
 export default class Ennemy extends Entities {
@@ -20,11 +25,20 @@ export default class Ennemy extends Entities {
 
 	constructor(
 		co: Coordonee,
-		difficulte = DifficulteEnnemi.FACILE,
-		spriteId: string = 'ennemiTemp',
+		difficulte: DifficulteEnnemi = DifficulteEnnemi.MOYEN,
+		spriteId: string = 'ennemiTemp'
 	) {
 		const stats = STATS_ENNEMIS[difficulte];
-		super(co, 0, 0, stats.speed, stats.taille, stats.taille, spriteId, stats.hp);
+		super(
+			co,
+			0,
+			0,
+			stats.speed,
+			stats.taille,
+			stats.taille,
+			spriteId,
+			stats.hp
+		);
 		this.scoreValue = stats.score;
 	}
 
@@ -38,16 +52,17 @@ export default class Ennemy extends Entities {
 		worldHeight: number,
 		distMin: number = 0
 	) {
-		if (this.getX() > j.getX() + distMin) {
-			this.setX(this.getX() + this.speed * -1);
-		} else if (this.getX() < j.getX() - distMin) {
-			this.setX(this.getX() + this.speed * 1);
-		}
+		const dx = j.getX() - this.getX();
+		const dy = j.getY() - this.getY();
 
-		if (this.getY() > j.getY() + distMin) {
-			this.setY(this.getY() + this.speed * -1);
-		} else if (this.getY() < j.getY() - distMin) {
-			this.setY(this.getY() + this.speed * 1);
+		const distance = Math.hypot(dx, dy);
+
+		if (distance > distMin) {
+			this.vx = (dx / distance) * this.speed;
+			this.vy = (dy / distance) * this.speed;
+
+			this.setX(this.getX() + this.vx);
+			this.setY(this.getY() + this.vy);
 		}
 		verifCoordonee(this, worldWidth, worldHeight);
 	}

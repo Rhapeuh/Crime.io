@@ -11,13 +11,23 @@ export default class Bullet extends Entities {
 		co: Coordonee,
 		angle: number,
 		speed: number,
-		joueur: Entities,
-		bulletRange: number = 1000
+		entite: Entities,
+		bulletRange: number = 500,
+		bulletWidth: number,
+		bulletHeight: number
 	) {
-		super(co, Math.cos(angle) * speed, Math.sin(angle) * speed, speed, 20, 10, 'bullet');
+		super(
+			co,
+			Math.cos(angle) * speed,
+			Math.sin(angle) * speed,
+			speed,
+			bulletWidth,
+			bulletHeight,
+			'bullet'
+		);
 		this.createdAt = co;
 		this.active = true;
-		this.entitie = joueur;
+		this.entitie = entite;
 		this.bulletRange = bulletRange;
 	}
 

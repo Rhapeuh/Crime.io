@@ -62,7 +62,6 @@
 }
 
 .jeuSolo a, .jeuMulti a {
-    position: absolute;
     bottom: 20px;
 
     z-index: 10;
@@ -79,13 +78,18 @@
     transition: all 0.2s ease;
 }
 
-.retour{
-    left: 20px;
-}
-
 .jeuSolo a:hover, .jeuMulti a:hover {
     background: var(--electric-blue2);
     border-color: var(--electric-pink);
     box-shadow: 0 0 15px var(--electric-pink);
     transform: scale(1.05);
+}
+
+.hud .timer{
+    position: absolute;
+    left: 50%;
+    font-size: 20px;
+    color: var(--white1);
+    font: 600;
+    transform: translate(-50%);
 }

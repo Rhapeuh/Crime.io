@@ -1,13 +1,16 @@
 import type { Socket } from 'socket.io-client';
-import View from './View';
-import Router from './Router';
-import type Game from '../../common/Game';
-import type Joueur from '../../common/Joueur';
-import Assets from './asset';
-import type Bullet from '../../common/Bullet';
-import type { Coordonee } from '../../common/types';
-import type Ennemy from '../../common/Ennemy';
-import type Entities from '../../common/Entities';
+import View from './View.ts';
+import Router from './Router.ts';
+import type Game from '../../common/Game.ts';
+import type Joueur from '../../common/Joueur.ts';
+import Assets from './asset.ts';
+import type Bullet from '../../common/Bullet.ts';
+import type { Coordonee } from '../../common/types.ts';
+import type Ennemy from '../../common/Ennemy.ts';
+import type Entities from '../../common/Entities.ts';
+import type Bonus from '../../common/Bonus.ts';
+import Chrono from './Chrono.ts';
+import { calculerAngle } from '../../common/utils';
 
 export default class JeuView extends View {
 	context: CanvasRenderingContext2D;
@@ -17,9 +20,25 @@ export default class JeuView extends View {
 	vy: number = 0;
 	socket;
 	coordoneeMouseToGo: Coordonee | null = null;
+	chrono: Chrono = new Chrono();
+	camera: Coordonee = { x: 0, y: 0 };
+	currentMousePos: MouseEvent | null = null;
+	worldWidth: number = 0;
+	worldHeight: number = 0;
+	private keys: { [key: string]: boolean } = {
+		ArrowUp: false,
+		KeyW: false,
+		ArrowDown: false,
+		KeyS: false,
+		ArrowLeft: false,
+		KeyA: false,
+		ArrowRight: false,
+		KeyD: false,
+	};
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
+		this.chrono.start();
 		this.socket = socket;
 
 		this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -28,20 +47,17 @@ export default class JeuView extends View {
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleShooting = this.handleShooting.bind(this);
+		this.mortJoueur = this.mortJoueur.bind(this);
+		this.handleResize = this.handleResize.bind(this);
 
 		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
 
-		this.canvas.width = 1920;
-		this.canvas.height = 1080;
+		this.handleResize();
 
 		this.hudElement = this.element.querySelector('.hud')!;
 
-		
-
 		this.initEvents();
-
-		Router.setMenuElement(element);
 	}
 
 	handleRender(g: Game) {
@@ -50,6 +66,7 @@ export default class JeuView extends View {
 	}
 
 	private initEvents() {
+		window.addEventListener('resize', this.handleResize);
 		window.addEventListener('contextmenu', e => e.preventDefault());
 		window.addEventListener('keydown', this.handleKeyDown);
 		window.addEventListener('keyup', this.handleKeyUp);
@@ -57,64 +74,112 @@ export default class JeuView extends View {
 		this.canvas.addEventListener('mousemove', this.handleMouseMove);
 		this.socket.on('mortDuJoueur', this.mortJoueur);
 
-		this.rejouerListener()
-		this.retourListener()
-		
+		this.rejouerListener();
+		this.retourListener();
 	}
 
-	private rejouerListener(){
-		const rejouerButton = document.querySelectorAll(".rejouerButton");
-		rejouerButton?.forEach((temp) => temp.addEventListener("click", (event) => {
-			event.preventDefault;
-			// console.log('prevent')
-			if (document.querySelector('.jeuSolo')?.contains(temp)){
-				Router.navigate('/jeuSolo')
-			}else{
-				Router.navigate('/jeuMulti')
-			}
-			document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "blur"));
-			document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton"));
-			document.querySelectorAll(".retour")!.forEach((temp) => temp.setAttribute("class", "retour"));
-
-		}));
+	private rejouerListener() {
+		const rejouerButton = document.querySelectorAll('.rejouerButton');
+		rejouerButton?.forEach(temp =>
+			temp.addEventListener('click', event => {
+				event.preventDefault;
+				document
+					.querySelectorAll('.joueurMort')
+					?.forEach(elt => elt.classList.remove('active'));
+				if (document.querySelector('.jeuSolo')?.contains(temp)) {
+					Router.navigate('/jeuSolo');
+				} else {
+					Router.navigate('/jeuMulti');
+				}
+				document
+					.querySelectorAll('.blur')!
+					.forEach(temp => temp.setAttribute('class', 'blur'));
+				document
+					.querySelectorAll('.rejouerButton')!
+					.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
+				document
+					.querySelectorAll('.retour')!
+					.forEach(temp => temp.setAttribute('class', 'retour'));
+			})
+		);
 	}
 
-	private retourListener(){
-		const retourButton = document.querySelectorAll(".retour");
-		retourButton?.forEach((temp) => temp.addEventListener("click", (event) => {
-			event.preventDefault;
-			// console.log('prevent')
-			
-			Router.navigate('/')
-			
-			document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "blur"));
-			document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton"));
-			document.querySelectorAll(".retour")!.forEach((temp) => temp.setAttribute("class", "retour"));
+	private retourListener() {
+		const retourButton = document.querySelectorAll('.retour');
+		document
+			.querySelectorAll('.joueurMort')
+			?.forEach(elt => elt.classList.remove('active'));
+		retourButton?.forEach(temp =>
+			temp.addEventListener('click', event => {
+				event.preventDefault;
 
-		}));
+				Router.navigate('/');
+
+				document
+					.querySelectorAll('.blur')!
+					.forEach(temp => temp.setAttribute('class', 'blur'));
+				document
+					.querySelectorAll('.rejouerButton')!
+					.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
+				document
+					.querySelectorAll('.retour')!
+					.forEach(temp => temp.setAttribute('class', 'retour'));
+			})
+		);
 	}
 
-	private mortJoueur() {
-		console.log('vous etes mort');
+	private mortJoueur(j: Joueur) {
+		this.chrono.stop();
+		this.setStat(j);
+		document
+			.querySelectorAll('.joueurMort')
+			?.forEach(elt => elt.classList.add('active'));
+		document
+			.querySelectorAll('.blur')!
+			.forEach(temp => temp.classList.add('rejouer', 'blur'));
+		document
+			.querySelectorAll('.rejouerButton')!
+			.forEach(temp => temp.classList.add('rejouerButton', 'displayButton'));
+		document
+			.querySelectorAll('.retour')!
+			.forEach(temp => temp.classList.add('retour', 'displayRetour'));
+	}
 
-		document.querySelectorAll(".blur")!.forEach((temp) => temp.setAttribute("class", "rejouer blur"));
-		document.querySelectorAll(".rejouerButton")!.forEach((temp) => temp.setAttribute("class", "rejouerButton displayButton"));
-		document.querySelectorAll(".retour")!.forEach((temp) => temp.setAttribute("class", "retour displayRetour"));
+	private setStat(j: Joueur) {
+		document
+			.querySelectorAll('.timeFinal')
+			.forEach(
+				elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`)
+			);
+		document
+			.querySelectorAll('.nbTuer')
+			.forEach(
+				elt => (elt.innerHTML = `Nombre d'ennemis tuer : ${j.nbEnnemiTuer}`)
+			);
+		document
+			.querySelectorAll('.scoreFinal')
+			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
+	}
 
+	private handleResize() {
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
 	}
 
 	private handleMouseDown(e: MouseEvent) {
 		this.handleShooting(e);
-		this.handleDirectionMouse(e);
+		this.handleDirectionMouse();
 	}
 
 	private handleMouseMove(e: MouseEvent) {
+		this.currentMousePos = e;
 		if ((e.buttons & 2) !== 0) {
-			this.handleDirectionMouse(e);
+			this.handleDirectionMouse();
 		}
 	}
 
-	private handleDirectionMouse(e: MouseEvent) {
+	private handleDirectionMouse() {
+		const e = this.currentMousePos!;
 		// 2 = clique droit / '&' détermine si le bit 2 est allumé
 		if (e.button === 2 || (e.buttons & 2) !== 0) {
 			this.coordoneeMouseToGo = this.realClickCoordonee(e);
@@ -127,8 +192,8 @@ export default class JeuView extends View {
 		if (e.button === 0) {
 			this.socket.emit('shooting', {
 				active: e.type === 'mousedown',
-				pourcentX: x / this.canvas.width,
-				pourcentY: y / this.canvas.height,
+				x: x,
+				y: y,
 			});
 		}
 	}
@@ -169,21 +234,39 @@ export default class JeuView extends View {
 			this.vy = 0;
 			this.coordoneeMouseToGo = null;
 		}
-		this.selectDirection(e);
-		this.handleAbilities(e);
-		this.socket.emit('updateInput', {
-			vx: this.vx,
-			vy: this.vy,
-		});
+		if (this.keys[e.code]) return;
+
+		if (this.keys[e.code] !== undefined) {
+			this.keys[e.code] = true;
+			this.updateDirection();
+		}
 	}
 
 	private handleKeyUp(e: KeyboardEvent) {
-		this.arretDirection(e);
-		this.coordoneeMouseToGo = null;
-		this.socket.emit('updateInput', {
-			vx: this.vx,
-			vy: this.vy,
-		});
+		if (this.keys[e.code] !== undefined) {
+			this.keys[e.code] = false;
+			this.updateDirection();
+		}
+	}
+
+	private updateDirection() {
+		let vx = 0;
+		let vy = 0;
+
+		if (this.keys['ArrowUp'] || this.keys['KeyW']) vy -= 1;
+		if (this.keys['ArrowDown'] || this.keys['KeyS']) vy += 1;
+		if (this.keys['ArrowLeft'] || this.keys['KeyA']) vx -= 1;
+		if (this.keys['ArrowRight'] || this.keys['KeyD']) vx += 1;
+
+		if (this.vx !== vx || this.vy !== vy) {
+			this.vx = vx;
+			this.vy = vy;
+
+			this.socket.emit('updateInput', {
+				vx: this.vx,
+				vy: this.vy,
+			});
+		}
 	}
 
 	destroy() {
@@ -191,53 +274,47 @@ export default class JeuView extends View {
 
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
+		window.removeEventListener('resize', this.handleResize);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
 	}
 
-	clearCanvas() {
-		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	}
-
-	private selectDirection(e: KeyboardEvent) {
-		if (e.key === 'd' || e.key === 'ArrowRight') this.vx = 1;
-		if (e.key === 'q' || e.key === 'ArrowLeft') this.vx = -1;
-		if (e.key === 'z' || e.key === 'ArrowUp') this.vy = -1;
-		if (e.key === 's' || e.key === 'ArrowDown') this.vy = 1;
-	}
-
-	private arretDirection(e: KeyboardEvent) {
-		if (
-			e.key === 'd' ||
-			e.key === 'q' ||
-			e.key === 'ArrowRight' ||
-			e.key === 'ArrowLeft'
-		)
-			this.vx = 0;
-		if (
-			e.key === 'z' ||
-			e.key === 's' ||
-			e.key === 'ArrowUp' ||
-			e.key === 'ArrowDown'
-		)
-			this.vy = 0;
-	}
-
-	private handleAbilities(e: KeyboardEvent) {
-		if (e.key === ' ') {
-			this.socket.emit('playerParry');
-		}
-	}
-
 	private render(g: Game) {
-		this.context.clearRect(0, 0, 1920, 1080);
+		this.updateTailleMap(g);
+		const me = g.joueurs.find(j => j.clientID === this.socket.id);
+		if (me) {
+			this.camera.x = me.co.x - this.canvas.width / 2;
+			this.camera.y = me.co.y - this.canvas.height / 2;
+		}
+
+		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+		this.renderWorldBorders();
+
 		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
 		if (g.bulletsEnnemy) this.renderBulletsEnnemy(g.bulletsEnnemy);
 		if (g.joueurs) this.renderJoueur(g.joueurs);
 		if (g.ennemies) this.renderEnnemies(g.ennemies);
 		if (g.bulletsHit) this.renderBulletsHit(g.bulletsHit);
+		if (g.bonus) this.renderBonus(g.bonus);
 
 		this.renderHud(g.joueurs);
+	}
+
+	private updateTailleMap(g: Game) {
+		if (
+			this.worldWidth !== g.WORLD_WIDTH ||
+			this.worldHeight !== g.WORLD_HEIGHT
+		) {
+			this.worldWidth = g.WORLD_WIDTH;
+			this.worldHeight = g.WORLD_HEIGHT;
+		}
+	}
+
+	private renderBonus(bonus: Bonus[]) {
+		for (const b of bonus) {
+			this.dessinerEntite(b, 0);
+		}
 	}
 
 	private renderHud(listJoueurs: Joueur[]) {
@@ -250,81 +327,95 @@ export default class JeuView extends View {
 			);
 			this.hudElement.querySelector('.info-score')!.innerHTML =
 				'' + currentClient.score;
+			this.hudElement.querySelector('.timer')!.innerHTML =
+				this.chrono.getTimeFormat();
 		}
 	}
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
-			this.dessinerEntite(j);
+			let angle;
+			if (j.clientID === this.socket.id && this.currentMousePos)
+				angle = calculerAngle(
+					j.co,
+					this.realClickCoordonee(this.currentMousePos)
+				);
+			else angle = 0;
+			this.dessinerEntite(j, angle);
 		}
 	}
 
 	private renderBulletsJoueur(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			this.dessinerEntite(b);
+			this.dessinerEntite(b, Math.atan2(b.vy, b.vx));
 		}
 	}
 	private renderBulletsEnnemy(listBullets: Bullet[]) {
 		for (const b of listBullets) {
-			this.dessinerEntite(b);
+			this.dessinerEntite(b, Math.atan2(b.vy, b.vx));
 		}
 	}
 
 	private renderBulletsHit(listBulletsHit: Bullet[]) {
-		for (const bh of listBulletsHit) {
-			this.dessinerEntite(bh);
+		for (const b of listBulletsHit) {
+			this.dessinerEntite(b, Math.atan2(b.vy, b.vx));
 		}
 	}
 
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
-			this.dessinerEntite(e);
+			this.dessinerEntite(e, Math.atan2(e.vy, e.vx));
 		}
 	}
 
-	private dessinerEntite(e: Entities) {
-		const coord = this.realCordonee(e.co);
+	private dessinerEntite(e: Entities, angle: number) {
+		const screenX = e.co.x - this.camera.x;
+		const screenY = e.co.y - this.camera.y;
+
+		this.context.save();
+
+		this.context.translate(screenX, screenY);
+
+		this.context.rotate(angle);
+
 		const img = Assets.getImage(e.spriteId);
 		if (img)
 			this.context.drawImage(
 				img,
-				coord.x - e.width / 2,
-				coord.y - e.height / 2,
+				-e.width / 2,
+				-e.height / 2,
 				e.width,
 				e.height
 			);
-	}
 
-	private realCordonee(c: Coordonee): Coordonee {
-		const ratioX = c.x / 1920;
-		const ratioY = c.y / 1080;
-
-		const realX = ratioX * this.canvas.width;
-		const realY = ratioY * this.canvas.height;
-
-		return { x: realX, y: realY };
+		this.context.restore();
 	}
 
 	private realClickCoordonee(e: MouseEvent): Coordonee {
-		const rect = this.canvas.getBoundingClientRect();
+		return {
+			x: e.clientX + this.camera.x,
+			y: e.clientY + this.camera.y,
+		};
+	}
 
-		// Calculer le ratio auquel le canva a été redimenssioné
-		const scale = Math.min(
-			rect.width / this.canvas.width,
-			rect.height / this.canvas.height
+	private renderWorldBorders() {
+		const startX = 0 - this.camera.x;
+		const startY = 0 - this.camera.y;
+
+		this.context.save();
+
+		this.context.strokeStyle = 'red';
+		this.context.lineWidth = 10;
+
+		const demiEpaisseur = this.context.lineWidth / 2;
+
+		this.context.strokeRect(
+			startX - demiEpaisseur,
+			startY - demiEpaisseur,
+			this.worldWidth + this.context.lineWidth,
+			this.worldHeight + this.context.lineWidth
 		);
 
-		// Dimensions rééles du client grâce au ratio
-		const visualWidth = this.canvas.width * scale;
-		const visualHeight = this.canvas.height * scale;
-
-		// Canva centré dcp on fait l'offset du vide sur le côté puis /2 pour le centre
-		const offsetX = (rect.width - visualWidth) / 2;
-		const offsetY = (rect.height - visualHeight) / 2;
-
-		// Coordonnées exactes de la souris projetées sur le canvas interne (1920x1080)
-		const canvasX = (e.clientX - rect.left - offsetX) / scale;
-		const canvasY = (e.clientY - rect.top - offsetY) / scale;
-		return { x: canvasX, y: canvasY };
+		this.context.restore();
 	}
 }

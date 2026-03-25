@@ -4,15 +4,19 @@ import Joueur from './Joueur.ts';
 
 const STATS_ENNEMIS = {
 	[DifficulteEnnemi.FACILE]: { fireRate: 1500 },
-	[DifficulteEnnemi.MOYEN]: { fireRate: 700 },
-	[DifficulteEnnemi.DIFFICILE]: { fireRate: 300 },
+	[DifficulteEnnemi.MOYEN]: { fireRate: 600 },
+	[DifficulteEnnemi.DIFFICILE]: { fireRate: 200 },
+	[DifficulteEnnemi.IMPOSSIBLE]: { fireRate: 100 },
 };
 
 export default class ShooterEnnemy extends Ennemy {
 	private fireRate: number;
 	private prochainTire: number;
 
-	constructor(co: Coordonee, difficulte = DifficulteEnnemi.FACILE) {
+	constructor(
+		co: Coordonee,
+		difficulte: DifficulteEnnemi = DifficulteEnnemi.FACILE
+	) {
 		super(co, difficulte, 'shooterEnnemi');
 		const stats = STATS_ENNEMIS[difficulte];
 		this.fireRate = stats.fireRate;
@@ -20,7 +24,7 @@ export default class ShooterEnnemy extends Ennemy {
 	}
 
 	public update(j: Joueur, worldWidth: number, worldHeight: number) {
-		super.update(j, worldWidth, worldHeight, 300);
+		super.update(j, worldWidth, worldHeight, 250);
 	}
 
 	public shoot(now: number): boolean {

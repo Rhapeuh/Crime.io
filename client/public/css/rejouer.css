@@ -7,28 +7,25 @@
 	width: 100%;
 }
 
-.displayRetour{
-	left: auto;
-  	margin-bottom: 45vh;
-	transform: translateX(-3em) !important;
-	width: 5em;
-  	text-align: center;
+.joueurMort {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 10;
 }
 
-.rejouerButton{
+.joueurMort p {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 30px;
+	color: var(--white1);
+}
+
+.joueurMort .main {
+	font-size: 35px;
+	font: bold;
+}
+
+.joueurMort:not(.active) {
 	display: none;
-  	margin-bottom: 50vh;
-	transform: translateX(-3em) !important;
-	width: 5em;
-  	text-align: center;
 }
-
-.rejouerButton.displayButton{
-	display: flex;
-}
-
-.buttonContainer{
-	margin-inline: 50vw;
-
-}
-

@@ -8,16 +8,9 @@ export default class JeuSolo extends Jeu {
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(
-			pseudo,
-			this.randomCoordonee(),
-			1,
-			3,
-			50,
-			50,
-			socket.id
-		);
+		this.j = new Joueur(pseudo, { x: 0, y: 0 }, 0, 3, 20, 20, socket.id);
 		this.game.addJoueur(this.j);
+		this.j.setCoordonee(this.randomCoordonee());
 		this.socket = socket;
 
 		this.socket.emit('renderSolo', this.game);
@@ -27,33 +20,23 @@ export default class JeuSolo extends Jeu {
 
 		socket.on(
 			'shooting',
-			(donnee: { active: boolean; pourcentX: number; pourcentY: number }) => {
+			(donnee: { active: boolean; x: number; y: number }) => {
 				if (donnee.active) {
-					const realX = this.WORLD_WIDTH * donnee.pourcentX;
-					const realY = this.WORLD_HEIGHT * donnee.pourcentY;
-					this.addBullet(this.j, {x: realX, y: realY});
+					this.addBullet(this.j, { x: donnee.x, y: donnee.y });
 				}
 			}
 		);
 
-		socket.on('playerParry', () => {
-			// CoolDown à prévoir
-			this.j.mettreInvincible();
-			setTimeout(() => {
-				this.j.enleverInvincible();
-			}, 500);
-		});
-
 		this.gameLoop = setInterval(() => {
 			this.update();
 		}, 1000 / 60);
+		this.handleBonusSpawning();
 	}
 
 	destroy() {
 		super.destroy();
 
 		this.socket.removeAllListeners('updateInput');
-		this.socket.removeAllListeners('playerParry');
 		this.socket.removeAllListeners('shooting');
 	}
 
@@ -65,6 +48,6 @@ export default class JeuSolo extends Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		await super.joueurMort(j);
-		this.socket.emit('mortDuJoueur');
+		this.socket.emit('mortDuJoueur', j);
 	}
 }

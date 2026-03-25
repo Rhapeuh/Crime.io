@@ -2,7 +2,6 @@ import Bullet from '../common/Bullet.ts';
 import Game from '../common/Game.ts';
 import Joueur from '../common/Joueur.ts';
 import type { Coordonee } from '../common/types.ts';
-import { randomInt } from 'crypto';
 import { writeFile, readFile } from 'fs/promises';
 import {
 	calculerAngle,
@@ -12,29 +11,34 @@ import {
 import Ennemy, { DifficulteEnnemi } from '../common/Ennemy.ts';
 import ShooterEnnemy from '../common/ShooterEnnemy.ts';
 import type Entities from '../common/Entities';
+import Bonus from '../common/Bonus.ts';
 
 export default class Jeu {
-	protected WORLD_WIDTH = 1920;
-	protected WORLD_HEIGHT = 1080;
-	private maxEnemies = 5;
+	private maxEnemies = 20;
 	private maxEnnemiesSpawning = 2;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
 	private maxSpawnDelay = 300;
-	private pourcentSpawn = { moyen: 0.5, difficile: 0.85 };
+	private gameDifficulty: DifficulteEnnemi = DifficulteEnnemi.FACILE;
+	private bonusIntervalFunction: NodeJS.Timeout | null = null;
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
 
 	protected destroy() {
-		if (this.gameLoop) {
-			clearInterval(this.gameLoop);
-		}
+		if (this.gameLoop) clearInterval(this.gameLoop);
+
+		if (this.bonusIntervalFunction) clearInterval(this.bonusIntervalFunction);
 		this.game.clearAll();
+	}
+
+	public setDifficulty(difficulte: DifficulteEnnemi) {
+		this.gameDifficulty = difficulte;
 	}
 
 	protected update() {
 		this.handleEnemySpawning();
 		this.updateJoueur();
+		this.updateBonus();
 		this.game.removeAllHit();
 		this.updateJoueurBullets();
 		this.updateEnnemyBullets();
@@ -47,7 +51,10 @@ export default class Jeu {
 	// gestion globale
 
 	protected randomCoordonee(): Coordonee {
-		return { x: randomInt(this.WORLD_WIDTH), y: randomInt(this.WORLD_HEIGHT) };
+		return {
+			x: this.getRandomInt(0, this.game.WORLD_WIDTH),
+			y: this.getRandomInt(0, this.game.WORLD_HEIGHT),
+		};
 	}
 
 	// Gestion du joueur
@@ -62,7 +69,7 @@ export default class Jeu {
 				continue;
 			}
 			this.joueurToucher(j);
-			j.update(this.WORLD_WIDTH, this.WORLD_HEIGHT);
+			j.update(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 		}
 	}
 
@@ -82,6 +89,7 @@ export default class Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		console.log(`le joueur mort est ${j.getPseudo()}`);
+		j.recalculScore();
 		const data = {
 			pseudo: j.getPseudo(),
 			score: j.getScore(),
@@ -96,27 +104,33 @@ export default class Jeu {
 		const angle = calculerAngle(e.getCoordonee(), coFinal);
 
 		const nouvelleBalle = new Bullet(
-			e.getCoordonee(),
+			{ x: e.getX(), y: e.getY() },
 			angle,
 			15,
-			e
+			e,
+			undefined,
+			e.getBulletWidth(),
+			e.getBulletHeight()
 		);
-		if(e instanceof Joueur) this.game.addBulletJoueur(nouvelleBalle);
-		else if (e instanceof ShooterEnnemy) this.game.addEnnemyBullet(nouvelleBalle);
+		if (e instanceof Joueur) this.game.addBulletJoueur(nouvelleBalle);
+		else if (e instanceof ShooterEnnemy)
+			this.game.addEnnemyBullet(nouvelleBalle);
 	}
 
-	private updateJoueurBullets(){
+	private updateJoueurBullets() {
 		this.game.bulletsJoueur.forEach(b => {
-			if(this.updateBullet(b, this.game.ennemies)) this.game.removeBulletJoueur(b)
+			if (this.updateBullet(b, this.game.ennemies))
+				this.game.removeBulletJoueur(b);
 			if (b.shouldBeDeleted()) this.game.removeBulletJoueur(b);
-		})
+		});
 	}
 
-	private updateEnnemyBullets(){
+	private updateEnnemyBullets() {
 		this.game.bulletsEnnemy.forEach(b => {
-			if(this.updateBullet(b, this.game.joueurs)) this.game.removeBulletEnnemy(b);
+			if (this.updateBullet(b, this.game.joueurs))
+				this.game.removeBulletEnnemy(b);
 			if (b.shouldBeDeleted()) this.game.removeBulletEnnemy(b);
-		})
+		});
 	}
 
 	private updateBullet(b: Bullet, entities: Array<Entities>): boolean {
@@ -152,8 +166,8 @@ export default class Jeu {
 			if (result) {
 				const j = result.joueur;
 				const dist = result.distance;
-				e.update(j, this.WORLD_WIDTH, this.WORLD_HEIGHT);
-				if (e instanceof ShooterEnnemy && dist <= 300) {
+				e.update(j, this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
+				if (e instanceof ShooterEnnemy && dist <= 250) {
 					if (e.shoot(now)) {
 						this.addBullet(e, j.getCoordonee());
 					}
@@ -169,28 +183,46 @@ export default class Jeu {
 			this.game.getNbEnnemy() < this.maxEnemies &&
 			now >= this.nextSpawnTime
 		) {
-			let nbASpawn = randomInt(this.maxEnnemiesSpawning);
+			let nbASpawn = this.getRandomInt(1, this.maxEnnemiesSpawning);
 			if (nbASpawn > this.maxEnemies - this.game.getNbEnnemy())
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
 			for (let i = 0; i < nbASpawn; i++) {
-				const randDifficulté = Math.random();
 				const randEnnemy = Math.random();
-				let difficulte = DifficulteEnnemi.FACILE;
+				const difficulte = this.gameDifficulty;
 
-				if (randDifficulté > this.pourcentSpawn.difficile) {
-					difficulte = DifficulteEnnemi.DIFFICILE;
-				} else if (randDifficulté > this.pourcentSpawn.moyen) {
-					difficulte = DifficulteEnnemi.MOYEN;
-				}
-				if(randEnnemy < 0.5) this.addEnnemy(new Ennemy(this.randomCoordonee(), difficulte));
-				else this.addEnnemy(new ShooterEnnemy(this.randomCoordonee(), difficulte));
+				if (randEnnemy < 0.5)
+					this.addEnnemy(new Ennemy(this.randomCoordonee(), difficulte));
+				else
+					this.addEnnemy(new ShooterEnnemy(this.randomCoordonee(), difficulte));
 			}
 
 			const randomDelay =
 				Math.random() * (this.maxSpawnDelay - this.minSpawnDelay) +
 				this.minSpawnDelay;
 			this.nextSpawnTime = now + randomDelay;
+		}
+	}
+
+	// Gestion des bonus
+	protected handleBonusSpawning() {
+		this.bonusIntervalFunction = setInterval(() => {
+			// 5 bonus par joueur
+			if (this.game.bonus.length < this.game.joueurs.length * 5) {
+				const bonus = Bonus.getRandomBonusEffect(this.randomCoordonee());
+				const { x, y } = bonus.getCoordonee();
+				console.log(`Bonus ${bonus.getEffect()} spawn en X:${x}, Y:${y}`);
+				this.game.addBonus(bonus);
+			}
+		}, 1000);
+	}
+
+	protected updateBonus() {
+		for (const b of this.game.bonus) {
+			const joueur = b.update(this.game.joueurs);
+			if (joueur) {
+				this.game.removeBonus(b);
+			}
 		}
 	}
 
@@ -226,5 +258,9 @@ export default class Jeu {
 		data.topScore.sort((a, b) => b.score - a.score);
 		data.topScore = data.topScore.slice(0, 10);
 		await writeFile(cheminAbsolu, JSON.stringify(data), 'utf8');
+	}
+
+	private getRandomInt(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 }
