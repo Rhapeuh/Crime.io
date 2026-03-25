@@ -106,6 +106,9 @@ export default class JeuView extends View {
 
 	private retourListener() {
 		const retourButton = document.querySelectorAll('.retour');
+		document
+			.querySelectorAll('.joueurMort')
+			?.forEach(elt => elt.classList.remove('active'));
 		retourButton?.forEach(temp =>
 			temp.addEventListener('click', event => {
 				event.preventDefault;
