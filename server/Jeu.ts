@@ -19,7 +19,7 @@ export default class Jeu {
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
 	private maxSpawnDelay = 300;
-	private gameDifficulty: DifficulteEnnemi = DifficulteEnnemi.MOYEN;
+	private gameDifficulty: DifficulteEnnemi = DifficulteEnnemi.FACILE;
 	private bonusIntervalFunction: NodeJS.Timeout | null = null;
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
@@ -61,13 +61,13 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 		}

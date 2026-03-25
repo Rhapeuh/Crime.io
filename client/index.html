@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/score.css" />
     <link rel="stylesheet" href="/css/credits.css" />
     <link rel="stylesheet" href="/css/choixDifficulte.css" />
+    <link rel="stylesheet" href="/css/room.css">
 
 	<script type="module" src="/src/main.ts"></script>
 </head>
@@ -34,11 +35,10 @@
             <section class="fond">
             </section>
 
-
             <section class="menuJeu">
                 <input type="text" class="pseudo-input" placeholder="Pseudo" maxlength="15" />
                 <a href="/jeuSolo"> Solo </a>
-                <a href="/jeuMulti"> Multijoueur </a>
+                <a href="/room"> Multijoueur </a>
             </section>
             <section class="titre">
                 <div class="colonne">
@@ -48,8 +48,23 @@
                     <h1>Titre &nbsp;•&nbsp; </h1>
                 </div>
             </section>
-
         </section>
+
+        <section class="room">
+            <h3>Parties en cours :</h3>
+            <table class="tableRooms">
+                <thead>
+                    <tr>
+                        <th>Nom de la Room</th>
+                    </tr>
+                </thead>
+                <tbody class="corpsTableauRooms">
+                </tbody>
+            </table>
+            <a href="/jeuMulti">Créer une nouvelle partie</a>
+            <a href="/">retour</a>
+        </section>
+
         <section class="jeuSolo">
             <div class="blur">
                 <canvas class="canvas gameCanvasSolo"></canvas>
@@ -58,7 +73,7 @@
                         <div class="info-pseudo"></div>
                         <div class="info-score"></div>
                     </div>
-                    <div class="timer">timer</div>
+                    <div class="timer"></div>
                     <div class="vies"></div>
                 </div>
             </div>
@@ -81,7 +96,7 @@
                         <div class="info-pseudo"></div>
                         <div class="info-score"></div>
                     </div>
-                    <div class="timer">timer</div>
+                    <div class="timer"></div>
                     <div class="vies"></div>
                 </div>
             </div>

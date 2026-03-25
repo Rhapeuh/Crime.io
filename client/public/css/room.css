@@ -1,0 +1,109 @@
+
+
+.room {
+    width: 100vw;
+    height: 100vh;
+    
+    max-width: none; 
+    margin: 0;
+    border: none;
+    border-radius: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: var(--purpleblue3);
+    box-shadow: none;
+}
+
+.room h3 {
+    font-family: baseFont;
+    color: var(--electric-citrus1);
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.tableRooms {
+    width: 95%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin-bottom: 10px;
+}
+
+.tableRooms th {
+    font-family: baseFont;
+    color: var(--white1);
+    text-align: left;
+    padding-left: 15px;
+    font-size: 18px;
+    border-bottom: 2px solid var(--electric-purple1);
+}
+
+.corpsTableauRooms tr {
+    background-color: var(--darkblue2);
+    transition: transform 0.2s ease;
+}
+
+.corpsTableauRooms td {
+    padding: 5px;
+    padding-inline: 15px;
+    color: var(--white1);
+    font-family: titreFont;
+    border-top: 1px solid var(--darkblue1);
+    border-bottom: 1px solid var(--darkblue1);
+}
+
+.room a {
+    font-family: baseFont;
+    font-weight: 900;
+    color : var(--white1);
+    background-color: var(--darkblue1);
+    border: 3px solid var(--white1);
+    border-radius: 6px;
+    font-size: 20px;
+    
+    display: flex;
+    width: 500px;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    transition: all 0.2s ease;
+}
+
+.room a:hover {
+    border-radius: 12px;
+    color: var(--electric-purple1);
+    border-color: var(--electric-citrus1);
+    background-color: var(--purpleblue3);
+    box-shadow: 0 0 5px 2px var(--electric-citrus2);
+}
+
+.room a[href="/"] {
+    background-color: transparent;
+    border-color: var(--electric-purple2);
+    font-size: 16px;
+    height: 40px;
+    width: 450px;
+}
+
+.containerRoom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.containerRoom div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.nameRoom {
+    width: 200px !important;
+    height: 45px !important;
+}

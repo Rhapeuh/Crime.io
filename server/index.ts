@@ -8,6 +8,8 @@ import JeuMulti from './JeuMulti.ts';
 import { readFile } from 'fs/promises';
 import { DifficulteEnnemi } from '../common/Ennemy.ts';
 
+const max_player = 2;
+
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'text/plain');
@@ -21,7 +23,7 @@ httpServer.listen(9876, () => {
 const io = new IOServer(httpServer, { cors: { origin: true } });
 
 const partiesSoloEnCours = new Map<string, JeuSolo>();
-let partieMulti: JeuMulti | null = null;
+const partieMultiEnCours = new Map<string, JeuMulti>();
 
 io.on('connection', socket => {
 	socket.emit('premiereConnexion', genereNom());
@@ -39,17 +41,35 @@ io.on('connection', socket => {
 		startNewGame(pseudo, socket);
 	});
 
-	socket.on('rejoindreMulti', (pseudo: string) => {
-		if (partieMulti === null) {
-			partieMulti = new JeuMulti(io);
-			if (socket.data.difficulte !== undefined) {
-				partieMulti.setDifficulty(socket.data.difficulte as DifficulteEnnemi);
-			}
+	socket.on('getAllRoom', () => {
+		const test = envoyerListeRooms();
+		socket.emit('allRoom', test);
+	});
+
+	socket.on('rejoindreMulti', (pseudo: string, nameRoom: string) => {
+		if (!nameRoom || nameRoom === '') nameRoom = `${pseudo}'s room`;
+
+		const partieExistante = partieMultiEnCours.get(nameRoom);
+
+		if (partieExistante && partieExistante.getNbJoueurs() >= max_player) {
+			socket.emit('plusDePlace');
+			return;
 		}
 
-		partieMulti.ajouterJoueur(socket, pseudo);
+		socket.join(nameRoom);
 
-		socket.on('quitterMulti', verifJeuMulti);
+		if (!partieMultiEnCours.has(nameRoom)) {
+			partieMultiEnCours.set(nameRoom, new JeuMulti(io, nameRoom));
+		}
+
+		const partieActuel = partieMultiEnCours.get(nameRoom);
+		partieActuel?.ajouterJoueur(socket, pseudo);
+		console.log(`room ${nameRoom} rejointe`);
+
+		socket.on('quitterMulti', () => verifJeuMulti(nameRoom));
+		socket.on('disconnect', () => {
+			verifJeuMulti(nameRoom);
+		});
 	});
 
 	socket.on('disconnect', () => {
@@ -57,7 +77,6 @@ io.on('connection', socket => {
 			partiesSoloEnCours.get(socket.id)?.destroy();
 			partiesSoloEnCours.delete(socket.id);
 		}
-		verifJeuMulti();
 	});
 	socket.on('quitterSolo', () => {
 		if (partiesSoloEnCours.has(socket.id)) {
@@ -71,9 +90,7 @@ io.on('connection', socket => {
 			const contenu = await readFile('data/score.json', 'utf8');
 			socket.emit('envoiScore', JSON.parse(contenu).topScore);
 		} catch (err) {
-			console.log(
-				"Le fichier n'existe pas encore ou est illisible, on va le créer."
-			);
+			console.log("Le fichier n'existe pas encore ou est illisible.");
 		}
 	});
 });
@@ -94,9 +111,20 @@ function genereNom(): string {
 	return `Joueur${randomInt(10000)}`;
 }
 
-function verifJeuMulti() {
-	if (partieMulti && partieMulti.getNbJoueurs() === 0) {
-		partieMulti.destroy();
-		partieMulti = null;
+function verifJeuMulti(nameRoom: string) {
+	const partie = partieMultiEnCours.get(nameRoom);
+	if (partie && partie.getNbJoueurs() === 0) {
+		partie.destroy();
+		partieMultiEnCours.delete(nameRoom);
 	}
+}
+
+function envoyerListeRooms() {
+	return Array.from(partieMultiEnCours.entries()).map(([nom, partie]) => {
+		return {
+			nom: nom,
+			joueursActuels: partie.getNbJoueurs(),
+			joueursMax: max_player,
+		};
+	});
 }

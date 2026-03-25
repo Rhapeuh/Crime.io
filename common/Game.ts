@@ -38,6 +38,12 @@ export default class Game {
 	getNbJoueurs(): number {
 		return this.joueurs.length;
 	}
+	getJoueur(clientID: string): Joueur | null {
+		for(const j of this.joueurs){
+			if(j.getClientID() === clientID) return j
+		}
+		return null;
+	}
 
 	addBulletJoueur(bullet: Bullet) {
 		this.bulletsJoueur.push(bullet);

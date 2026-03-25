@@ -4,6 +4,7 @@ import JeuSoloView from './JeuSoloView';
 import { io } from 'socket.io-client';
 import JeuMultiView from './JeuMultiView';
 import Assets from './asset';
+import Room, { roomName } from './Room';
 
 const pseudoInput = document.querySelector('.pseudo-input') as HTMLInputElement;
 
@@ -38,8 +39,14 @@ const routes = [
 			new JeuMultiView(
 				document.querySelector('.viewContent > .jeuMulti')!,
 				socket,
-				pseudoInput.value
+				pseudoInput.value,
+				roomName
 			),
+	},
+	{
+		path: '/room',
+		getView: () =>
+			new Room(document.querySelector('.viewContent > .room')!, socket),
 	},
 ];
 
