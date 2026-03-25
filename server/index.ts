@@ -8,7 +8,7 @@ import JeuMulti from './JeuMulti.ts';
 import { readFile } from 'fs/promises';
 import { DifficulteEnnemi } from '../common/Ennemy.ts';
 
-const max_player = 2;
+const max_player = 6;
 
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
