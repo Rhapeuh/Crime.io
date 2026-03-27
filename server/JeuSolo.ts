@@ -48,8 +48,8 @@ export default class JeuSolo extends Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		await super.joueurMort(j);
-		this.socket.emit('mortDuJoueur', j);
-	}
+			this.socket.emit('mortDuJoueur', j);
+		}
 
 	setDifficulte(difficulte: number) {
 		if (difficulte === 1) {
