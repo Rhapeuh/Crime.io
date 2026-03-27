@@ -14,6 +14,7 @@ export default class JeuSoloView extends JeuView {
 
 			return;
 		}
+		this.socket.emit('rejoindreSolo');
 		this.socket.on('renderSolo', this.handleRender);
 	}
 
