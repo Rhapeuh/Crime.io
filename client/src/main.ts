@@ -69,5 +69,4 @@ lancerJeu();
 
 export function setCurrentDifficulte(difficulte: number) {
 	currentDifficulte = difficulte;
-	socket.emit('choixDifficulte', currentDifficulte);
 }
