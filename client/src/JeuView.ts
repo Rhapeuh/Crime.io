@@ -359,6 +359,7 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
+			console.log(j.spriteId);
 			let angle;
 			if (j.clientID === this.socket.id && this.currentMousePos)
 				angle = calculerAngle(

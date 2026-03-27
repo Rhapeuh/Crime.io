@@ -26,7 +26,7 @@ export default class JeuMulti extends Jeu {
 		this.io.removeAllListeners('shooting');
 	}
 
-	ajouterJoueur(socket: Socket, pseudo: string) {
+	ajouterJoueur(socket: Socket, pseudo: string, spriteId: string = 'scarab') {
 		this.retirerJoueur(socket.id);
 
 		const newJoueur = new Joueur(
@@ -36,7 +36,8 @@ export default class JeuMulti extends Jeu {
 			3,
 			35,
 			35,
-			socket.id
+			socket.id,
+			spriteId
 		);
 		this.game.addJoueur(newJoueur);
 		newJoueur.setCoordonee(this.randomCoordonee());

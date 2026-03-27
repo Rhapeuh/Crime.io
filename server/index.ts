@@ -27,8 +27,8 @@ const partieMultiEnCours = new Map<string, JeuMulti>();
 io.on('connection', socket => {
 	socket.emit('premiereConnexion', genereNom());
 
-	socket.on('rejoindreSolo', (pseudo: string, difficulte: number) => {
-		startNewGame(pseudo, socket, difficulte);
+	socket.on('rejoindreSolo', (pseudo: string, difficulte: number, spriteId: string) => {
+		startNewGame(pseudo, socket, difficulte, spriteId);
 	});
 
 	socket.on('getAllRoom', () => {
@@ -36,7 +36,7 @@ io.on('connection', socket => {
 		socket.emit('allRoom', test);
 	});
 
-	socket.on('rejoindreMulti', (pseudo: string, nameRoom: string) => {
+	socket.on('rejoindreMulti', (pseudo: string, nameRoom: string, spriteId: string) => {
 		if (!nameRoom || nameRoom === '') nameRoom = `${pseudo}'s room`;
 
 		const partieExistante = partieMultiEnCours.get(nameRoom);
@@ -53,7 +53,7 @@ io.on('connection', socket => {
 		}
 
 		const partieActuel = partieMultiEnCours.get(nameRoom);
-		partieActuel?.ajouterJoueur(socket, pseudo);
+		partieActuel?.ajouterJoueur(socket, pseudo, spriteId);
 		console.log(`room ${nameRoom} rejointe`);
 
 		socket.on('quitterMulti', () => verifJeuMulti(nameRoom));
@@ -85,12 +85,12 @@ io.on('connection', socket => {
 	});
 });
 
-function startNewGame(pseudo: string, socket: Socket, difficulte: number) {
+function startNewGame(pseudo: string, socket: Socket, difficulte: number, spriteId: string) {
 	if (partiesSoloEnCours.has(socket.id)) {
 		partiesSoloEnCours.get(socket.id)?.destroy();
 	}
 
-	const nouveauJeu = new JeuSolo(pseudo, socket);
+	const nouveauJeu = new JeuSolo(pseudo, socket, spriteId);
 	nouveauJeu.setDifficulte(difficulte);
 	partiesSoloEnCours.set(socket.id, nouveauJeu);
 }
