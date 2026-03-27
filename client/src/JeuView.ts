@@ -49,6 +49,8 @@ export default class JeuView extends View {
 		this.handleShooting = this.handleShooting.bind(this);
 		this.mortJoueur = this.mortJoueur.bind(this);
 		this.handleResize = this.handleResize.bind(this);
+		this.handleClickRejouer = this.handleClickRejouer.bind(this);
+		this.handleClickRetour = this.handleClickRetour.bind(this);
 
 		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
@@ -81,28 +83,30 @@ export default class JeuView extends View {
 	private rejouerListener() {
 		const rejouerButton = document.querySelectorAll('.rejouerButton');
 		rejouerButton?.forEach(temp =>
-			temp.addEventListener('click', event => {
-				event.preventDefault;
-				document
-					.querySelectorAll('.joueurMort')
-					?.forEach(elt => elt.classList.remove('active'));
-				if (document.querySelector('.jeuSolo')?.contains(temp)) {
-					this.socket.emit('quitterSolo');
-					Router.navigate('/jeuSolo');
-				} else {
-					Router.navigate('/jeuMulti');
-				}
-				document
-					.querySelectorAll('.blur')!
-					.forEach(temp => temp.setAttribute('class', 'blur'));
-				document
-					.querySelectorAll('.rejouerButton')!
-					.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
-				document
-					.querySelectorAll('.retour')!
-					.forEach(temp => temp.setAttribute('class', 'retour'));
-			})
+			temp.addEventListener('click', this.handleClickRejouer)
 		);
+	}
+
+	private handleClickRejouer(event: Event) {
+		event.preventDefault();
+		const temp = event.currentTarget as HTMLElement;
+		document
+			.querySelectorAll('.joueurMort')
+			?.forEach(elt => elt.classList.remove('active'));
+		if (document.querySelector('.jeuSolo')?.contains(temp)) {
+			Router.navigate('/jeuSolo');
+		} else {
+			Router.navigate('/jeuMulti');
+		}
+		document
+			.querySelectorAll('.blur')!
+			.forEach(temp => temp.setAttribute('class', 'blur'));
+		document
+			.querySelectorAll('.rejouerButton')!
+			.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
+		document
+			.querySelectorAll('.retour')!
+			.forEach(temp => temp.setAttribute('class', 'retour'));
 	}
 
 	private retourListener() {
@@ -111,8 +115,12 @@ export default class JeuView extends View {
 			.querySelectorAll('.joueurMort')
 			?.forEach(elt => elt.classList.remove('active'));
 		retourButton?.forEach(temp =>
-			temp.addEventListener('click', event => {
-				event.preventDefault;
+			temp.addEventListener('click', this.handleClickRetour)
+		);
+	}
+
+	private handleClickRetour(event: Event){
+		event.preventDefault();
 
 				Router.navigate('/');
 
@@ -125,8 +133,6 @@ export default class JeuView extends View {
 				document
 					.querySelectorAll('.retour')!
 					.forEach(temp => temp.setAttribute('class', 'retour'));
-			})
-		);
 	}
 
 	private mortJoueur(j: Joueur) {
@@ -278,6 +284,19 @@ export default class JeuView extends View {
 		window.removeEventListener('resize', this.handleResize);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
+
+		document
+			.querySelectorAll('.rejouerButton')
+			.forEach(btn =>
+				btn.removeEventListener('click', this.handleClickRejouer)
+			);
+		document
+			.querySelectorAll('.retour')
+			.forEach(btn => btn.removeEventListener('click', this.handleClickRetour));
+
+		this.socket.off('mortDuJoueur', this.mortJoueur);
+
+		this.chrono.stop();
 	}
 
 	private render(g: Game) {
