@@ -55,13 +55,16 @@ export default class JeuSolo extends Jeu {
 		if (difficulte === 1) {
 			this.pourcentSpawn.moyen = 0.25;
 			this.maxEnemies = 15;
+			this.multiplicateurDifficulte = 1.25
 		} else if (difficulte === 2) {
 			this.pourcentSpawn.difficile = 0.5;
 			this.pourcentSpawn.moyen = 0.25;
 			this.maxEnemies = 20;
+			this.multiplicateurDifficulte = 1.5
 		} else if (difficulte === 3) {
 			this.pourcentSpawn.impossible = 0;
 			this.maxEnemies = 10000;
+			this.multiplicateurDifficulte = 2;
 		}
 	}
 }

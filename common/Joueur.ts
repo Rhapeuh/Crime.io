@@ -116,9 +116,11 @@ export default class Joueur extends Entities {
 		this.setVY(newVY);
 	}
 
-	public recalculScore() {
+	public recalculScore(multiplicateur: number) {
 		const tempsEnVie = Date.now() - this.startTime;
-		const multiplicateur = tempsEnVie / 60000;
-		this.addScore(Math.trunc(this.getScore() * multiplicateur));
+		const multiplicateurTemps = tempsEnVie / 60000;
+		this.addScore(
+			Math.trunc(this.getScore() * multiplicateurTemps * multiplicateur)
+		);
 	}
 }

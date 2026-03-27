@@ -23,11 +23,19 @@ export default class Jeu {
 	private bonusIntervalFunction: NodeJS.Timeout | null = null;
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
+	multiplicateurDifficulte: number = 1;
 
 	protected destroy() {
-		if (this.gameLoop) clearInterval(this.gameLoop);
+		if (this.gameLoop) {
+			clearInterval(this.gameLoop);
+			this.gameLoop = null;
+		}
 
-		if (this.bonusIntervalFunction) clearInterval(this.bonusIntervalFunction);
+		if (this.bonusIntervalFunction) {
+			clearInterval(this.bonusIntervalFunction);
+			this.bonusIntervalFunction = null;
+		}
+
 		this.game.clearAll();
 	}
 
@@ -85,7 +93,7 @@ export default class Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		console.log(`le joueur mort est ${j.getPseudo()}`);
-		j.recalculScore();
+		j.recalculScore(this.multiplicateurDifficulte);
 		const data = {
 			pseudo: j.getPseudo(),
 			score: j.getScore(),
