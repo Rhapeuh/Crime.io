@@ -380,6 +380,7 @@ export default class JeuView extends View {
 	}
 
 	private renderEnnemies(listEnnemies: Ennemy[]) {
+		console.log(listEnnemies);
 		for (const e of listEnnemies) {
 			this.dessinerEntite(e, Math.atan2(e.vy, e.vx));
 			if (e.vie && e.vie < e.viesBase) this.afficherBarreVie(e);

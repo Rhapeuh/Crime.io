@@ -14,12 +14,12 @@ import type Entities from '../common/Entities';
 import Bonus from '../common/Bonus.ts';
 
 export default class Jeu {
-	private maxEnemies = 20;
-	private maxEnnemiesSpawning = 2;
+	maxEnemies = 10;
+	private maxEnnemiesSpawning = 1;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
-	private maxSpawnDelay = 300;
-	private gameDifficulty: DifficulteEnnemi = DifficulteEnnemi.FACILE;
+	private maxSpawnDelay = 400;
+	pourcentSpawn = { moyen: 1, difficile: 1, impossible: 1 };
 	private bonusIntervalFunction: NodeJS.Timeout | null = null;
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
@@ -29,10 +29,6 @@ export default class Jeu {
 
 		if (this.bonusIntervalFunction) clearInterval(this.bonusIntervalFunction);
 		this.game.clearAll();
-	}
-
-	public setDifficulty(difficulte: DifficulteEnnemi) {
-		this.gameDifficulty = difficulte;
 	}
 
 	protected update() {
@@ -61,13 +57,13 @@ export default class Jeu {
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 		}
@@ -188,8 +184,17 @@ export default class Jeu {
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
 			for (let i = 0; i < nbASpawn; i++) {
+				const randDifficulté = Math.random();
 				const randEnnemy = Math.random();
-				const difficulte = this.gameDifficulty;
+				let difficulte = DifficulteEnnemi.FACILE;
+
+				if (randDifficulté > this.pourcentSpawn.impossible) {
+					difficulte = DifficulteEnnemi.IMPOSSIBLE;
+				} else if (randDifficulté > this.pourcentSpawn.difficile) {
+					difficulte = DifficulteEnnemi.DIFFICILE;
+				} else if (randDifficulté > this.pourcentSpawn.moyen) {
+					difficulte = DifficulteEnnemi.MOYEN;
+				}
 
 				if (randEnnemy < 0.5)
 					this.addEnnemy(new Ennemy(this.randomCoordonee(), difficulte));
@@ -205,6 +210,7 @@ export default class Jeu {
 	}
 
 	// Gestion des bonus
+
 	protected handleBonusSpawning() {
 		this.bonusIntervalFunction = setInterval(() => {
 			// 5 bonus par joueur

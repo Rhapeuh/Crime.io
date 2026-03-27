@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io-client';
 import JeuView from './JeuView';
 import Router from './Router';
+import { currentDifficulte } from './main';
 
 export default class JeuSoloView extends JeuView {
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
@@ -14,7 +15,7 @@ export default class JeuSoloView extends JeuView {
 
 			return;
 		}
-		socket.emit('rejoindreSolo', pseudo);
+		socket.emit('rejoindreSolo', pseudo, currentDifficulte);
 		this.socket.on('renderSolo', this.handleRender);
 	}
 

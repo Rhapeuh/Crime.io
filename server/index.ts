@@ -7,7 +7,7 @@ import { randomInt } from 'crypto';
 import JeuMulti from './JeuMulti.ts';
 import { readFile } from 'fs/promises';
 
-const max_player = 6;
+const max_player = 20;
 
 const httpServer = http.createServer((_req, res) => {
 	res.statusCode = 200;
@@ -27,17 +27,8 @@ const partieMultiEnCours = new Map<string, JeuMulti>();
 io.on('connection', socket => {
 	socket.emit('premiereConnexion', genereNom());
 
-	// socket.on('choixDifficulte', (difficulte: number) => {
-	// 	socket.data.difficulte = difficulte;
-	// 	if (partiesSoloEnCours.has(socket.id)) {
-	// 		partiesSoloEnCours
-	// 			.get(socket.id)
-	// 			?.setDifficulty(difficulte as DifficulteEnnemi);
-	// 	}
-	// });
-
-	socket.on('rejoindreSolo', (pseudo: string) => {
-		startNewGame(pseudo, socket);
+	socket.on('rejoindreSolo', (pseudo: string, difficulte: number) => {
+		startNewGame(pseudo, socket, difficulte);
 	});
 
 	socket.on('getAllRoom', () => {
@@ -94,15 +85,13 @@ io.on('connection', socket => {
 	});
 });
 
-function startNewGame(pseudo: string, socket: Socket) {
+function startNewGame(pseudo: string, socket: Socket, difficulte: number) {
 	if (partiesSoloEnCours.has(socket.id)) {
 		partiesSoloEnCours.get(socket.id)?.destroy();
 	}
 
 	const nouveauJeu = new JeuSolo(pseudo, socket);
-	// if (socket.data.difficulte !== undefined) {
-	// 	nouveauJeu.setDifficulty(socket.data.difficulte as DifficulteEnnemi);
-	// }
+	nouveauJeu.setDifficulte(difficulte);
 	partiesSoloEnCours.set(socket.id, nouveauJeu);
 }
 
