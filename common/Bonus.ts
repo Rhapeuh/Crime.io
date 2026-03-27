@@ -63,16 +63,16 @@ export default class Bonus extends Entities {
 						j.setBulletWidth(j.getBulletWidth() + this.value);
 						j.setBulletHeight(j.getBulletHeight() + this.value);
 						setTimeout(() => {
-							j.setBulletWidth(10);
-							j.setBulletHeight(5);
+							j.setBulletWidth(5);
+							j.setBulletHeight(10);
 						}, 15000);
 						break;
 					case 'BULLET_WIDTH_REMOVE':
 						j.setBulletWidth(this.value);
 						j.setBulletHeight(this.value);
 						setTimeout(() => {
-							j.setBulletWidth(10);
-							j.setBulletHeight(5);
+							j.setBulletWidth(5);
+							j.setBulletHeight(10);
 						}, 15000);
 						break;
 					case 'SPEED_ADD':
