@@ -25,7 +25,8 @@ export default class JeuView extends View {
 	currentMousePos: MouseEvent | null = null;
 	worldWidth: number = 0;
 	worldHeight: number = 0;
-	private keys: { [key: string]: boolean } = {
+	lastVie: number = -1;
+	keys: { [key: string]: boolean } = {
 		ArrowUp: false,
 		KeyW: false,
 		ArrowDown: false,
@@ -119,20 +120,20 @@ export default class JeuView extends View {
 		);
 	}
 
-	private handleClickRetour(event: Event){
+	private handleClickRetour(event: Event) {
 		event.preventDefault();
 
-				Router.navigate('/');
+		Router.navigate('/');
 
-				document
-					.querySelectorAll('.blur')!
-					.forEach(temp => temp.setAttribute('class', 'blur'));
-				document
-					.querySelectorAll('.rejouerButton')!
-					.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
-				document
-					.querySelectorAll('.retour')!
-					.forEach(temp => temp.setAttribute('class', 'retour'));
+		document
+			.querySelectorAll('.blur')!
+			.forEach(temp => temp.setAttribute('class', 'blur'));
+		document
+			.querySelectorAll('.rejouerButton')!
+			.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
+		document
+			.querySelectorAll('.retour')!
+			.forEach(temp => temp.setAttribute('class', 'retour'));
 	}
 
 	private mortJoueur(j: Joueur) {
@@ -342,10 +343,13 @@ export default class JeuView extends View {
 		if (currentClient) {
 			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
 				currentClient.pseudo!;
-			this.hudElement.querySelector('.vies')!.innerHTML =
-				'<img src="/images/textures/hp.png" alt="Vie" style="margin: 3px"/>'.repeat(
-					currentClient.vie!
-				);
+			if (currentClient.vie && this.lastVie !== currentClient.vie) {
+				this.hudElement.querySelector('.vies')!.innerHTML =
+					'<img src="/images/hp.png" alt="Vie" style="margin: 3px"/>'.repeat(
+						currentClient.vie!
+					);
+				this.lastVie = currentClient.vie;
+			}
 			this.hudElement.querySelector('.info-score')!.innerHTML =
 				'' + currentClient.score;
 			this.hudElement.querySelector('.timer')!.innerHTML =

@@ -3,10 +3,10 @@ export default class Assets {
 
 	static async loadAll() {
 		const imagesToLoad = [
-			{ id: 'scarab', src: '/images/textures/scarab.png' },
+			{ id: 'scarab', src: '/images/perso/scarab.png' },
 			{ id: 'bullet', src: '/images/bullet.jpg' },
-			{ id: 'ennemiMelee', src: '/images/textures/basic_ennemy.png' },
-			{ id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg' },
+			{ id: 'ennemiMelee', src: '/images/perso/basic_ennemy.png' },
+			{ id: 'shooterEnnemi', src: '/images/perso/shooterEnnemy.jpg' },
 			{ id: 'bonusTemp', src: '/images/bonusTemp.jpg' },
 		];
 
