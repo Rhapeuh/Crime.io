@@ -435,6 +435,17 @@ export default class JeuView extends View {
 		const screenX = e.co.x - this.camera.x;
 		const screenY = e.co.y - this.camera.y;
 
+		const halfWidth = e.width / 2;
+		const halfHeight = e.height / 2;
+		if (
+			screenX + halfWidth < 0 ||
+			screenX - halfWidth > this.canvas.width ||
+			screenY + halfHeight < 0 ||
+			screenY - halfHeight > this.canvas.height
+		) {
+			return;
+		}
+
 		this.context.save();
 
 		this.context.translate(screenX, screenY);
