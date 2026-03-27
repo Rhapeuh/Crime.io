@@ -87,6 +87,7 @@ export default class JeuView extends View {
 					.querySelectorAll('.joueurMort')
 					?.forEach(elt => elt.classList.remove('active'));
 				if (document.querySelector('.jeuSolo')?.contains(temp)) {
+					this.socket.emit('quitterSolo');
 					Router.navigate('/jeuSolo');
 				} else {
 					Router.navigate('/jeuMulti');
