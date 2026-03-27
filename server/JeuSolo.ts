@@ -8,7 +8,7 @@ export default class JeuSolo extends Jeu {
 
 	constructor(pseudo: string, socket: Socket) {
 		super();
-		this.j = new Joueur(pseudo, { x: 0, y: 0 }, 0, 3, 20, 20, socket.id);
+		this.j = new Joueur(pseudo, { x: 0, y: 0 }, 0, 3, 35, 35, socket.id);
 		this.game.addJoueur(this.j);
 		this.j.setCoordonee(this.randomCoordonee());
 		this.socket = socket;

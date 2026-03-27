@@ -32,8 +32,8 @@ export default class JeuMulti extends Jeu {
 			{ x: 0, y: 0 },
 			1,
 			3,
-			20,
-			20,
+			35,
+			35,
 			socket.id
 		);
 		this.game.addJoueur(newJoueur);

@@ -15,7 +15,6 @@
     justify-content: center;
     
     background-color: var(--purpleblue3);
-    box-shadow: none;
 }
 
 .room h3 {
@@ -80,7 +79,6 @@
     color: var(--electric-purple1);
     border-color: var(--electric-citrus1);
     background-color: var(--purpleblue3);
-    box-shadow: 0 0 5px 2px var(--electric-citrus2);
 }
 
 .room a[href="/"] {

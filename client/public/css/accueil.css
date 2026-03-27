@@ -122,9 +122,8 @@ h1 {
 	color: var(--electric-purple1);
 	border-color: var(--electric-citrus1);
 	background-color: var(--purpleblue3);
-	box-shadow: 0 0 1px 1px var(--electric-citrus2);
 
-	transition: border-color 0.3s ease, background-color 0.125s ease, color 0.125s ease, box-shadow 0.125s ease;
+	transition: border-color 0.3s ease, background-color 0.125s ease, color 0.125s ease;
 }
 
 .pseudo-input:not(focus),

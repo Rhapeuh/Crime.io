@@ -7,6 +7,7 @@
 	left: 0;
 	border: none;
 	z-index: 0;
+    background-color: #403232;
 }
 
 .jeuSolo, .jeuMulti {
@@ -14,7 +15,6 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-color: #0a0a0a;
 	z-index: 2;
 }
 
@@ -58,7 +58,6 @@
 .hud .vies {
     font-size: 32px;
     letter-spacing: 4px;
-    filter: drop-shadow(0 0 6px var(--electric-pink));
 }
 
 .jeuSolo a, .jeuMulti a {
@@ -74,14 +73,12 @@
     padding: 10px 20px;
     border-radius: 8px;
     border: 2px solid var(--electric-purple1);
-    box-shadow: 0 0 10px var(--electric-blue1);
     transition: all 0.2s ease;
 }
 
 .jeuSolo a:hover, .jeuMulti a:hover {
     background: var(--electric-blue2);
     border-color: var(--electric-pink);
-    box-shadow: 0 0 15px var(--electric-pink);
     transform: scale(1.05);
 }
 

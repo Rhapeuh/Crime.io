@@ -23,7 +23,7 @@ export default class Joueur extends Entities {
 		height: number,
 		clientID: string
 	) {
-		super(co, 0, 0, speed, width, height, 'persoTemp', vies);
+		super(co, 0, 0, speed, width, height, 'scarab', vies);
 		this.pseudo = pseudo;
 		this.clientID = clientID;
 		this.invincibilite = false;

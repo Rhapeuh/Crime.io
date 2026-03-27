@@ -322,9 +322,11 @@ export default class JeuView extends View {
 		if (currentClient) {
 			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
 				currentClient.pseudo!;
-			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
-				currentClient.vie!
-			);
+			this.hudElement.querySelector('.vies')!.innerHTML =
+				'<img src="/images/textures/hp.png" alt="Vie" style="margin: 3px"/>'.repeat(
+					3
+					//currentClient.vie!
+				);
 			this.hudElement.querySelector('.info-score')!.innerHTML =
 				'' + currentClient.score;
 			this.hudElement.querySelector('.timer')!.innerHTML =
@@ -342,7 +344,23 @@ export default class JeuView extends View {
 				);
 			else angle = 0;
 			this.dessinerEntite(j, angle);
+
+			this.afficherPseudo(j);
 		}
+	}
+
+	private afficherPseudo(j: Joueur) {
+		const screenX = j.co.x - this.camera.x;
+		const screenY = j.co.y - this.camera.y;
+		this.context.save();
+		this.context.translate(screenX, screenY);
+		this.context.fillStyle = 'white';
+		this.context.strokeStyle = 'black';
+		this.context.lineWidth = 2;
+		this.context.font = '14px Arial';
+		this.context.textAlign = 'center';
+		this.context.fillText(j.pseudo || 'Joueur', 0, -j.height / 2 - 10);
+		this.context.restore();
 	}
 
 	private renderBulletsJoueur(listBullets: Bullet[]) {
@@ -376,7 +394,7 @@ export default class JeuView extends View {
 
 		this.context.translate(screenX, screenY);
 
-		this.context.rotate(angle);
+		this.context.rotate(angle + Math.PI / 2);
 
 		const img = Assets.getImage(e.spriteId);
 		if (img)

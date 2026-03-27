@@ -32,7 +32,7 @@
     cursor: pointer;
     border: none;
     border-radius: 8px;
-    transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, filter 0.2s;
     color: white;
     text-transform: uppercase;
 }
@@ -49,17 +49,14 @@
 
 .btn-difficulte[data-difficulte="0"] {
     background-color: var(--diff-facile);
-    box-shadow: 0 0 15px var(--diff-facile);
 }
 
 
 .btn-difficulte[data-difficulte="1"] {
     background-color: var(--diff-moyen);
-    box-shadow: 0 0 15px var(--diff-moyen);
 }
 
 
 .btn-difficulte[data-difficulte="2"] {
     background-color: var(--diff-difficile);
-    box-shadow: 0 0 15px var(--diff-difficile);
 }

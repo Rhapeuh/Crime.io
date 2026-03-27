@@ -3,9 +3,9 @@ export default class Assets {
 
 	static async loadAll() {
 		const imagesToLoad = [
-			{ id: 'persoTemp', src: '/images/persoTemp.jpg' },
+			{ id: 'scarab', src: '/images/textures/scarab.png' },
 			{ id: 'bullet', src: '/images/bullet.jpg' },
-			{ id: 'ennemiTemp', src: '/images/ennemyTemp.jpg' },
+			{ id: 'ennemiMelee', src: '/images/textures/basic_ennemy.png' },
 			{ id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg' },
 			{ id: 'bonusTemp', src: '/images/bonusTemp.jpg' },
 		];
