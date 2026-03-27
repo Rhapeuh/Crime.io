@@ -6,7 +6,7 @@ import type Joueur from '../../common/Joueur.ts';
 import Assets from './asset.ts';
 import type Bullet from '../../common/Bullet.ts';
 import type { Coordonee } from '../../common/types.ts';
-import type Ennemy from '../../common/Ennemy.ts';
+import Ennemy from '../../common/Ennemy.ts';
 import type Entities from '../../common/Entities.ts';
 import type Bonus from '../../common/Bonus.ts';
 import Chrono from './Chrono.ts';
@@ -383,7 +383,33 @@ export default class JeuView extends View {
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
 			this.dessinerEntite(e, Math.atan2(e.vy, e.vx));
+			if (e.vie && e.vie < e.viesBase) this.afficherBarreVie(e);
 		}
+	}
+
+	private afficherBarreVie(e: Ennemy) {
+		const screenX = e.co.x - this.camera.x;
+		const screenY = e.co.y - this.camera.y;
+		this.context.save();
+		this.context.translate(screenX, screenY);
+		this.context.lineWidth = 2;
+		if (e.vie) {
+			this.context.fillStyle = 'black';
+			this.context.fillRect(
+				-(e.width / 2) - 5,
+				-e.height / 2 - 10,
+				e.width + 10,
+				5
+			);
+			this.context.fillStyle = 'purple';
+			this.context.fillRect(
+				-(e.width / 2) - 5,
+				-e.height / 2 - 10,
+				((e.width + 10) / e.viesBase) * e.vie,
+				5
+			);
+		}
+		this.context.restore();
 	}
 
 	private dessinerEntite(e: Entities, angle: number) {

@@ -22,6 +22,7 @@ const STATS_ENNEMIS = {
 
 export default class Ennemy extends Entities {
 	private scoreValue: number;
+	public viesBase: number;
 
 	constructor(
 		co: Coordonee,
@@ -40,10 +41,15 @@ export default class Ennemy extends Entities {
 			stats.hp
 		);
 		this.scoreValue = stats.score;
+		this.viesBase = stats.hp;
 	}
 
 	public getScoreValue(): number {
 		return this.scoreValue;
+	}
+
+	public getViesBase(): number {
+		return this.viesBase;
 	}
 
 	public update(
