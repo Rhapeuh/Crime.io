@@ -5,13 +5,13 @@ import Score from './Score';
 import type { Socket } from 'socket.io-client';
 import { genererCredits } from './Credits';
 import Parametres from './Parametres';
+import { currentDifficulte, setCurrentDifficulte } from './main';
 
 export default class AcceuilView extends View {
 	private menuGauche: HTMLElement;
 	private dernierElement: HTMLElement | null = null;
 	private fondElement: HTMLElement;
 	private socket: Socket;
-	private currentDifficulte: number = 1;
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
@@ -90,17 +90,16 @@ export default class AcceuilView extends View {
 			this.fondElement.innerHTML = Parametres.genererChoixDifficulte();
 			this.fondElement.querySelectorAll('.btn-difficulte').forEach(btn => {
 				const btnDiff = parseInt(btn.getAttribute('data-difficulte') || '1');
-				if (btnDiff === this.currentDifficulte) {
+				if (btnDiff === currentDifficulte) {
 					btn.classList.add('selected');
 				} else {
 					btn.classList.remove('selected');
 				}
 				btn.addEventListener('click', e => {
 					const target = e.target as HTMLElement;
-					this.currentDifficulte = parseInt(
-						target.getAttribute('data-difficulte') || '1'
+					setCurrentDifficulte(
+						parseInt(target.getAttribute('data-difficulte') || '1')
 					);
-					this.socket.emit('choixDifficulte', this.currentDifficulte);
 					this.fondElement
 						.querySelectorAll('.btn-difficulte')
 						.forEach(b => b.classList.remove('selected'));

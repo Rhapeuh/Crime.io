@@ -6,6 +6,7 @@ import JeuMultiView from './JeuMultiView';
 import Assets from './asset';
 import Room, { roomName } from './Room';
 
+export let currentDifficulte = 1;
 const pseudoInput = document.querySelector('.pseudo-input') as HTMLInputElement;
 
 const socket = io(window.location.hostname + `:9876`);
@@ -65,3 +66,8 @@ async function lancerJeu() {
 }
 
 lancerJeu();
+
+export function setCurrentDifficulte(difficulte: number) {
+	currentDifficulte = difficulte;
+	socket.emit('choixDifficulte', currentDifficulte);
+}
