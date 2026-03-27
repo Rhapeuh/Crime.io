@@ -1,4 +1,4 @@
-import AcceuilView from './AcceuilView';
+import AccueilView from './AccueilView';
 import Router from './Router';
 import JeuSoloView from './JeuSoloView';
 import { io } from 'socket.io-client';
@@ -20,7 +20,7 @@ const routes = [
 	{
 		path: '/',
 		getView: () =>
-			new AcceuilView(
+			new AccueilView(
 				document.querySelector('.viewContent > .accueil')!,
 				socket
 			),

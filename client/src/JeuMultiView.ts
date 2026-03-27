@@ -3,6 +3,7 @@ import JeuView from './JeuView';
 import Router from './Router';
 
 export default class JeuMultiView extends JeuView {
+
 	constructor(
 		element: HTMLElement,
 		socket: Socket,
@@ -14,7 +15,12 @@ export default class JeuMultiView extends JeuView {
 		socket.on('plusDePlace', () => Router.navigate('/room'));
 		if (pseudo === '') {
 			this.element.classList.remove('active');
-			Router.navigate('/');
+
+			setTimeout(() => {
+				Router.navigate('/');
+			}, 0);
+
+			socket.emit('quitterMulti');
 			return;
 		}
 		this.socket.on('renderMulti', this.handleRender);

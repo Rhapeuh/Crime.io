@@ -3,6 +3,7 @@ import JeuView from './JeuView';
 import Router from './Router';
 
 export default class JeuSoloView extends JeuView {
+
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element, socket);
 		if (pseudo === '') {
@@ -11,6 +12,7 @@ export default class JeuSoloView extends JeuView {
 			setTimeout(() => {
 				Router.navigate('/');
 			}, 0);
+			socket.emit('quitterSolo');
 
 			return;
 		}

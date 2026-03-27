@@ -7,7 +7,7 @@ import { genererCredits } from './Credits';
 import Parametres from './Parametres';
 import { currentDifficulte, setCurrentDifficulte } from './main';
 
-export default class AcceuilView extends View {
+export default class AccueilView extends View {
 	private menuGauche: HTMLElement;
 	private dernierElement: HTMLElement | null = null;
 	private fondElement: HTMLElement;

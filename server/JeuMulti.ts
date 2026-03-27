@@ -27,6 +27,8 @@ export default class JeuMulti extends Jeu {
 	}
 
 	ajouterJoueur(socket: Socket, pseudo: string) {
+		this.retirerJoueur(socket.id);
+
 		const newJoueur = new Joueur(
 			pseudo,
 			{ x: 0, y: 0 },
