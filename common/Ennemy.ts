@@ -4,11 +4,12 @@ import type { Coordonee } from './types.ts';
 import { verifCoordonee } from './utils.ts';
 
 export const DifficulteEnnemi = {
-	FACILE: 0,
-	MOYEN: 1,
-	DIFFICILE: 2,
-	IMPOSSIBLE: 3,
-} as const;
+    FACILE: 'FACILE',
+    MOYEN: 'MOYEN',
+    DIFFICILE: 'DIFFICILE',
+	IMPOSSIBLE: 'IMPOSSIBLE'
+}
+
 
 export type DifficulteEnnemi =
 	(typeof DifficulteEnnemi)[keyof typeof DifficulteEnnemi];
@@ -17,7 +18,7 @@ const STATS_ENNEMIS = {
 	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 25 },
 	[DifficulteEnnemi.MOYEN]: { speed: 4, hp: 2, score: 25, taille: 30 },
 	[DifficulteEnnemi.DIFFICILE]: { speed: 7, hp: 3, score: 50, taille: 35 },
-	[DifficulteEnnemi.IMPOSSIBLE]: { speed: 10, hp: 5, score: 100, taille: 40 },
+	[DifficulteEnnemi.IMPOSSIBLE]: { speed: 15, hp: 5, score: 100, taille: 50 },
 };
 
 export default class Ennemy extends Entities {

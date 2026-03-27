@@ -50,4 +50,18 @@ export default class JeuSolo extends Jeu {
 		await super.joueurMort(j);
 		this.socket.emit('mortDuJoueur', j);
 	}
+
+	setDifficulte(difficulte: number) {
+		if (difficulte === 1) {
+			this.pourcentSpawn.moyen = 0.25;
+			this.maxEnemies = 15;
+		} else if (difficulte === 2) {
+			this.pourcentSpawn.difficile = 0.5;
+			this.pourcentSpawn.moyen = 0.25;
+			this.maxEnemies = 20;
+		} else if (difficulte === 3) {
+			this.pourcentSpawn.impossible = 0;
+			this.maxEnemies = 10000;
+		}
+	}
 }
