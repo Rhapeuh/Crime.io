@@ -1,12 +1,5 @@
 @import url("palette.css");
 
-:root {
-    --diff-facile: var(--electric-pink);
-    --diff-moyen: var(--electric-purple2);
-    --diff-difficile: var(--black1);
-}
-
-
 .difficulteContent {
     text-align: center;
     padding: 3rem 2rem;
@@ -37,6 +30,7 @@
     margin-bottom: 2.5rem;
     justify-content: center;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .btn-difficulte {
@@ -44,7 +38,8 @@
     font-size: 25px;
     font-weight: bold;
     cursor: pointer;
-    border: none;
+    border: 2px var(--electric-purple2) solid;
+;
     border-radius: 8px;
     transition: transform 0.2s, filter 0.2s;
     color: var(--white1);
@@ -54,12 +49,17 @@
 }
 
 .btn-difficulte:hover {
-    filter: brightness(1.08);
+    transform: scale(1.05);
+
+
 }
 
 .btn-difficulte.selected {
     transform: scale(1.1);
-    background-color: var(--electric-citrus2);
+    background-color: var(--electric-citrus1);
+    border-color: var(--electric-citrus1);
+    color: var(--darkblue2);
+    
 }
 
 
