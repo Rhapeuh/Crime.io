@@ -324,8 +324,7 @@ export default class JeuView extends View {
 				currentClient.pseudo!;
 			this.hudElement.querySelector('.vies')!.innerHTML =
 				'<img src="/images/textures/hp.png" alt="Vie" style="margin: 3px"/>'.repeat(
-					3
-					//currentClient.vie!
+					currentClient.vie!
 				);
 			this.hudElement.querySelector('.info-score')!.innerHTML =
 				'' + currentClient.score;
