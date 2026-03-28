@@ -163,11 +163,11 @@ export default class JeuView extends View {
 		document
 			.querySelectorAll('.nbTuer')
 			.forEach(
-				elt => (elt.innerHTML += `${j.nbEnnemiTuer}`)
+				elt => (elt.innerHTML = `Valeur de crime commis : ${j.nbEnnemiTuer}`)
 			);
 		document
 			.querySelectorAll('.scoreFinal')
-			.forEach(elt => (elt.innerHTML += `${j.score}`));
+			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
 	}
 
 	private handleResize() {
