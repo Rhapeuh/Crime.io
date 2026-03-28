@@ -115,6 +115,7 @@ h1 {
 	padding-left: 15px;
 	transition: border-radius 0.1s ease;
 	font-weight: 500;
+	font-family: joueurFont;
 }
 
 
