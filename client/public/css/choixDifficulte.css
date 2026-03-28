@@ -25,10 +25,12 @@
 }
 
 .difficulteSection h2, .personnageSection h2 {
-    margin-bottom: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     height: 1rem;
+    font-family: titreFont;
 }
 
 .separator {
@@ -50,29 +52,37 @@
     font-size: 25px;
     font-weight: bold;
     cursor: pointer;
-    border: 2px var(--electric-purple2) solid;
+    border: 2px var(--electric-purple3) solid;
 ;
     border-radius: 8px;
     transition: transform 0.2s, filter 0.2s;
     color: var(--white1);
-    background-color: var(--electric-purple2);
+    background-color: var(--electric-purple3);
     text-transform: uppercase;
     font-family: baseFont;
 }
 
-.btn-difficulte:hover {
+.btn-difficulte:hover,
+.btn-personnage:hover {
     transform: scale(1.05);
 
-
+    transition: transform 0.1s ;
 }
 
-.btn-difficulte.selected {
+.btn-difficulte.selected,
+.btn-personnage.selected {
     transform: scale(1.1);
-    background-color: var(--electric-citrus1);
-    border-color: var(--electric-citrus1);
-    color: var(--darkblue2);
+    background-color: var(--darkblue2);
+    border-color: var(--darkblue2);
+    color: var(--electric-citrus1);
+
+    img{
+        background-color: var(--black3) !important;
+
+    }
     
 }
+
 
 .personnage-grid {
     display: flex;
@@ -86,14 +96,14 @@
     flex-direction: column;
     align-items: center;
     padding: 1rem;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: bold;
     cursor: pointer;
     border: none;
     border-radius: 8px;
     transition: transform 0.2s, filter 0.2s;
     color: var(--white1);
-    background-color: var(--electric-purple2);
+    background-color: var(--electric-purple3);
     text-transform: uppercase;
     font-family: baseFont;
 }
@@ -102,15 +112,6 @@
     width: 60px;
     height: 60px;
     margin-bottom: 0.5rem;
-}
-
-.btn-personnage:hover {
-    filter: brightness(1.08);
-}
-
-.btn-personnage.selected {
-    transform: scale(1.1);
-    background-color: var(--electric-citrus2);
 }
 
 

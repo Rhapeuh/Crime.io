@@ -15,6 +15,11 @@
   	src: url(font/averox-font/Averox-rgY9y.ttf);
 }
 
+@font-face {
+	font-family: joueurFont; 
+  	src: url(font/cardot-font/Cardot-lxq6q.ttf);
+}
+
 .accueil {
 	display: grid;
 	width: 100vw;
@@ -59,7 +64,7 @@ a {
 }
 
 .titre {
-	color: var(--electric-purple2);
+	color: var(--electric-purple3);
 
 	font-family: titreFont !important;
 	display: flex;

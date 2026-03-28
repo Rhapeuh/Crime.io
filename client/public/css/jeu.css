@@ -7,7 +7,7 @@
 	left: 0;
 	border: none;
 	z-index: 0;
-    background-color: #403232;
+    background-color: var(--canva-purple);
 }
 
 .jeuSolo, .jeuMulti {
@@ -42,10 +42,10 @@
 .hud .info-pseudo {
     font-size: 28px;
     font-weight: bold;
-    color: var(--electric-pink);
+    color: var(--hud-red);
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 0 0 10px var(--electric-pink);
+    font-family: joueurFont;
 }
 
 .hud .info-score {
@@ -53,6 +53,7 @@
     color: var(--electric-citrus1);
     font-weight: bold;
     text-shadow: 0 0 10px var(--electric-citrus1);
+    font-family: joueurFont;
 }
 
 .hud .vies {
@@ -89,4 +90,5 @@
     color: var(--white1);
     font: 600;
     transform: translate(-50%);
+    font-family: joueurFont;
 }
