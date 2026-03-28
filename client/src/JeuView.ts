@@ -153,6 +153,7 @@ export default class JeuView extends View {
 		document
 			.querySelectorAll('.retour')!
 			.forEach(temp => temp.classList.add('retour', 'displayRetour'));
+		
 	}
 
 	private setStat(j: Joueur) {
