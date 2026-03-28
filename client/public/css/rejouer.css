@@ -16,7 +16,7 @@
 }
 
 .joueurMort p {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: joueurFont;
 	font-size: 30px;
 	color: var(--white1);
 }

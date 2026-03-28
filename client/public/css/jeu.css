@@ -64,21 +64,22 @@
     bottom: 20px;
 
     z-index: 10;
-    color: white;
+    color: var(--white1);
     text-decoration: none;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: baseFont;
 	text-transform: uppercase;
     font-weight: bold;
-    background: var(--electric-blue1);
+    background: var(--darkblue2);
     padding: 10px 20px;
     border-radius: 8px;
-    border: 2px solid var(--electric-purple1);
+    border: 2px solid var(--electric-citrus1);
     transition: all 0.2s ease;
+    font-size: 25px;
 }
 
 .jeuSolo a:hover, .jeuMulti a:hover {
-    background: var(--electric-blue2);
-    border-color: var(--electric-pink);
+    background: var(--electric-citrus1);
+    color: var(--darkblue2);
     transform: scale(1.05);
 }
 
