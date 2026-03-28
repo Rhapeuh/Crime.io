@@ -23,7 +23,7 @@
 	margin-top: 15px;
 	margin-left: 20px;
 	margin-right: 20px;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: joueurFont;
 }
 
 .tableau-scores th {
