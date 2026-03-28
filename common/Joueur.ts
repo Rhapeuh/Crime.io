@@ -21,9 +21,10 @@ export default class Joueur extends Entities {
 		vies: number,
 		width: number,
 		height: number,
-		clientID: string
+		clientID: string,
+		spriteId: string = 'scarab'
 	) {
-		super(co, 0, 0, speed, width, height, 'persoTemp', vies);
+		super(co, 0, 0, speed, width, height, spriteId, vies);
 		this.pseudo = pseudo;
 		this.clientID = clientID;
 		this.invincibilite = false;
@@ -116,9 +117,11 @@ export default class Joueur extends Entities {
 		this.setVY(newVY);
 	}
 
-	public recalculScore() {
+	public recalculScore(multiplicateur: number) {
 		const tempsEnVie = Date.now() - this.startTime;
-		const multiplicateur = tempsEnVie / 60000;
-		this.addScore(Math.trunc(this.getScore() * multiplicateur));
+		const multiplicateurTemps = tempsEnVie / 60000;
+		this.addScore(
+			Math.trunc(this.getScore() * multiplicateurTemps * multiplicateur)
+		);
 	}
 }

@@ -6,7 +6,7 @@ import type Joueur from '../../common/Joueur.ts';
 import Assets from './asset.ts';
 import type Bullet from '../../common/Bullet.ts';
 import type { Coordonee } from '../../common/types.ts';
-import type Ennemy from '../../common/Ennemy.ts';
+import Ennemy from '../../common/Ennemy.ts';
 import type Entities from '../../common/Entities.ts';
 import type Bonus from '../../common/Bonus.ts';
 import Chrono from './Chrono.ts';
@@ -25,7 +25,8 @@ export default class JeuView extends View {
 	currentMousePos: MouseEvent | null = null;
 	worldWidth: number = 0;
 	worldHeight: number = 0;
-	private keys: { [key: string]: boolean } = {
+	lastVie: number = -1;
+	keys: { [key: string]: boolean } = {
 		ArrowUp: false,
 		KeyW: false,
 		ArrowDown: false,
@@ -49,6 +50,8 @@ export default class JeuView extends View {
 		this.handleShooting = this.handleShooting.bind(this);
 		this.mortJoueur = this.mortJoueur.bind(this);
 		this.handleResize = this.handleResize.bind(this);
+		this.handleClickRejouer = this.handleClickRejouer.bind(this);
+		this.handleClickRetour = this.handleClickRetour.bind(this);
 
 		this.canvas = this.element.querySelector('canvas')!;
 		this.context = this.canvas.getContext('2d')!;
@@ -81,27 +84,30 @@ export default class JeuView extends View {
 	private rejouerListener() {
 		const rejouerButton = document.querySelectorAll('.rejouerButton');
 		rejouerButton?.forEach(temp =>
-			temp.addEventListener('click', event => {
-				event.preventDefault;
-				document
-					.querySelectorAll('.joueurMort')
-					?.forEach(elt => elt.classList.remove('active'));
-				if (document.querySelector('.jeuSolo')?.contains(temp)) {
-					Router.navigate('/jeuSolo');
-				} else {
-					Router.navigate('/jeuMulti');
-				}
-				document
-					.querySelectorAll('.blur')!
-					.forEach(temp => temp.setAttribute('class', 'blur'));
-				document
-					.querySelectorAll('.rejouerButton')!
-					.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
-				document
-					.querySelectorAll('.retour')!
-					.forEach(temp => temp.setAttribute('class', 'retour'));
-			})
+			temp.addEventListener('click', this.handleClickRejouer)
 		);
+	}
+
+	private handleClickRejouer(event: Event) {
+		event.preventDefault();
+		const temp = event.currentTarget as HTMLElement;
+		document
+			.querySelectorAll('.joueurMort')
+			?.forEach(elt => elt.classList.remove('active'));
+		if (document.querySelector('.jeuSolo')?.contains(temp)) {
+			Router.navigate('/jeuSolo');
+		} else {
+			Router.navigate('/jeuMulti');
+		}
+		document
+			.querySelectorAll('.blur')!
+			.forEach(temp => temp.setAttribute('class', 'blur'));
+		document
+			.querySelectorAll('.rejouerButton')!
+			.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
+		document
+			.querySelectorAll('.retour')!
+			.forEach(temp => temp.setAttribute('class', 'retour'));
 	}
 
 	private retourListener() {
@@ -110,22 +116,24 @@ export default class JeuView extends View {
 			.querySelectorAll('.joueurMort')
 			?.forEach(elt => elt.classList.remove('active'));
 		retourButton?.forEach(temp =>
-			temp.addEventListener('click', event => {
-				event.preventDefault;
-
-				Router.navigate('/');
-
-				document
-					.querySelectorAll('.blur')!
-					.forEach(temp => temp.setAttribute('class', 'blur'));
-				document
-					.querySelectorAll('.rejouerButton')!
-					.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
-				document
-					.querySelectorAll('.retour')!
-					.forEach(temp => temp.setAttribute('class', 'retour'));
-			})
+			temp.addEventListener('click', this.handleClickRetour)
 		);
+	}
+
+	private handleClickRetour(event: Event) {
+		event.preventDefault();
+
+		Router.navigate('/');
+
+		document
+			.querySelectorAll('.blur')!
+			.forEach(temp => temp.setAttribute('class', 'blur'));
+		document
+			.querySelectorAll('.rejouerButton')!
+			.forEach(temp => temp.setAttribute('class', 'rejouerButton'));
+		document
+			.querySelectorAll('.retour')!
+			.forEach(temp => temp.setAttribute('class', 'retour'));
 	}
 
 	private mortJoueur(j: Joueur) {
@@ -277,6 +285,19 @@ export default class JeuView extends View {
 		window.removeEventListener('resize', this.handleResize);
 		this.canvas.removeEventListener('mousedown', this.handleMouseDown);
 		this.canvas.removeEventListener('mousemove', this.handleMouseMove);
+
+		document
+			.querySelectorAll('.rejouerButton')
+			.forEach(btn =>
+				btn.removeEventListener('click', this.handleClickRejouer)
+			);
+		document
+			.querySelectorAll('.retour')
+			.forEach(btn => btn.removeEventListener('click', this.handleClickRetour));
+
+		this.socket.off('mortDuJoueur', this.mortJoueur);
+
+		this.chrono.stop();
 	}
 
 	private render(g: Game) {
@@ -322,9 +343,13 @@ export default class JeuView extends View {
 		if (currentClient) {
 			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
 				currentClient.pseudo!;
-			this.hudElement.querySelector('.vies')!.innerHTML = '❤️'.repeat(
-				currentClient.vie!
-			);
+			if (currentClient.vie && this.lastVie !== currentClient.vie) {
+				this.hudElement.querySelector('.vies')!.innerHTML =
+					'<img src="/images/hp.png" alt="Vie" style="margin: 3px"/>'.repeat(
+						currentClient.vie!
+					);
+				this.lastVie = currentClient.vie;
+			}
 			this.hudElement.querySelector('.info-score')!.innerHTML =
 				'' + currentClient.score;
 			this.hudElement.querySelector('.timer')!.innerHTML =
@@ -334,6 +359,7 @@ export default class JeuView extends View {
 
 	private renderJoueur(listJoueurs: Joueur[]) {
 		for (const j of listJoueurs) {
+			console.log(j.spriteId);
 			let angle;
 			if (j.clientID === this.socket.id && this.currentMousePos)
 				angle = calculerAngle(
@@ -342,7 +368,23 @@ export default class JeuView extends View {
 				);
 			else angle = 0;
 			this.dessinerEntite(j, angle);
+
+			this.afficherPseudo(j);
 		}
+	}
+
+	private afficherPseudo(j: Joueur) {
+		const screenX = j.co.x - this.camera.x;
+		const screenY = j.co.y - this.camera.y;
+		this.context.save();
+		this.context.translate(screenX, screenY);
+		this.context.fillStyle = 'white';
+		this.context.strokeStyle = 'black';
+		this.context.lineWidth = 2;
+		this.context.font = '14px Arial';
+		this.context.textAlign = 'center';
+		this.context.fillText(j.pseudo || 'Joueur', 0, -j.height / 2 - 10);
+		this.context.restore();
 	}
 
 	private renderBulletsJoueur(listBullets: Bullet[]) {
@@ -365,18 +407,55 @@ export default class JeuView extends View {
 	private renderEnnemies(listEnnemies: Ennemy[]) {
 		for (const e of listEnnemies) {
 			this.dessinerEntite(e, Math.atan2(e.vy, e.vx));
+			if (e.vie && e.vie < e.viesBase) this.afficherBarreVie(e);
 		}
+	}
+
+	private afficherBarreVie(e: Ennemy) {
+		const screenX = e.co.x - this.camera.x;
+		const screenY = e.co.y - this.camera.y;
+		this.context.save();
+		this.context.translate(screenX, screenY);
+		this.context.lineWidth = 2;
+		if (e.vie) {
+			this.context.fillStyle = 'black';
+			this.context.fillRect(
+				-(e.width / 2) - 5,
+				-e.height / 2 - 10,
+				e.width + 10,
+				5
+			);
+			this.context.fillStyle = 'purple';
+			this.context.fillRect(
+				-(e.width / 2) - 5,
+				-e.height / 2 - 10,
+				((e.width + 10) / e.viesBase) * e.vie,
+				5
+			);
+		}
+		this.context.restore();
 	}
 
 	private dessinerEntite(e: Entities, angle: number) {
 		const screenX = e.co.x - this.camera.x;
 		const screenY = e.co.y - this.camera.y;
 
+		const halfWidth = e.width / 2;
+		const halfHeight = e.height / 2;
+		if (
+			screenX + halfWidth < 0 ||
+			screenX - halfWidth > this.canvas.width ||
+			screenY + halfHeight < 0 ||
+			screenY - halfHeight > this.canvas.height
+		) {
+			return;
+		}
+
 		this.context.save();
 
 		this.context.translate(screenX, screenY);
 
-		this.context.rotate(angle);
+		this.context.rotate(angle + Math.PI / 2);
 
 		const img = Assets.getImage(e.spriteId);
 		if (img)

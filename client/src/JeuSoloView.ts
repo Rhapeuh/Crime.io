@@ -1,8 +1,10 @@
 import { Socket } from 'socket.io-client';
 import JeuView from './JeuView';
 import Router from './Router';
+import { currentDifficulte, currentCharacter } from './main';
 
 export default class JeuSoloView extends JeuView {
+
 	constructor(element: HTMLElement, socket: Socket, pseudo: string) {
 		super(element, socket);
 		if (pseudo === '') {
@@ -11,10 +13,11 @@ export default class JeuSoloView extends JeuView {
 			setTimeout(() => {
 				Router.navigate('/');
 			}, 0);
+			socket.emit('quitterSolo');
 
 			return;
 		}
-		socket.emit('rejoindreSolo', pseudo);
+		this.socket.emit('rejoindreSolo', pseudo, currentDifficulte, currentCharacter);
 		this.socket.on('renderSolo', this.handleRender);
 	}
 

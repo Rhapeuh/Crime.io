@@ -14,28 +14,39 @@ import type Entities from '../common/Entities';
 import Bonus from '../common/Bonus.ts';
 
 export default class Jeu {
-	private maxEnemies = 20;
-	private maxEnnemiesSpawning = 2;
+	maxEnemies = 10;
+	private maxEnnemiesSpawning = 1;
 	private nextSpawnTime = 0;
 	private minSpawnDelay = 100;
-	private maxSpawnDelay = 300;
-	private gameDifficulty: DifficulteEnnemi = DifficulteEnnemi.FACILE;
+	private maxSpawnDelay = 400;
+	pourcentSpawn = { moyen: 1, difficile: 1, impossible: 1 };
 	private bonusIntervalFunction: NodeJS.Timeout | null = null;
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
+	multiplicateurDifficulte: number = 1;
+	private updateDelay: number = 3000;
+	private nextTimeUpdateDiff: number = 0;
+
+	constructor() {
+		this.nextTimeUpdateDiff = Date.now() + this.updateDelay;
+	}
 
 	protected destroy() {
-		if (this.gameLoop) clearInterval(this.gameLoop);
+		if (this.gameLoop) {
+			clearInterval(this.gameLoop);
+			this.gameLoop = null;
+		}
 
-		if (this.bonusIntervalFunction) clearInterval(this.bonusIntervalFunction);
+		if (this.bonusIntervalFunction) {
+			clearInterval(this.bonusIntervalFunction);
+			this.bonusIntervalFunction = null;
+		}
+
 		this.game.clearAll();
 	}
 
-	public setDifficulty(difficulte: DifficulteEnnemi) {
-		this.gameDifficulty = difficulte;
-	}
-
 	protected update() {
+		this.updateDifficultee();
 		this.handleEnemySpawning();
 		this.updateJoueur();
 		this.updateBonus();
@@ -57,17 +68,32 @@ export default class Jeu {
 		};
 	}
 
+	private updateDifficultee() {
+		const now = Date.now();
+		if (now >= this.nextTimeUpdateDiff) {
+			this.updateDelay += 1000;
+			if (this.maxEnemies < 100) this.maxEnemies += 2;
+			if (this.pourcentSpawn.moyen >= 0.05) this.pourcentSpawn.moyen -= 0.05;
+			else if (this.pourcentSpawn.difficile <= 0.1)
+				this.pourcentSpawn.difficile -= 0.05;
+			else if (this.pourcentSpawn.impossible <= 0.9)
+				this.pourcentSpawn.impossible -= 0.001;
+			this.multiplicateurDifficulte += 0.1;
+			this.nextTimeUpdateDiff = now + this.updateDelay;
+		}
+	}
+
 	// Gestion du joueur
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 		}
@@ -89,7 +115,7 @@ export default class Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		console.log(`le joueur mort est ${j.getPseudo()}`);
-		j.recalculScore();
+		j.recalculScore(this.multiplicateurDifficulte);
 		const data = {
 			pseudo: j.getPseudo(),
 			score: j.getScore(),
@@ -188,8 +214,17 @@ export default class Jeu {
 				nbASpawn = this.maxEnemies - this.game.getNbEnnemy();
 
 			for (let i = 0; i < nbASpawn; i++) {
+				const randDifficulté = Math.random();
 				const randEnnemy = Math.random();
-				const difficulte = this.gameDifficulty;
+				let difficulte = DifficulteEnnemi.FACILE;
+
+				if (randDifficulté > this.pourcentSpawn.impossible) {
+					difficulte = DifficulteEnnemi.IMPOSSIBLE;
+				} else if (randDifficulté > this.pourcentSpawn.difficile) {
+					difficulte = DifficulteEnnemi.DIFFICILE;
+				} else if (randDifficulté > this.pourcentSpawn.moyen) {
+					difficulte = DifficulteEnnemi.MOYEN;
+				}
 
 				if (randEnnemy < 0.5)
 					this.addEnnemy(new Ennemy(this.randomCoordonee(), difficulte));
@@ -205,6 +240,7 @@ export default class Jeu {
 	}
 
 	// Gestion des bonus
+
 	protected handleBonusSpawning() {
 		this.bonusIntervalFunction = setInterval(() => {
 			// 5 bonus par joueur

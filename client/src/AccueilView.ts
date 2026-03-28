@@ -5,13 +5,13 @@ import Score from './Score';
 import type { Socket } from 'socket.io-client';
 import { genererCredits } from './Credits';
 import Parametres from './Parametres';
+import { currentDifficulte, setCurrentDifficulte, currentCharacter, setCurrentCharacter } from './main';
 
-export default class AcceuilView extends View {
+export default class AccueilView extends View {
 	private menuGauche: HTMLElement;
 	private dernierElement: HTMLElement | null = null;
 	private fondElement: HTMLElement;
 	private socket: Socket;
-	private currentDifficulte: number = 1;
 
 	constructor(element: HTMLElement, socket: Socket) {
 		super(element);
@@ -87,24 +87,42 @@ export default class AcceuilView extends View {
 		} else if (
 			this.dernierElement?.className.toLowerCase().includes('paramètres')
 		) {
-			this.fondElement.innerHTML = Parametres.genererChoixDifficulte();
+			this.fondElement.innerHTML = Parametres.genererParametres();
+			// Handle difficulty buttons
 			this.fondElement.querySelectorAll('.btn-difficulte').forEach(btn => {
 				const btnDiff = parseInt(btn.getAttribute('data-difficulte') || '1');
-				if (btnDiff === this.currentDifficulte) {
+				if (btnDiff === currentDifficulte) {
 					btn.classList.add('selected');
 				} else {
 					btn.classList.remove('selected');
 				}
 				btn.addEventListener('click', e => {
 					const target = e.target as HTMLElement;
-					this.currentDifficulte = parseInt(
-						target.getAttribute('data-difficulte') || '1'
+					setCurrentDifficulte(
+						parseInt(target.getAttribute('data-difficulte') || '1')
 					);
-					this.socket.emit('choixDifficulte', this.currentDifficulte);
 					this.fondElement
 						.querySelectorAll('.btn-difficulte')
 						.forEach(b => b.classList.remove('selected'));
 					target.classList.add('selected');
+				});
+			});
+			// Handle character buttons
+			this.fondElement.querySelectorAll('.btn-personnage').forEach(btn => {
+				const btnChar = btn.getAttribute('data-personnage') || 'Fleinz';
+				if (btnChar === currentCharacter) {
+					btn.classList.add('selected');
+				} else {
+					btn.classList.remove('selected');
+				}
+				btn.addEventListener('click', e => {
+					const target = e.target as HTMLElement;
+					const personnage = target.closest('.btn-personnage')?.getAttribute('data-personnage') || 'scarab';
+					setCurrentCharacter(personnage);
+					this.fondElement
+						.querySelectorAll('.btn-personnage')
+						.forEach(b => b.classList.remove('selected'));
+					target.closest('.btn-personnage')?.classList.add('selected');
 				});
 			});
 		}

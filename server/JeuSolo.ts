@@ -6,9 +6,9 @@ export default class JeuSolo extends Jeu {
 	private j: Joueur;
 	private socket: Socket;
 
-	constructor(pseudo: string, socket: Socket) {
+	constructor(pseudo: string, socket: Socket, character: string = 'scarab') {
 		super();
-		this.j = new Joueur(pseudo, { x: 0, y: 0 }, 0, 3, 20, 20, socket.id);
+		this.j = new Joueur(pseudo, { x: 0, y: 0 }, 0, 3, 35, 35, socket.id, character);
 		this.game.addJoueur(this.j);
 		this.j.setCoordonee(this.randomCoordonee());
 		this.socket = socket;
@@ -48,6 +48,23 @@ export default class JeuSolo extends Jeu {
 
 	protected async joueurMort(j: Joueur) {
 		await super.joueurMort(j);
-		this.socket.emit('mortDuJoueur', j);
+			this.socket.emit('mortDuJoueur', j);
+		}
+
+	setDifficulte(difficulte: number) {
+		if (difficulte === 1) {
+			this.pourcentSpawn.moyen = 0.25;
+			this.maxEnemies = 15;
+			this.multiplicateurDifficulte = 1.25
+		} else if (difficulte === 2) {
+			this.pourcentSpawn.difficile = 0.5;
+			this.pourcentSpawn.moyen = 0.25;
+			this.maxEnemies = 20;
+			this.multiplicateurDifficulte = 1.5
+		} else if (difficulte === 3) {
+			this.pourcentSpawn.impossible = 0;
+			this.maxEnemies = 100;
+			this.multiplicateurDifficulte = 2;
+		}
 	}
 }

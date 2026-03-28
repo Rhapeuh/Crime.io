@@ -3,11 +3,13 @@ export default class Assets {
 
 	static async loadAll() {
 		const imagesToLoad = [
-			{ id: 'persoTemp', src: '/images/persoTemp.jpg' },
+			{ id: 'scarab', src: '/images/perso/scarab.png' },
 			{ id: 'bullet', src: '/images/bullet.jpg' },
-			{ id: 'ennemiTemp', src: '/images/ennemyTemp.jpg' },
-			{ id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg' },
+			{ id: 'persoTemp', src: '/images/perso/persoTemp.jpg' },
+			{ id: 'ennemiMelee', src: '/images/perso/basic_ennemy.png' },
+			{ id: 'shooterEnnemi', src: '/images/perso/shooterEnnemy.jpg' },
 			{ id: 'bonusTemp', src: '/images/bonusTemp.jpg' },
+			{ id: 'basicEnnemy', src: '/images/perso/basic_ennemy.png' },
 		];
 
 		const promises = imagesToLoad.map(item => {

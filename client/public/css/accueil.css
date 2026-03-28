@@ -46,7 +46,7 @@ a {
 	background-color: var(--darkblue1);
 	border: 3px solid var(--white1);
 	border-radius: 6px;
-	font-size: 25px;
+	font-size: 30px;
 
 	display: flex;
 	width: 250px;
@@ -54,6 +54,8 @@ a {
 	justify-content: center;
 	align-items: center;
 	margin: 10px;
+
+
 }
 
 .titre {
@@ -110,6 +112,13 @@ h1 {
 	font-weight: 500;
 }
 
+
+.pseudo-input, 
+.menuJeu > a{
+	border-color: var(--electric-citrus1);
+}
+
+
 .pseudo-input:hover,
 .menuJeu > a:hover{
 	border-radius: 12px;
@@ -119,12 +128,11 @@ h1 {
 
 .pseudo-input:focus,
 .menuJeu > a:hover{
-	color: var(--electric-purple1);
-	border-color: var(--electric-citrus1);
-	background-color: var(--purpleblue3);
-	box-shadow: 0 0 1px 1px var(--electric-citrus2);
+	background-color: var(--electric-citrus1);
+    transform: scale(1.05);
+	color: var(--darkblue2);
 
-	transition: border-color 0.3s ease, background-color 0.125s ease, color 0.125s ease, box-shadow 0.125s ease;
+	transition: background-color 0.125s ease, transform 0.125s ease-out;
 }
 
 .pseudo-input:not(focus),
