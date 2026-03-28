@@ -59,34 +59,40 @@
 .room a {
     font-family: baseFont;
     font-weight: 900;
-    color : var(--white1);
+    color: var(--white1);
     background-color: var(--darkblue1);
-    border: 3px solid var(--white1);
+    border: 3px solid;
+    border-color: var(--electric-citrus1);
     border-radius: 6px;
-    font-size: 20px;
-    
+    font-size: 30px;
     display: flex;
     width: 500px;
     height: 60px;
     justify-content: center;
     align-items: center;
     margin: 10px;
-    transition: all 0.2s ease;
 }
 
 .room a:hover {
     border-radius: 12px;
-    color: var(--electric-purple1);
-    border-color: var(--electric-citrus1);
-    background-color: var(--purpleblue3);
+	transition: border-radius 0.125s ease;
+    background-color: var(--electric-citrus1);
+    transform: scale(1.05);
+	color: var(--darkblue2);
+	transition: background-color 0.125s ease, transform 0.125s ease-out;
+}
+
+.room > a:not(focus){
+	transition: border-color 0.3s ease, color 0.125s ease;
 }
 
 .room a[href="/"] {
-    background-color: transparent;
     border-color: var(--electric-purple2);
-    font-size: 16px;
-    height: 40px;
-    width: 450px;
+}
+
+.room a[href="/"]:hover {
+    color: var(--white1);
+    background-color: var(--electric-purple2);
 }
 
 .containerRoom {
