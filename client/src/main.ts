@@ -1,4 +1,4 @@
-import AcceuilView from './AcceuilView';
+import AccueilView from './AccueilView';
 import Router from './Router';
 import JeuSoloView from './JeuSoloView';
 import { io } from 'socket.io-client';
@@ -7,6 +7,7 @@ import Assets from './asset';
 import Room, { roomName } from './Room';
 
 export let currentDifficulte = 0;
+export let currentCharacter = 'scarab';
 const pseudoInput = document.querySelector('.pseudo-input') as HTMLInputElement;
 
 const socket = io(window.location.hostname + `:9876`);
@@ -20,7 +21,7 @@ const routes = [
 	{
 		path: '/',
 		getView: () =>
-			new AcceuilView(
+			new AccueilView(
 				document.querySelector('.viewContent > .accueil')!,
 				socket
 			),
@@ -69,4 +70,8 @@ lancerJeu();
 
 export function setCurrentDifficulte(difficulte: number) {
 	currentDifficulte = difficulte;
+}
+
+export function setCurrentCharacter(character: string) {
+	currentCharacter = character;
 }

@@ -24,6 +24,12 @@ export default class Jeu {
 	gameLoop: NodeJS.Timeout | null = null;
 	game: Game = new Game();
 	multiplicateurDifficulte: number = 1;
+	private updateDelay: number = 3000;
+	private nextTimeUpdateDiff: number = 0;
+
+	constructor() {
+		this.nextTimeUpdateDiff = Date.now() + this.updateDelay;
+	}
 
 	protected destroy() {
 		if (this.gameLoop) {
@@ -40,6 +46,7 @@ export default class Jeu {
 	}
 
 	protected update() {
+		this.updateDifficultee();
 		this.handleEnemySpawning();
 		this.updateJoueur();
 		this.updateBonus();
@@ -61,17 +68,32 @@ export default class Jeu {
 		};
 	}
 
+	private updateDifficultee() {
+		const now = Date.now();
+		if (now >= this.nextTimeUpdateDiff) {
+			this.updateDelay += 1000;
+			if (this.maxEnemies < 100) this.maxEnemies += 2;
+			if (this.pourcentSpawn.moyen >= 0.05) this.pourcentSpawn.moyen -= 0.05;
+			else if (this.pourcentSpawn.difficile <= 0.1)
+				this.pourcentSpawn.difficile -= 0.05;
+			else if (this.pourcentSpawn.impossible <= 0.9)
+				this.pourcentSpawn.impossible -= 0.001;
+			this.multiplicateurDifficulte += 0.1;
+			this.nextTimeUpdateDiff = now + this.updateDelay;
+		}
+	}
+
 	// Gestion du joueur
 
 	private updateJoueur() {
 		for (const j of this.game.joueurs.values()) {
-			if (!j.estEnVie()) {
-				if (this.game.getNbJoueurs() === 1 && this.gameLoop)
-					clearInterval(this.gameLoop);
-				this.joueurMort(j);
-				this.game.removeJoueur(j);
-				continue;
-			}
+			// if (!j.estEnVie()) {
+			// 	if (this.game.getNbJoueurs() === 1 && this.gameLoop)
+			// 		clearInterval(this.gameLoop);
+			// 	this.joueurMort(j);
+			// 	this.game.removeJoueur(j);
+			// 	continue;
+			// }
 			this.joueurToucher(j);
 			j.update(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 		}
