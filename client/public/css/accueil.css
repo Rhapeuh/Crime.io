@@ -206,6 +206,7 @@ h1 {
 	transition: 0.1s width 0.1s linear;
 	align-items: center;
 	overflow: scroll;
+	border-left: 3px var(--darkblue1) solid;
 }
 
 .accueil:has(.ouvert) {
