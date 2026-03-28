@@ -157,16 +157,16 @@ export default class JeuView extends View {
 		document
 			.querySelectorAll('.timeFinal')
 			.forEach(
-				elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`)
+				elt => (elt.innerHTML += `${this.chrono.getTimeFormat()}`)
 			);
 		document
 			.querySelectorAll('.nbTuer')
 			.forEach(
-				elt => (elt.innerHTML = `Nombre d'ennemis tuer : ${j.nbEnnemiTuer}`)
+				elt => (elt.innerHTML += `${j.nbEnnemiTuer}`)
 			);
 		document
 			.querySelectorAll('.scoreFinal')
-			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
+			.forEach(elt => (elt.innerHTML += `${j.score}`));
 	}
 
 	private handleResize() {
