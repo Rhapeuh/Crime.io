@@ -15,7 +15,7 @@ import { calculerAngle } from '../../common/utils';
 export default class JeuView extends View {
 	context: CanvasRenderingContext2D;
 	canvas: HTMLCanvasElement;
-	hudElement: HTMLDivElement;
+	hudElement: HTMLDivElement | null;
 	vx: number = 0;
 	vy: number = 0;
 	socket;
@@ -58,7 +58,8 @@ export default class JeuView extends View {
 
 		this.handleResize();
 
-		this.hudElement = this.element.querySelector('.hud')!;
+		this.hudElement = this.element.querySelector('.hud');
+		if (this.hudElement) this.hudElement.style.display = '';
 
 		this.initEvents();
 	}
@@ -137,6 +138,7 @@ export default class JeuView extends View {
 	}
 
 	private mortJoueur(j: Joueur) {
+		if (this.hudElement) this.hudElement.style.display = 'none';
 		this.chrono.stop();
 		this.setStat(j);
 		document
@@ -156,17 +158,13 @@ export default class JeuView extends View {
 	private setStat(j: Joueur) {
 		document
 			.querySelectorAll('.timeFinal')
-			.forEach(
-				elt => (elt.innerHTML += `${this.chrono.getTimeFormat()}`)
-			);
+			.forEach(elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`));
 		document
 			.querySelectorAll('.nbTuer')
-			.forEach(
-				elt => (elt.innerHTML += `${j.nbEnnemiTuer}`)
-			);
+			.forEach(elt => (elt.innerHTML = `Nombre de crime commis : ${j.nbEnnemiTuer}`));
 		document
 			.querySelectorAll('.scoreFinal')
-			.forEach(elt => (elt.innerHTML += `${j.score}`));
+			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
 	}
 
 	private handleResize() {
@@ -340,7 +338,7 @@ export default class JeuView extends View {
 
 	private renderHud(listJoueurs: Joueur[]) {
 		const currentClient = listJoueurs.find(j => j.clientID === this.socket.id);
-		if (currentClient) {
+		if (currentClient && this.hudElement) {
 			this.hudElement.querySelector('.info-pseudo')!.innerHTML =
 				currentClient.pseudo!;
 			if (currentClient.vie && this.lastVie !== currentClient.vie) {
