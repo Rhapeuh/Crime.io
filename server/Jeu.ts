@@ -126,7 +126,7 @@ export default class Jeu {
 
 	// gestion des balle
 
-	protected addBullet(e: Entities, coFinal: Coordonee) {
+	protected addBullet(e: Entities, coFinal: Coordonee, sprite: string) {
 		const angle = calculerAngle(e.getCoordonee(), coFinal);
 
 		const nouvelleBalle = new Bullet(
@@ -136,7 +136,8 @@ export default class Jeu {
 			e,
 			undefined,
 			e.getBulletWidth(),
-			e.getBulletHeight()
+			e.getBulletHeight(),
+			sprite
 		);
 		if (e instanceof Joueur) this.game.addBulletJoueur(nouvelleBalle);
 		else if (e instanceof ShooterEnnemy)
@@ -195,7 +196,7 @@ export default class Jeu {
 				e.update(j, this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 				if (e instanceof ShooterEnnemy && dist <= 250) {
 					if (e.shoot(now)) {
-						this.addBullet(e, j.getCoordonee());
+						this.addBullet(e, j.getCoordonee(), 'bonusTemp');
 					}
 				}
 			}
