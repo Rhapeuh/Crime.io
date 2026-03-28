@@ -151,13 +151,14 @@ export default class JeuView extends View {
 		document
 			.querySelectorAll('.retour')!
 			.forEach(temp => temp.classList.add('retour', 'displayRetour'));
+		
 	}
 
 	private setStat(j: Joueur) {
 		document
 			.querySelectorAll('.timeFinal')
 			.forEach(
-				elt => (elt.innerHTML += `${this.chrono.getTimeFormat()}`)
+				elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`)
 			);
 		document
 			.querySelectorAll('.nbTuer')
