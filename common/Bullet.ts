@@ -12,7 +12,7 @@ export default class Bullet extends Entities {
 		angle: number,
 		speed: number,
 		entite: Entities,
-		bulletRange: number = 500,
+		bulletRange: number = 750,
 		bulletWidth: number,
 		bulletHeight: number,
 		sprite: string
@@ -36,8 +36,10 @@ export default class Bullet extends Entities {
 		this.setCoordonee({ x: this.getX() + this.vx, y: this.getY() + this.vy });
 	}
 
-	shouldBeDeleted(): boolean {
+	shouldBeDeleted(worldWidth: number, worldHeight: number): boolean {
 		if (
+			this.getX() < 0 || this.getX() > worldWidth ||
+			this.getY() < 0 || this.getY() > worldHeight ||
 			this.getX() + this.bulletRange < this.createdAt.x ||
 			this.getX() - this.bulletRange > this.createdAt.x ||
 			this.getY() + this.bulletRange < this.createdAt.y ||

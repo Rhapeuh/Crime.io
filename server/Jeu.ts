@@ -148,7 +148,7 @@ export default class Jeu {
 		this.game.bulletsJoueur.forEach(b => {
 			if (this.updateBullet(b, this.game.ennemies))
 				this.game.removeBulletJoueur(b);
-			if (b.shouldBeDeleted()) this.game.removeBulletJoueur(b);
+			if (b.shouldBeDeleted(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT)) this.game.removeBulletJoueur(b);
 		});
 	}
 
@@ -156,7 +156,7 @@ export default class Jeu {
 		this.game.bulletsEnnemy.forEach(b => {
 			if (this.updateBullet(b, this.game.joueurs))
 				this.game.removeBulletEnnemy(b);
-			if (b.shouldBeDeleted()) this.game.removeBulletEnnemy(b);
+			if (b.shouldBeDeleted(this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT)) this.game.removeBulletEnnemy(b);
 		});
 	}
 
