@@ -22,7 +22,7 @@ export default class JeuSolo extends Jeu {
 			'shooting',
 			(donnee: { active: boolean; x: number; y: number }) => {
 				if (donnee.active) {
-					this.addBullet(this.j, { x: donnee.x, y: donnee.y }, 'bullet');
+					this.addBullet(this.j, { x: donnee.x, y: donnee.y }, 'ballePerso');
 				}
 			}
 		);

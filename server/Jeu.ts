@@ -196,7 +196,7 @@ export default class Jeu {
 				e.update(j, this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
 				if (e instanceof ShooterEnnemy && dist <= 250) {
 					if (e.shoot(now)) {
-						this.addBullet(e, j.getCoordonee(), 'bonusTemp');
+						this.addBullet(e, j.getCoordonee(), 'balleEnnemy');
 					}
 				}
 			}
