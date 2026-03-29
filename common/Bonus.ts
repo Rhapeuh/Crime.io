@@ -15,8 +15,8 @@ type BonusEffect =
 const bonusEffects = [
 	{ effect: 'VIES_ADD' as BonusEffect, value: 1, spriteId: 'plusHP' },
 	{ effect: 'VIES_REMOVE' as BonusEffect, value: 1, spriteId: 'moinsHP' },
-	{ effect: 'SPEED_ADD' as BonusEffect, value: 40, spriteId: 'bonusTemp' },
-	{ effect: 'SPEED_REMOVE' as BonusEffect, value: 7, spriteId: 'bonusTemp' },
+	{ effect: 'SPEED_ADD' as BonusEffect, value: 40, spriteId: 'plusSpeed' },
+	{ effect: 'SPEED_REMOVE' as BonusEffect, value: 7, spriteId: 'moinsSpeed' },
 	{
 		effect: 'BULLET_WIDTH_ADD' as BonusEffect,
 		value: 5,

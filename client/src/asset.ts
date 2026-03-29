@@ -16,6 +16,8 @@ export default class Assets {
 			{ id: 'plusHP', src: '/images/plusHP.png' },
 			{ id: 'moinsWidth', src: '/images/moinsWidth.png' },
 			{ id: 'plusWidth', src: '/images/plusWidth.png' },
+			{ id: 'moinsSpeed', src: '/images/moinsSpeed.png' },
+			{ id: 'plusSpeed', src: '/images/plusSpeed.png' },
 		];
 
 		const promises = imagesToLoad.map(item => {
