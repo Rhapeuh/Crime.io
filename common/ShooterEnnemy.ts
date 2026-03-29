@@ -24,7 +24,7 @@ export default class ShooterEnnemy extends Ennemy {
 	}
 
 	public update(j: Joueur, worldWidth: number, worldHeight: number) {
-		super.update(j, worldWidth, worldHeight, 250);
+		super.update(j, worldWidth, worldHeight, 400);
 	}
 
 	public shoot(now: number): boolean {

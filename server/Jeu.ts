@@ -194,7 +194,7 @@ export default class Jeu {
 				const j = result.joueur;
 				const dist = result.distance;
 				e.update(j, this.game.WORLD_WIDTH, this.game.WORLD_HEIGHT);
-				if (e instanceof ShooterEnnemy && dist <= 250) {
+				if (e instanceof ShooterEnnemy && dist <= 450) {
 					if (e.shoot(now)) {
 						this.addBullet(e, j.getCoordonee(), 'balleEnnemy');
 					}
