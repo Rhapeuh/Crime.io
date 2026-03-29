@@ -13,24 +13,24 @@ type BonusEffect =
 	| 'GLISSADE';
 
 const bonusEffects = [
-	{ effect: 'VIES_ADD' as BonusEffect, value: 1, spriteId: 'bonusTemp' },
-	{ effect: 'VIES_REMOVE' as BonusEffect, value: 1, spriteId: 'bonusTemp' },
+	{ effect: 'VIES_ADD' as BonusEffect, value: 1, spriteId: 'plusHP' },
+	{ effect: 'VIES_REMOVE' as BonusEffect, value: 1, spriteId: 'moinsHP' },
 	{ effect: 'SPEED_ADD' as BonusEffect, value: 40, spriteId: 'bonusTemp' },
 	{ effect: 'SPEED_REMOVE' as BonusEffect, value: 7, spriteId: 'bonusTemp' },
 	{
 		effect: 'BULLET_WIDTH_ADD' as BonusEffect,
 		value: 5,
-		spriteId: 'bonusTemp',
+		spriteId: 'plusWidth',
 	},
 	{
 		effect: 'BULLET_WIDTH_REMOVE' as BonusEffect,
 		value: 5,
-		spriteId: 'bonusTemp',
+		spriteId: 'moinsWidth',
 	},
 	{
 		effect: 'GLISSADE' as BonusEffect,
 		value: 1,
-		spriteId: 'bonusTemp',
+		spriteId: 'glissade',
 	},
 ];
 

@@ -333,7 +333,7 @@ export default class JeuView extends View {
 
 	private renderBonus(bonus: Bonus[]) {
 		for (const b of bonus) {
-			this.dessinerEntite(b, 0);
+			this.dessinerEntite(b, - Math.PI / 2);
 		}
 	}
 

@@ -56,7 +56,7 @@ export default class JeuMulti extends Jeu {
 			(donnee: { active: boolean; x: number; y: number }) => {
 				if (donnee.active) {
 					const j = this.game.getJoueur(socket.id);
-					if (j) this.addBullet(j, { x: donnee.x, y: donnee.y }, 'bullet');
+					if (j) this.addBullet(j, { x: donnee.x, y: donnee.y }, 'ballePerso');
 				}
 			}
 		);
