@@ -32,13 +32,15 @@ export default class Ennemy extends Entities {
 	constructor(
 		co: Coordonee,
 		difficulte: DifficulteEnnemi = DifficulteEnnemi.MOYEN,
-		spriteId: string = 'ennemiMelee'
+		spriteId: string = 'ennemiMelee',
+		taillEnPlus: number = 0
 	) {
 		const stats = STATS_ENNEMIS[difficulte];
 		const config = sprite_config[spriteId as keyof typeof sprite_config];
-		const width = stats.taille * (config.width / config.height);
+		const height = stats.taille + taillEnPlus;
+		const width = height * (config.width / config.height);
 
-		super(co, 0, 0, stats.speed, width, stats.taille, spriteId, stats.hp);
+		super(co, 0, 0, stats.speed, width, height, spriteId, stats.hp);
 		this.scoreValue = stats.score;
 		this.viesBase = stats.hp;
 	}
