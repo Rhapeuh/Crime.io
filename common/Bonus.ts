@@ -19,12 +19,12 @@ const bonusEffects = [
 	{ effect: 'SPEED_REMOVE' as BonusEffect, value: 7, spriteId: 'moinsSpeed' },
 	{
 		effect: 'BULLET_WIDTH_ADD' as BonusEffect,
-		value: 5,
+		value: 10,
 		spriteId: 'plusWidth',
 	},
 	{
 		effect: 'BULLET_WIDTH_REMOVE' as BonusEffect,
-		value: 5,
+		value: 10,
 		spriteId: 'moinsWidth',
 	},
 	{

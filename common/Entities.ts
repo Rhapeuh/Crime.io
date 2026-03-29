@@ -21,8 +21,8 @@ export default class Entities {
 		height: number,
 		spriteId: string,
 		vie?: number,
-		bulletWitdh: number = 5,
-		bulletHeight: number = 10
+		bulletWitdh: number = 10,
+		bulletHeight: number = 15
 	) {
 		this.co = co;
 		this.vx = vx;

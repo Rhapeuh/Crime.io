@@ -7,7 +7,7 @@
 	left: 0;
 	border: none;
 	z-index: 0;
-    background-color: var(--canva-purple);
+    background-color: var(--purpleblue3);
 }
 
 .jeuSolo, .jeuMulti {

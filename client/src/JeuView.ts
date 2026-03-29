@@ -26,6 +26,7 @@ export default class JeuView extends View {
 	worldWidth: number = 0;
 	worldHeight: number = 0;
 	lastVie: number = -1;
+	noisePattern: CanvasPattern | null = null;
 	keys: { [key: string]: boolean } = {
 		ArrowUp: false,
 		KeyW: false,
@@ -61,8 +62,33 @@ export default class JeuView extends View {
 		this.hudElement = this.element.querySelector('.hud');
 		if (this.hudElement) this.hudElement.style.display = '';
 
+		this.generateNoisePattern();
 		this.initEvents();
 	}
+
+	private generateNoisePattern() {
+        const size = 256; 
+        
+        const offscreenCanvas = document.createElement('canvas');
+        offscreenCanvas.width = size;
+        offscreenCanvas.height = size;
+        const offCtx = offscreenCanvas.getContext('2d')!;
+
+        const imgData = offCtx.createImageData(size, size);
+        const data = imgData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const noise = Math.floor(Math.random() * 15); 
+
+            data[i] = 30 + noise;   
+            data[i + 1] = 27 + noise;
+            data[i + 2] = 36 + noise; 
+            data[i + 3] = 255; 
+        }
+
+        offCtx.putImageData(imgData, 0, 0);
+        this.noisePattern = this.context.createPattern(offscreenCanvas, 'repeat');
+    }
 
 	handleRender(g: Game) {
 		this.render(g);
@@ -153,16 +179,19 @@ export default class JeuView extends View {
 		document
 			.querySelectorAll('.retour')!
 			.forEach(temp => temp.classList.add('retour', 'displayRetour'));
-		
 	}
 
 	private setStat(j: Joueur) {
 		document
 			.querySelectorAll('.timeFinal')
-			.forEach(elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`));
+			.forEach(
+				elt => (elt.innerHTML = `Temps en vie : ${this.chrono.getTimeFormat()}`)
+			);
 		document
 			.querySelectorAll('.nbTuer')
-			.forEach(elt => (elt.innerHTML = `Nombre de crime commis : ${j.nbEnnemiTuer}`));
+			.forEach(
+				elt => (elt.innerHTML = `Nombre de crime commis : ${j.nbEnnemiTuer}`)
+			);
 		document
 			.querySelectorAll('.scoreFinal')
 			.forEach(elt => (elt.innerHTML = `Score final : ${j.score}`));
@@ -309,6 +338,18 @@ export default class JeuView extends View {
 
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+		if (this.noisePattern) {
+			this.context.save();
+
+			this.context.translate(-this.camera.x, -this.camera.y);
+
+			this.context.fillStyle = this.noisePattern;
+
+			this.context.fillRect(0, 0, g.WORLD_WIDTH, g.WORLD_HEIGHT);
+
+			this.context.restore();
+		}
+
 		this.renderWorldBorders();
 
 		if (g.bulletsJoueur) this.renderBulletsJoueur(g.bulletsJoueur);
@@ -333,7 +374,7 @@ export default class JeuView extends View {
 
 	private renderBonus(bonus: Bonus[]) {
 		for (const b of bonus) {
-			this.dessinerEntite(b, - Math.PI / 2);
+			this.dessinerEntite(b, -Math.PI / 2);
 		}
 	}
 
