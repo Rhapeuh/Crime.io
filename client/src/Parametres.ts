@@ -19,9 +19,9 @@ export default class Parametres {
 							<img src="/images/scarab.png" alt="Scarab" />
 							<span>Scarab</span>
 						</button>
-						<button class="btn-personnage" data-personnage="persoTemp">
-							<img src="/images/persoTemp.jpg" alt="persoTemp" />
-							<span>persoTemp</span>
+						<button class="btn-personnage" data-personnage="persoTir">
+							<img src="/images/persoTir.png" alt="persoTir" />
+							<span>persoTir</span>
 						</button>
 						<button class="btn-personnage" data-personnage="chat">
 							<img src="/images/chat.png" alt="chat" />

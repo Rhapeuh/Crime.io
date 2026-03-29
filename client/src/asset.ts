@@ -5,13 +5,13 @@ export default class Assets {
 		const imagesToLoad = [
 			{ id: 'scarab', src: '/images/scarab.png' },
 			{ id: 'chat', src: '/images/chat.png' },
-			{ id: 'persoTemp', src: '/images/persoTemp.jpg' },
+			{ id: 'persoTir', src: '/images/persoTir.png' },
 
 			{ id: 'ballePerso', src: '/images/ballePerso.png' },
 			{ id: 'balleEnnemy', src: '/images/balleEnnemy.png' },
 
 			{ id: 'ennemiMelee', src: '/images/basic_ennemy.png' },
-			{ id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg' },
+			{ id: 'ennemyTir', src: '/images/EnnemyTir.png' },
 
 			{ id: 'bonusTemp', src: '/images/bonusTemp.jpg' },
 			{ id: 'glissade', src: '/images/glissade.png' },

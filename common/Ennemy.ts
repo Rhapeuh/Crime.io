@@ -3,13 +3,17 @@ import type Joueur from './Joueur';
 import type { Coordonee } from './types.ts';
 import { verifCoordonee } from './utils.ts';
 
+const sprite_config = {
+	ennemiMelee: { width: 32, height: 32 },
+	ennemyTir: { width: 6, height: 22 },
+};
+
 export const DifficulteEnnemi = {
     FACILE: 'FACILE',
     MOYEN: 'MOYEN',
     DIFFICILE: 'DIFFICILE',
 	IMPOSSIBLE: 'IMPOSSIBLE'
 }
-
 
 export type DifficulteEnnemi =
 	(typeof DifficulteEnnemi)[keyof typeof DifficulteEnnemi];
@@ -31,16 +35,10 @@ export default class Ennemy extends Entities {
 		spriteId: string = 'ennemiMelee'
 	) {
 		const stats = STATS_ENNEMIS[difficulte];
-		super(
-			co,
-			0,
-			0,
-			stats.speed,
-			stats.taille,
-			stats.taille,
-			spriteId,
-			stats.hp
-		);
+		const config = sprite_config[spriteId as keyof typeof sprite_config];
+		const width = stats.taille * (config.width / config.height);
+
+		super(co, 0, 0, stats.speed, width, stats.taille, spriteId, stats.hp);
 		this.scoreValue = stats.score;
 		this.viesBase = stats.hp;
 	}

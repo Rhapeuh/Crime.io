@@ -4,7 +4,7 @@ import { verifCoordonee } from './utils.ts';
 
 const sprite_config = {
 	scarab: { width: 32, height: 32 },
-	persoTemp: { width: 32, height: 32 },
+	persoTir: { width: 6, height: 22 },
 	chat: { width: 16, height: 32 },
 };
 

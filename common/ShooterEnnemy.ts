@@ -17,7 +17,7 @@ export default class ShooterEnnemy extends Ennemy {
 		co: Coordonee,
 		difficulte: DifficulteEnnemi = DifficulteEnnemi.FACILE
 	) {
-		super(co, difficulte, 'shooterEnnemi');
+		super(co, difficulte, 'ennemyTir');
 		const stats = STATS_ENNEMIS[difficulte];
 		this.fireRate = stats.fireRate;
 		this.prochainTire = 0;
