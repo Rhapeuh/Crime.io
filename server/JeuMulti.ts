@@ -34,7 +34,7 @@ export default class JeuMulti extends Jeu {
 			{ x: 0, y: 0 },
 			1,
 			3,
-			35,
+			40,
 			socket.id,
 			spriteId
 		);

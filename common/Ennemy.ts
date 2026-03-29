@@ -15,9 +15,9 @@ export type DifficulteEnnemi =
 	(typeof DifficulteEnnemi)[keyof typeof DifficulteEnnemi];
 
 const STATS_ENNEMIS = {
-	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 25 },
-	[DifficulteEnnemi.MOYEN]: { speed: 4, hp: 2, score: 25, taille: 30 },
-	[DifficulteEnnemi.DIFFICILE]: { speed: 7, hp: 3, score: 50, taille: 35 },
+	[DifficulteEnnemi.FACILE]: { speed: 2, hp: 1, score: 10, taille: 35 },
+	[DifficulteEnnemi.MOYEN]: { speed: 4, hp: 2, score: 25, taille: 40 },
+	[DifficulteEnnemi.DIFFICILE]: { speed: 7, hp: 3, score: 50, taille: 45 },
 	[DifficulteEnnemi.IMPOSSIBLE]: { speed: 15, hp: 5, score: 100, taille: 50 },
 };
 

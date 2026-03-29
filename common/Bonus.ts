@@ -44,7 +44,7 @@ export default class Bonus extends Entities {
 		coordonee: Coordonee,
 		spriteId: string = 'bonusTemp'
 	) {
-		super(coordonee, 0, 0, 0, 25, 25, spriteId, 1);
+		super(coordonee, 0, 0, 0, 40, 40, spriteId, 1);
 		this.effect = effect;
 		this.value = value;
 	}
