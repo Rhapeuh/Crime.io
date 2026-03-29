@@ -32,9 +32,14 @@ export default class AccueilView extends View {
 
 				this.dernierElement?.classList.remove('btn-cliquer');
 				if (this.dernierElement === element) {
+
 					this.fermerTiroir();
 				} else {
 					this.dernierElement = element as HTMLElement;
+					const fond = document.querySelector('.fond') as HTMLElement;
+					if (this.dernierElement !== document.querySelector('.credits'))
+						fond.style.overflow = 'hidden';
+					else fond.style.overflow = 'scroll';
 					this.ouvrirTiroir();
 				}
 				setTimeout(() => {
