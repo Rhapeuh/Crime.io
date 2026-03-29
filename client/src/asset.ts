@@ -11,6 +11,11 @@ export default class Assets {
 			{ id: 'shooterEnnemi', src: '/images/perso/shooterEnnemy.jpg' },
 			{ id: 'bonusTemp', src: '/images/bonusTemp.jpg' },
 			{ id: 'basicEnnemy', src: '/images/perso/basic_ennemy.png' },
+			{ id: 'glissade', src: '/images/glissade.png' },
+			{ id: 'moinsHP', src: '/images/moinsHP.png' },
+			{ id: 'plusHP', src: '/images/plusHP.png' },
+			{ id: 'moinsWidth', src: '/images/moinsWidth.png' },
+			{ id: 'plusWidth', src: '/images/plusWidth.png' },
 		];
 
 		const promises = imagesToLoad.map(item => {
