@@ -2,6 +2,12 @@ import type { Coordonee } from './types.ts';
 import Entities from './Entities.ts';
 import { verifCoordonee } from './utils.ts';
 
+const sprite_config = {
+	scarab: { width: 32, height: 32 },
+	persoTemp: { width: 32, height: 32 },
+	chat: { width: 16, height: 32 },
+};
+
 export default class Joueur extends Entities {
 	pseudo: string;
 	private invincibilite: boolean;
@@ -19,11 +25,13 @@ export default class Joueur extends Entities {
 		co: Coordonee,
 		speed: number,
 		vies: number,
-		width: number,
 		height: number,
 		clientID: string,
 		spriteId: string = 'scarab'
 	) {
+		console.log(spriteId)
+		const config = sprite_config[spriteId as keyof typeof sprite_config];
+		const width = height * (config.width / config.height);
 		super(co, 0, 0, speed, width, height, spriteId, vies);
 		this.pseudo = pseudo;
 		this.clientID = clientID;

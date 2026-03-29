@@ -16,16 +16,16 @@ export default class Parametres {
 					<h2>Personnage</h2>
 					<div class="personnage-grid">
 						<button class="btn-personnage" data-personnage="scarab">
-							<img src="/images/perso/scarab.png" alt="Scarab" />
+							<img src="/images/scarab.png" alt="Scarab" />
 							<span>Scarab</span>
 						</button>
 						<button class="btn-personnage" data-personnage="persoTemp">
-							<img src="/images/perso/persoTemp.jpg" alt="persoTemp" />
+							<img src="/images/persoTemp.jpg" alt="persoTemp" />
 							<span>persoTemp</span>
 						</button>
-						<button class="btn-personnage" data-personnage="basicEnnemy">
-							<img src="/images/perso/basic_ennemy.png" alt="basicEnnemy" />
-							<span>basic_ennemy</span>
+						<button class="btn-personnage" data-personnage="chat">
+							<img src="/images/chat.png" alt="chat" />
+							<span>chat</span>
 						</button>
 					</div>
 				</div>

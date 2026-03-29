@@ -3,14 +3,17 @@ export default class Assets {
 
 	static async loadAll() {
 		const imagesToLoad = [
-			{ id: 'scarab', src: '/images/perso/scarab.png' },
+			{ id: 'scarab', src: '/images/scarab.png' },
+			{ id: 'chat', src: '/images/chat.png' },
+			{ id: 'persoTemp', src: '/images/persoTemp.jpg' },
+
 			{ id: 'ballePerso', src: '/images/ballePerso.png' },
 			{ id: 'balleEnnemy', src: '/images/balleEnnemy.png' },
-			{ id: 'persoTemp', src: '/images/perso/persoTemp.jpg' },
-			{ id: 'ennemiMelee', src: '/images/perso/basic_ennemy.png' },
-			{ id: 'shooterEnnemi', src: '/images/perso/shooterEnnemy.jpg' },
+
+			{ id: 'ennemiMelee', src: '/images/basic_ennemy.png' },
+			{ id: 'shooterEnnemi', src: '/images/shooterEnnemy.jpg' },
+
 			{ id: 'bonusTemp', src: '/images/bonusTemp.jpg' },
-			{ id: 'basicEnnemy', src: '/images/perso/basic_ennemy.png' },
 			{ id: 'glissade', src: '/images/glissade.png' },
 			{ id: 'moinsHP', src: '/images/moinsHP.png' },
 			{ id: 'plusHP', src: '/images/plusHP.png' },

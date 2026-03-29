@@ -109,7 +109,7 @@
 }
 
 .btn-personnage img {
-    width: 60px;
+    width: auto;
     height: 60px;
     margin-bottom: 0.5rem;
 }
