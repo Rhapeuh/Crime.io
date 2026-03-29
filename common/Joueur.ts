@@ -29,7 +29,6 @@ export default class Joueur extends Entities {
 		clientID: string,
 		spriteId: string = 'scarab'
 	) {
-		console.log(spriteId)
 		const config = sprite_config[spriteId as keyof typeof sprite_config];
 		const width = height * (config.width / config.height);
 		super(co, 0, 0, speed, width, height, spriteId, vies);
