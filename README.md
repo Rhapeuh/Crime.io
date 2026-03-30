@@ -1,4 +1,4 @@
-# JSAE - (inserer le nom)
+# Crime.io
 
 ## Membres
 
@@ -73,8 +73,61 @@
 
 ## TODO
 
-- Choisir le nom du jeu
 - Faires les issues
+
+## Rapport de Projet
+
+### Diagrammes de séquence
+
+#### Échanges WebSocket (Client/Serveur)
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Serveur
+    C->>S: Connexion
+    S-->>C: premiereConnexion(pseudo aléatoire)
+    
+    rect rgb(200, 220, 240)
+        Note over C,S: Partie Solo
+        C->>S: rejoindreSolo(pseudo, difficulte, spriteId)
+        S->>S: Initialisation JeuSolo
+    end
+
+    rect rgb(220, 240, 200)
+        Note over C,S: Partie Multijoueur
+        C->>S: getAllRoom()
+        S-->>C: allRoom(liste des rooms)
+        C->>S: rejoindreMulti(pseudo, roomName, spriteId)
+        S->>S: Rejoint/Crée JeuMulti
+        loop Boucle de jeu
+            S-->>C: renderMulti(état du jeu complet)
+            C->>S: inputs (mouvements, tirs)
+        end
+    end
+
+    C->>S: quitterSolo / quitterMulti
+    S->>S: Nettoyage de l'instance
+```
+
+### Difficultés techniques rencontrées
+
+- **Synchronisation en Temps Réel :** Le défi majeur a été de maintenir une fluidité de mouvement et une détection de collision cohérente pour tous les joueurs en mode multijoueur.
+- **Gestion des Coordonnées et du Redimensionnement :** Adapter le canvas à différentes tailles d'écran tout en assurant que les positions des entités et les trajectoires des balles restent précises a nécessité une refactorisation du moteur de rendu.
+- **Stabilité du Serveur :** Gérer proprement le cycle de vie des parties (création, join, déconnexion) pour éviter les fuites de mémoire et les états incohérents lors des déconnexions brutales.
+
+### Points d'amélioration et d'achèvement
+
+- **Support Mobile :** Adaptation de l'interface et des contrôles pour une jouabilité sur smartphones.
+- **Système de Progression :** Ajout d'un système d'XP, de niveaux et d'un inventaire pour permettre une personnalisation plus poussée.
+- **Contenu Additionnel :** Implémentation d'un mode PvP dédié, d'une mini-map et de nouveaux types d'ennemis avec des comportements variés.
+- **Qualité de Code :** Augmentation de la couverture de tests unitaires et d'intégration.
+
+### Ce dont nous sommes les plus fiers
+
+- **Architecture Multijoueur :** Avoir réussi à mettre en place un système de "rooms" robuste avec Socket.io permettant une expérience fluide et interactive.
+- **Mécaniques de Jeu :** L'implémentation de mécaniques avancées comme le "parry" et la mêlée, inspirées de jeux modernes, qui ajoutent une couche stratégique au gameplay.
+- **Identité Visuelle :** Le style rétro-néon cohérent, soutenu par des sprites personnalisés et une interface utilisateur travaillée.
 
 ## plus
 
