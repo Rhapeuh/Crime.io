@@ -1,134 +1,93 @@
 # Crime.io
 
-## Membres
+Un jeu de tir (Joueur contre Bot) jouable sur navigateur, développé entièrement en TypeScript.
 
-- Ethan Seulin
-- Ylann Wattrelos
-- Adam Stievenard
+![Menu principal du jeu](accueil.png)
 
-## Infos
+## Description
 
-- **Progression difficultés :**
-  - plus move speed
-  - plus bullet speed
-  - bot avec EMP shield (bloque les balles + à implémenter avec l'update de la mélée)
+Crime.io est un jeu d'action et de tir en arène où le joueur doit survivre face à des bots. Le jeu propose de l'action rapide et des mécaniques évolutives :
+* **Survie et Difficulté :** Affrontez des bots de plus en plus redoutables (vitesse accrue, apparition de boucliers EMP).
+* **Mécaniques de combat :** Utilisez des tirs à distance, une attaque de mêlée pour briser les défenses ennemies, et un système de parade (*parry*) stratégique.
+* **Multijoueur et Solo :** Jouez seul ou rejoignez des salons (rooms) pour jouer à plusieurs.
 
-- **Bonus :**
-  - metal skin (pas de bullet damage à la Deadlock mais pas possible de parry)
-  - invisibilité (mais impossible d'infliger des damages)
-  - multi bullets
-  - bonus bullet speed
-  - bonus HP
+## Analyse Technique & Architecture
 
-## Milestones
+Ce projet a été conçu avec une forte volonté de maintenir un code robuste, typé de bout en bout, et une architecture réseau performante en temps réel.
 
-- **V0,1 :**
-  - génération des ennemis
-  - perso movable
-  - maquette
-  - vues sans css
-- **V0.2 :**
-  - actifs de perso
-  - gestion des dégâts
-  - gestion des tirs
-  - gestion de la vie
-  - fonction rejouer
-  - ajout des difficultés
-- **V0.3 :**
-  - ajout des bonus
-  - mêlée
-  - parry
-  - sauvegarde des stats
-  - highscore
-  - crédits classiques
-- **V0.4 :**
-  - inventaire / perso (à voir on fait quoi)
-  - skins
-  - menu genre rétro futuriste UI
-  - musique
-- **V0.5 _(milestone bonus)_ :**
-  - case opening
-  - color palette thèmes
-  - ajout de musique perso
-  - implémentation de l'api de spotify (si on peut faire des bon trucs avec)
-  - crédits : page steam de chacun de nous grâce à l’api, ou un truc du genre
-
-## Idées pour le projet
-
-### Mélée / parry
-
-> Le système de mélée est un coup à charger légèrement et qui permet de mettre des dégats aux enemies qui ne peuvent pas être touché à distance (metal skin, bot avec EMP shield)  
-> Il peut être chargé en mm tps que d'autres actions  
-> Il peut être counter par un parry, qui est un "mur" autour du joueur qui dure 1.5s et qui root la personne qui initie le parry  
-> Semblable dans l'idée au parry de deadlock  
-> Possible de le move dans le V0.4 ou V0.5  
-
-### Inventaire / Perso
-
-> Soit on fait un inventaire qui permet de choisir son bonus, skin  
-> Ca permet un une meilleure personalisation  
->
-> Soit on fait des perso qui ont des bonus et un skin prédéfini  
-> Ca permet un une lisibilitée dans les stuffs et possibilitées des autres.  
-
-## TODO
-
-- Faires les issues
-
-## Rapport de Projet
-
-### Diagrammes de séquence
-
-#### Échanges WebSocket (Client/Serveur)
+* **Full-Stack TypeScript :** Utilisation exclusive de TypeScript pour le client et le serveur, garantissant un typage strict et un partage d'interfaces entre le front et le back.
+* **Architecture Client/Serveur (WebSocket) :** Mise en place d'une communication bidirectionnelle avec Socket.io pour gérer les instances de parties via un système de "Rooms".
+* **Moteur de Rendu Custom :** Utilisation de HTML5 Canvas avec une gestion dynamique du redimensionnement et un calcul précis des collisions (hitboxes et trajectoires).
+* **Synchronisation d'État :** Le serveur gère la logique principale (Authoritative Server) et diffuse l'état complet du jeu aux clients pour assurer une parfaite synchronisation multijoueur.
 
 ```mermaid
 sequenceDiagram
     participant C as Client
     participant S as Serveur
-    C->>S: Connexion
-    S-->>C: premiereConnexion(pseudo aléatoire)
+    C->>S: Connexion WebSocket
+    S-->>C: premiereConnexion (génération pseudo)
     
-    rect rgb(200, 220, 240)
-        Note over C,S: Partie Solo
-        C->>S: rejoindreSolo(pseudo, difficulte, spriteId)
-        S->>S: Initialisation JeuSolo
+    Note over C,S: Boucle de jeu (Solo ou Multi)
+    C->>S: rejoindreRoom / rejoindreSolo
+    loop Échanges Temps Réel
+        C->>S: Envoi des inputs (Mouvements, Tirs, Mêlée)
+        S-->>C: renderMulti (Diffusion de l'état du jeu)
     end
-
-    rect rgb(220, 240, 200)
-        Note over C,S: Partie Multijoueur
-        C->>S: getAllRoom()
-        S-->>C: allRoom(liste des rooms)
-        C->>S: rejoindreMulti(pseudo, roomName, spriteId)
-        S->>S: Rejoint/Crée JeuMulti
-        loop Boucle de jeu
-            S-->>C: renderMulti(état du jeu complet)
-            C->>S: inputs (mouvements, tirs)
-        end
-    end
-
-    C->>S: quitterSolo / quitterMulti
-    S->>S: Nettoyage de l'instance
 ```
 
-### Difficultés techniques rencontrées
+## Fonctionnalités
 
-- **Synchronisation en Temps Réel :** Le défi majeur a été de maintenir une fluidité de mouvement et une détection de collision cohérente pour tous les joueurs en mode multijoueur.
-- **Gestion des Coordonnées et du Redimensionnement :** Adapter le canvas à différentes tailles d'écran tout en assurant que les positions des entités et les trajectoires des balles restent précises a nécessité une refactorisation du moteur de rendu.
-- **Stabilité du Serveur :** Gérer proprement le cycle de vie des parties (création, join, déconnexion) pour éviter les fuites de mémoire et les états incohérents lors des déconnexions brutales.
+* Jeu de tir fluide jouable directement dans le navigateur.
+* Système de combat complet : tirs, mêlée chargée et parade (bouclier de 1.5s).
+* Difficulté progressive des bots.
+* Apparition de bonus tactiques (Invisibilité, Multi-bullets, Vitesse, HP supplémentaires).
+* Système de Rooms pour les parties multijoueur.
 
-### Points d'amélioration et d'achèvement
+## Technologies utilisées
 
-- **Support Mobile :** Adaptation de l'interface et des contrôles pour une jouabilité sur smartphones.
-- **Système de Progression :** Ajout d'un système d'XP, de niveaux et d'un inventaire pour permettre une personnalisation plus poussée.
-- **Contenu Additionnel :** Implémentation d'un mode PvP dédié, d'une mini-map et de nouveaux types d'ennemis avec des comportements variés.
-- **Qualité de Code :** Augmentation de la couverture de tests unitaires et d'intégration.
+* **Langages & Frontend :** TypeScript, HTML5 Canvas, CSS
+* **Backend & Réseau :** Node.js, Socket.io (WebSocket)
+* **Design :** Figma
 
-### Ce dont nous sommes les plus fiers
+## Installation et Exécution
 
-- **Architecture Multijoueur :** Avoir réussi à mettre en place un système de "rooms" robuste avec Socket.io permettant une expérience fluide et interactive.
-- **Mécaniques de Jeu :** L'implémentation de mécaniques avancées comme le "parry" et la mêlée, inspirées de jeux modernes, qui ajoutent une couche stratégique au gameplay.
-- **Identité Visuelle :** Le style rétro-néon cohérent, soutenu par des sprites personnalisés et une interface utilisateur travaillée.
+**Environnement requis :** Node.js (v16 ou supérieur) et npm.
 
-## plus
+**1. Clonez le dépôt :**
+```bash
+git clone [lien_du_repo_github]
+```
 
-[figma](https://www.figma.com/design/NtCrYoV48QG4gA1IYktlMD/maquette?node-id=0-1&p=f&t=I1PpPJhCa9w2e3yW-0)
+**2. Installez les dépendances :**
+```bash
+npm install
+```
+
+**3. Lancez l'application :**
+```bash
+npm run dev
+# ou la commande que vous utilisez pour lancer le serveur
+```
+
+## Structure du projet
+
+```
+/
+├── src/
+│   ├── client/          # Code source Frontend (Rendu Canvas, Inputs)
+│   ├── server/          # Code source Backend (Logique de jeu, Sockets)
+│   └── shared/          # Types et logiques partagés (TypeScript)
+└── public/              # Ressources statiques (images, css)
+```
+
+## Auteurs
+
+- Ethan Seulin
+- Ylann Wattrelos
+- Adam Stievenard
+
+## Licence et Documentation additionnelle
+
+Ce projet est sous licence MIT.
+
+* [Voir la maquette Figma du projet](https://www.figma.com/design/NtCrYoV48QG4gA1IYktlMD/maquette?node-id=0-1&p=f&t=I1PpPJhCa9w2e3yW-0)
