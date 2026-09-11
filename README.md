@@ -55,18 +55,17 @@ sequenceDiagram
 
 **1. Clonez le dépôt :**
 ```bash
-git clone [lien_du_repo_github]
+git clone https://github.com/Rhapeuh/Crime.io.git
 ```
 
 **2. Installez les dépendances :**
 ```bash
-npm install
+npm i
 ```
 
 **3. Lancez l'application :**
 ```bash
 npm run dev
-# ou la commande que vous utilisez pour lancer le serveur
 ```
 
 ## Structure du projet
@@ -75,9 +74,9 @@ npm run dev
 /
 ├── src/
 │   ├── client/          # Code source Frontend (Rendu Canvas, Inputs)
+│   │    ├── public/     # Ressources statiques (images, css)
 │   ├── server/          # Code source Backend (Logique de jeu, Sockets)
-│   └── shared/          # Types et logiques partagés (TypeScript)
-└── public/              # Ressources statiques (images, css)
+└   └── common/          # Types et logiques partagés (TypeScript)
 ```
 
 ## Auteurs
